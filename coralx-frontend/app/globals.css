@@ -1,0 +1,219 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: rgb(0, 0, 0);
+    --background-start-rgb: rgb(214, 219, 220);
+    --background-end-rgb: rgb(255, 255, 255);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: rgb(255, 255, 255);
+        --background-start-rgb: rgb(0, 0, 0);
+        --background-end-rgb: rgb(0, 0, 0);
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+@layer base {
+    :root {
+        --background: linear-gradient(to right, rgba(234, 236, 243) 67%, rgba(234, 236, 243) 83%, rgba(234, 236, 243) 100%);
+        --foreground: rgb(10, 10, 11);
+        --foreground-rgb: rgb(0, 0, 0);
+        --background-image: url('/images/coralAI-Background.png');
+        --background-overlay: rgba(0, 0, 0, 0.05);
+        --button: linear-gradient(to right, rgb(132, 200, 255) 0%, rgb(174, 216, 255) 33%, rgb(255, 255, 255) 100%);
+        --button-hover: rgb(58, 97, 140);
+        --card: rgb(255, 255, 255);
+        --card-foreground: rgb(10, 10, 11);
+        --popover: rgb(255, 255, 255);
+        --popover-foreground: rgb(10, 10, 11);
+        --primary: rgb(23, 23, 26);
+        --primary-foreground: rgb(250, 250, 250);
+        --secondary: rgb(244, 244, 245);
+        --secondary-foreground: rgb(23, 23, 26);
+        --muted: rgb(15, 28, 61);
+        --muted-foreground: rgb(115, 115, 125);
+        --accent: rgb(244, 244, 245);
+        --accent-foreground: rgb(23, 23, 26);
+        --destructive: rgb(239, 68, 68);
+        --destructive-foreground: rgb(250, 250, 250);
+        --border: rgb(228, 228, 231);
+        --input: rgb(228, 228, 231);
+        --ring: rgb(10, 10, 11);
+        --chart-1: rgb(198, 108, 73);
+        --chart-2: rgb(41, 147, 158);
+        --chart-3: rgb(47, 71, 84);
+        --chart-4: rgb(215, 182, 56);
+        --chart-5: rgb(221, 129, 52);
+        --radius: 0.5rem;
+        --sidebar-background: linear-gradient(to bottom, rgba(15, 28, 61) 74%, rgba(15, 28, 61, 0) 100%);
+        --sidebar-foreground: rgb(255, 255, 255);
+        --sidebar-primary: rgb(0, 0, 0);
+        --sidebar-primary-foreground: rgb(255, 255, 255);
+        --sidebar-accent: rgb(243, 243, 247);
+        --sidebar-accent-foreground: rgb(15, 28, 61);
+        --sidebar-border: rgb(232, 234, 237);
+        --sidebar-ring: rgb(33, 133, 242);
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        min-height: 100vh;
+        position: relative;
+        z-index: 0;
+        background-image: url('/images/coralAI-Background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        position: relative;
+    }
+    
+    .gradient-button {
+        background: var(--button);
+        color: rgb(6, 67, 128);
+        opacity: 0.9;
+      }
+      
+      .gradient-button:hover {
+        background: var(--button-hover) !important;
+        color: white !important;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .sidebar {
+        background: var(--sidebar-background);
+        color: var(--sidebar-foreground);
+        height: 100vh;
+      }
+      
+    .dark {
+        --background: rgb(8, 8, 11);
+        --foreground: rgb(250, 250, 250);
+        --card: rgb(8, 8, 11);
+        --card-foreground: rgb(250, 250, 250);
+        --popover: rgb(8, 8, 11);
+        --popover-foreground: rgb(250, 250, 250);
+        --primary: rgb(250, 250, 250);
+        --primary-foreground: rgb(20, 21, 23);
+        --secondary: rgb(35, 36, 41);
+        --secondary-foreground: rgb(250, 250, 250);
+        --muted: rgb(35, 36, 41);
+        --muted-foreground: rgb(157, 157, 166);
+        --accent: rgb(35, 36, 41);
+        --accent-foreground: rgb(250, 250, 250);
+        --destructive: rgb(78, 29, 29);
+        --destructive-foreground: rgb(250, 250, 250);
+        --border: rgb(35, 36, 41);
+        --input: rgb(35, 36, 41);
+        --ring: rgb(211, 212, 214);
+        --chart-1: rgb(43, 108, 217);
+        --chart-2: rgb(46, 166, 119);
+        --chart-3: rgb(217, 140, 41);
+        --chart-4: rgb(153, 51, 204);
+        --chart-5: rgb(217, 51, 102);
+        --sidebar-background: rgb(20, 21, 23);
+        --sidebar-foreground: rgb(242, 242, 244);
+        --sidebar-primary: rgb(31, 99, 224);
+        --sidebar-primary-foreground: rgb(255, 255, 255);
+        --sidebar-accent: rgb(35, 36, 41);
+        --sidebar-accent-foreground: rgb(242, 242, 244);
+        --sidebar-border: rgb(35, 36, 41);
+        --sidebar-ring: rgb(66, 133, 244);
+    }
+
+    .dark body::before {
+        background: rgba(0, 0, 0, 0.7);
+    }    
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    @font-face {
+        font-family: "geist";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url(/fonts/geist.woff2) format("woff2");
+    }
+
+    @font-face {
+        font-family: "geist-mono";
+        font-style: normal;
+        font-weight: 100 900;
+        src: url(/fonts/geist-mono.woff2) format("woff2");
+    }
+}
+
+.skeleton {
+    * {
+        pointer-events: none !important;
+    }
+
+    *[class^="text-"] {
+        color: transparent;
+        @apply rounded-md bg-foreground/20 select-none animate-pulse;
+    }
+
+    .skeleton-bg {
+        @apply bg-foreground/10;
+    }
+
+    .skeleton-div {
+        @apply bg-foreground/20 animate-pulse;
+    }
+}
+
+.ProseMirror {
+    outline: none;
+}
+
+.cm-editor,
+.cm-gutters {
+    @apply bg-background dark:bg-zinc-800 outline-none selection:bg-zinc-900 !important;
+}
+
+.content-overlay {
+  @apply bg-background/80 backdrop-blur-sm;
+}
+
+.ͼo.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground,
+.ͼo.cm-selectionBackground,
+.ͼo.cm-content::selection {
+    @apply bg-zinc-200 dark:bg-zinc-900 !important;
+}
+
+.cm-activeLine,
+.cm-activeLineGutter {
+    @apply bg-transparent !important;
+}
+
+.cm-activeLine {
+    @apply rounded-r-sm !important;
+}
+
+.cm-lineNumbers {
+    @apply min-w-7;
+}
+
+.cm-foldGutter {
+    @apply min-w-3;
+}
+
+.cm-lineNumbers .cm-activeLineGutter {
+    @apply rounded-l-sm !important;
+}
+
+.suggestion-highlight {
+    @apply bg-blue-200 hover:bg-blue-300 dark:hover:bg-blue-400/50 dark:text-blue-50 dark:bg-blue-500/40;
+}

@@ -1,0 +1,3 @@
+Suppose, you are an expert in coral research. Given a pdf (research paper), you will generate five high quality questions. And you will also answer the question solely based on the pdf, and no other new information.
+
+Finally make a csv with one column named "questions", and another one named "answers".

@@ -1,0 +1,41 @@
+# Core dependencies
+langchain>=0.1.0
+langchain-openai>=0.0.2
+openai>=1.12.0
+python-dotenv>=1.0.0
+
+# Vector Stores
+faiss-cpu>=1.7.4  # Use faiss-gpu for GPU support
+chromadb>=0.4.22
+
+# Document Processing
+PyPDF2>=3.0.0
+python-magic>=0.4.27
+python-magic-bin>=0.4.14; platform_system == 'Windows'
+
+# Embeddings
+transformers>=4.36.0
+torch>=2.2.0
+sentence-transformers>=2.3.1
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.24.0
+
+# Evaluation
+ragas>=0.0.22
+datasets>=2.17.0
+nest-asyncio>=1.5.8
+
+# Web Interface
+streamlit>=1.31.0
+
+# Progress Bars
+tqdm>=4.66.1
+
+# Warning Management
+warnings>=0.1.0
+
+# Optional but recommended
+nvidia-cuda-runtime; platform_system != 'Darwin'  # For GPU support
+nvidia-cudnn; platform_system != 'Darwin'  # For GPU support 

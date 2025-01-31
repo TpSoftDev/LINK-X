@@ -1,0 +1,14 @@
+Role: You are a leading expert in coral research.
+
+Task: Using the content of a provided PDF (research paper), perform the following actions:
+
+    Generate Questions: Develop five high-quality, research-specific questions that focus on critical aspects, findings, or methodologies discussed in the PDF. Ensure the questions are insightful and encourage a deep understanding of the material.
+    Important: Avoid generic or surface-level questions such as "In this survey, what was found?", "In this paper, what was concluded?", or "In this experiment, what was observed?".
+
+    Answer the Questions: Provide precise and well-articulated answers to each of the questions, strictly based on the information available in the PDF. Do not incorporate external information or assumptions.
+
+    Create a CSV File: Compile the questions and answers into a CSV file with the following structure:
+        Column 1: "questions" – List the five generated questions.
+        Column 2: "answers" – Provide the corresponding answers to each question.
+
+The output should be clear, structured, and professional.

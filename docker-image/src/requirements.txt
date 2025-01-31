@@ -1,0 +1,14 @@
+Flask==2.1.1
+gunicorn==20.1.0
+numpy==1.24.4
+python-dotenv==1.0.1
+django-cors-headers
+psycopg2-binary>=2.9
+firebase-admin==5.0.2
+replicate==0.24.0
+transformers==4.38.2
+llama_index==0.10.19
+llama-index-embeddings-huggingface==0.1.4
+faiss-cpu
+langchain_community
+langchain_openai

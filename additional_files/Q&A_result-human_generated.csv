@@ -1,0 +1,361 @@
+Question,Ground truth,Answer,Similar Chunk 1,Similar Chunk 2,Similar Chunk 3,Similar Chunk 4,Context Precision,Context Recall,Faithfulness,Answer Relevancy,Answer Similarity,Answer Correctness
+What temperature do most coral reefs around the globe/world live with?,The majority of coral reefs around the globe live with temperatures usually not exceeding 29°C.  ,Most coral reefs around the globe live with temperatures usually not exceeding 29°C.,"variation in any coral reef ecosystem; 
+º  Middle – Lisianski to Gardner; and 
+º  Southern – French Frigate Shoals to Nihoa, average temperature range 23-27 °C. 
+• 	SST analysis suggest there may have been bleaching events in 1987 and 1991 based on temperature 
+anomalies >1 °C during warm period (August-September). 
+• 	Sea surface fronts or eddies are active in the northern region from December to April with a peak in 
+March. Few fronts are found in the southern portion and during mid-summer, fronts retreat to the north. 
+• 	Low productivity ocean water is increasing worldwide due to climate change and this water has reached 
+the Hawaiian archipelago with major implications for ecosystem productivity. 
+i","65 far north, sea surface temperatures (SSTs) average 26 ̊C (± 1 ̊C) compared to 31.3 ̊C (± 1.1 ̊C) in 
+66 the south [22].  Numerous bleaching events have occurred on coral reefs in the Red Sea which 
+67 also show a latitudinal gradient in coral response. During the recent bleaching in 2015, Osman et 
+68 al. [24] reported that degree heating weeks (DHW) surpassing the bleaching threshold of 4 
+105 and is also made available for use under a CC0 license. 
+(which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC 
+The copyright holder for this preprintthis version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint","56 Coral reefs face different threats depending on their geographic region.  The Red Sea is a 
+57 unique environment for corals being a partially enclosed body of water with limited exchange 
+58 with the Indian Ocean, low influxes of freshwater (~30mm/year) and high evaporation rates 
+59 [15,16].  The majority of coral reefs around the globe live with temperatures usually not 
+60 exceeding 29°C and salinities around 36 PSU [17].  In the Red Sea, temperature extremes are the 
+61 norm with temperatures surpassing 32°C in the summer, around 18°C in the winter and with 
+62 salinities 40 PSU or higher [18,19].  Yet, the Red Sea has extensive and healthy coral reefs with 
+63 approximately 346 species of reef corals [20,21].  The Red Sea is characterized by natural north 
+64 to south gradients of temperature, salinity and nutrient availability [22,23].  As example, in the 
+65 far north, sea surface temperatures (SSTs) average 26 ̊C (± 1 ̊C) compared to 31.3 ̊C (± 1.1 ̊C) in","17
+Community Development at High Latitudes 
+To redefine the environmental limits over which reefs exist today and to identify 
+“marginal” reefs, i.e., those near or beyond “normal” environmental limits of reef 
+distribution, Kleypas et al. (1999) assessed five environmental variables (temperature, 
+salinity, light, carbonate saturation state, nutrients) considered to be first-order 
+determinants of global reef distribution. With minimum weekly sea surface temperatures 
+that fall to 17ºC (Coral Reef Ecosystem Division, unpubl. data), Kure conforms to a 
+criterion by which reefs may be said to exist in a “marginal” environment. Despite Kure’s 
+status as the world’s northernmost atoll (Dana, 1971), coral cover values in the three 
+geomorphic habitats are comparable to those of more southerly atolls in the Northwestern 
+Hawaiian Islands that have been quantified by methods and over time periods similar to",0.3333333333,1.0,1.0,0.9266980540882911,0.9817800283857915,0.9954437163421563
+What salinity do most coral reefs around the world/globe live with?,The majority of coral reefs around the globe live with salinities around 36 PSU.  ,Most coral reefs around the globe live with salinities around 36 PSU.,"56 Coral reefs face different threats depending on their geographic region.  The Red Sea is a 
+57 unique environment for corals being a partially enclosed body of water with limited exchange 
+58 with the Indian Ocean, low influxes of freshwater (~30mm/year) and high evaporation rates 
+59 [15,16].  The majority of coral reefs around the globe live with temperatures usually not 
+60 exceeding 29°C and salinities around 36 PSU [17].  In the Red Sea, temperature extremes are the 
+61 norm with temperatures surpassing 32°C in the summer, around 18°C in the winter and with 
+62 salinities 40 PSU or higher [18,19].  Yet, the Red Sea has extensive and healthy coral reefs with 
+63 approximately 346 species of reef corals [20,21].  The Red Sea is characterized by natural north 
+64 to south gradients of temperature, salinity and nutrient availability [22,23].  As example, in the 
+65 far north, sea surface temperatures (SSTs) average 26 ̊C (± 1 ̊C) compared to 31.3 ̊C (± 1.1 ̊C) in","25
+501 diseases [2,13].  Yet, we found corals existing in this challenging environment to have 
+502 surprisingly low disease levels (<1%).  Moreover, our surveys were conducted in the midst of a 
+503 bleaching event.  This suggests acclimation/adaptation to prevailing environmental conditions 
+504 [19,100] and notably, the Red Sea is an arid region with minimal terrestrial run-off and almost no 
+505 riverine input [18].  At our sites, we saw little evidence of sedimentation, water clarity was good 
+506 and there was little macroalgae on the reef (<1%).  Coastal coral reefs in other regions are 
+507 increasingly exposed to excess nutrients, sediments, and pollutants discharged from land which 
+508 are known to degrade local reefs [25] including increasing coral disease prevalence.  Haapkyla et 
+509 al. [11] found  a 10-fold greater mean abundance of disease on reefs during the rainy summer","17
+Community Development at High Latitudes 
+To redefine the environmental limits over which reefs exist today and to identify 
+“marginal” reefs, i.e., those near or beyond “normal” environmental limits of reef 
+distribution, Kleypas et al. (1999) assessed five environmental variables (temperature, 
+salinity, light, carbonate saturation state, nutrients) considered to be first-order 
+determinants of global reef distribution. With minimum weekly sea surface temperatures 
+that fall to 17ºC (Coral Reef Ecosystem Division, unpubl. data), Kure conforms to a 
+criterion by which reefs may be said to exist in a “marginal” environment. Despite Kure’s 
+status as the world’s northernmost atoll (Dana, 1971), coral cover values in the three 
+geomorphic habitats are comparable to those of more southerly atolls in the Northwestern 
+Hawaiian Islands that have been quantified by methods and over time periods similar to","517 major competitors with corals [102,103].  Additionally, macroalgae exude dissolved organic 
+518 carbon which can disrupt the function of the coral holobiont and promote potential bacterial 
+519 pathogens [104,105].  Although the coral reefs in the Red Sea have to contend with high 
+520 temperatures and salinity, these appears to be countered by the lack of terrestrial run-off and all 
+521 its associated problems.  As a comparison, the Persian Gulf is also an arid region but has riverine 
+522 input, and massive coastal habitat modification by dredging and converting shallow, productive 
+523 marine areas into land for homes, recreation, and industrial activities [106].  Resuspension of 
+105 and is also made available for use under a CC0 license. 
+(which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC",0.9999999999,1.0,1.0,0.947012175175216,0.9839754775269574,0.9959938693817394
+Are diseases amongst coral reefs common?,"Coral like most living creatures are susceptible to disease, Disease typically will not occur in high rates, in a recent survey of more than 75.000 corals, only 207 (0.17%) were found to show signs of disease.","Coral diseases are widespread, but the prevalence of disease is surprisingly low, with reported levels being less than 0.5% based on extensive surveys. While localized disease outbreaks occur worldwide, the overall incidence of disease among corals can vary significantly depending on environmental conditions and other factors.","32 widespread but a surprisingly low prevalence of disease (<0.5%), based on the examination of 
+33 >75,750 colonies. Twenty diseases were recorded affecting 16 coral taxa and included black 
+34 band disease, white syndromes, endolithic hypermycosis, skeletal eroding band, growth 
+35 anomalies and focal bleached patches. The three most common diseases were Acropora white 
+36 syndrome (59.1% of the survey sites), Porites growth anomalies (40.9%), and Porites white 
+37 syndrome (31.8%).  Over half of the coral genera within transects had lesions and corals from the 
+38 genera Acropora, Millepora and Lobophyllia were the most commonly affected. Cell-associated 
+39 microbial aggregates were found in four coral genera resembling patterns found in the Indo-
+40 Pacific. Differences in disease prevalence, coral cover, amount of heat stress as measured by 
+41 degree heating weeks (DHW) and extent of bleaching was evident among sites. Disease","730 76. Myers R, Raymundo L. Coral disease in Micronesian reefs: a link between disease 
+731 prevalence and host abundance. Dis Aquat Org. 2009;87:97–104. 
+732 77. Aeby GS, Ross M, Williams GJ, Lewis TD, Work TM. Disease dynamics of Montipora 
+733 white syndrome within Kaneohe Bay, Oahu, Hawaii: distribution, seasonality, virulence, and 
+734 transmissibility. Dis Aquat Org. 2010;91:1–8. 
+735 78. Howells EJ, Vaughan GO, Work TM, Burt JA, Abrego D. Annual outbreaks of coral disease 
+736 coincide with extreme seasonal warming. Coral Reefs. 2020;39:771–81. 
+737 79. Brandt ME, McManus JW. Disease incidence is related to bleaching extent in reef-building 
+738 corals. Ecology. 2009:90:2859-2867. 
+739 80. Miller J, Muller E, Rogers C, Waara R, Atkinson A, Whelan KRT, et al. Coral disease 
+740 following massive bleaching in 2005 causes 60% decline in coral cover on reefs in the US Virgin 
+741 Islands. Coral Reefs. 2009;28:925–37.","25
+501 diseases [2,13].  Yet, we found corals existing in this challenging environment to have 
+502 surprisingly low disease levels (<1%).  Moreover, our surveys were conducted in the midst of a 
+503 bleaching event.  This suggests acclimation/adaptation to prevailing environmental conditions 
+504 [19,100] and notably, the Red Sea is an arid region with minimal terrestrial run-off and almost no 
+505 riverine input [18].  At our sites, we saw little evidence of sedimentation, water clarity was good 
+506 and there was little macroalgae on the reef (<1%).  Coastal coral reefs in other regions are 
+507 increasingly exposed to excess nutrients, sediments, and pollutants discharged from land which 
+508 are known to degrade local reefs [25] including increasing coral disease prevalence.  Haapkyla et 
+509 al. [11] found  a 10-fold greater mean abundance of disease on reefs during the rainy summer","3
+46 prevalence in the Red Sea, which is projected to increase as a consequence of increased 
+47 frequency and severity of ocean warming. 
+48 Introduction
+49 Coral disease is a significant factor impacting coral reefs with localized disease outbreaks 
+50 occurring worldwide [1,2].  The single most damaging disease outbreak, stony coral tissue loss 
+51 disease, has been devastating coral reefs throughout the Florida Reef Tract since 2014 [3–5] and 
+52 has spread to neighboring Caribbean regions [6]. Outbreaks of coral disease have increased 
+53 through time [7] and have been linked to anthropogenic impacts such as overfishing [8], plastic 
+54 pollution [9], dredging activities [10], terrestrial runoff [11,12], and increased ocean 
+55 temperatures [13,14]. 
+56 Coral reefs face different threats depending on their geographic region.  The Red Sea is a 
+57 unique environment for corals being a partially enclosed body of water with limited exchange",0.999999999975,1.0,0.8333333333333334,0.9166239803953746,0.9343155724150152,0.6085788931037538
+What is an assumption common in models that predict the future of coral cover?,Models that predict the future coral cover of reefs typically assume that corals will be unable to compensate for increasing temperatures over relatively short timescales,An assumption common in models that predict the future of coral cover is that corals will be unable to compensate for increasing temperatures over relatively short timescales.,"M
+odels predict that reef ecosystems throughout much of
+the tropics will decrease in coral cover, diversity and/or
+undergo phase shifts in the coming decades [30–33]. An
+assumption of these models is that corals will be unable to
+compensate for increasing temperatures over relatively
+short timescales. The ability to associate with diverse sym-
+bionts has been suggested as one mechanism by which
+corals might be able to respond rapidly to environmental
+change [17,19,25,26,34–37]. However, it has been
+argued that symbiont-mediated acclimatization is not feas-
+ible for most coral species based on perceptions that (i)
+many coral taxa are ‘symbiotic specialists’ that are restricted
+* Author for correspondence (rsilverstein@rsmas.miami.edu).
+Electronic supplementary material is available at http://dx.doi.org/
+10.1098/rspb.2012.0055or via http://rspb.royalsocietypublishing.org.
+Proc. R. Soc. B (2012) 279, 2609–2618
+doi:10.1098/rspb.2012.0055
+Published online 24 February 2012","reveals that some of these trends can only be explained by in situ observations and site-speciﬁ c data. 
+115 
+Figure 4.13. Percent change in coral cover between 2001-2002 and 2006
+at permanent stations in the PMNM. Source: Maragos, unpub. data; map:
+L. Wedding.","for ﬁshes in the NWHI. Habitat alterations (sea level rise, warming, acidi ﬁcation) resulting from global climate 
+change are expected to be the most signiﬁcant impacts and likely to occur in the NWHI (Selkoe et al., 2008). 
+Although the effects of global warming and coral bleaching on coral reef ﬁshes are of concern worldwide 
+(Pratchett et al., 2008a), they are relatively more important in the NWHI where resources are now protected 
+from other human impacts by establishment of the Monument. 
+The prevalence and dynamics of coral and related substrata (e.g., algal secondary cover) represent the most 
+obvious habitat issues for shallow-water reef ﬁshes in the NWHI. Although corals are important as a food 
+source only for relatively few, specialized ﬁshes in tropical reef ecosystems including Hawaii (Cole et al. 2008), 
+corals provide exceedingly important shelter resources (Caley and St. John, 1996). These shelter resources","including temperature, wave stress, coral bleaching and other diseases, marine debris, and 
+crown-of-thorns seastars. 
+INTRODUCTION 
+As coral reefs worldwide are increasingly challenged by global phenomena such 
+as climate change and ocean acidification (Hughes et al., 2003; Pandolfi et al., 2003; 
+Kleypas et al., 2006), it becomes increasingly important to establish detailed quantitative 
+baselines by which subsequent changes can be discerned. Pauly (1995) introduced the 
+phrase “shifting baseline syndrome” in connection with fisheries, but the concept applies 
+equally well to other marine ecosystem resources, including coral reefs (Birkeland, 
+ __________________________________________
+1 Joint Institute for Marine and Atmospheric Research and NOAA Pacific Islands Fisheries Science Center 
+Coral Reef Ecosystem Division, 1125B Ala Moana Blvd., Honolulu, Hawaii 96814 USA; Email: Jean.
+Kenyon@noaa.gov 
+2 Hawaii Institute of Marine Biology, Kaneohe, Hawaii 96744 USA",0.9999999999,1.0,1.0,0.9920335625741191,0.9780462331773357,0.9945115582943339
+When conducting experiments in the field how do people capture the positions of the coral to make sure they continue to look at the same piece?,"Common methods include tagging, photographing, and recording positions using GPS.","In the field, researchers capture the positions of corals by using spatial reference methods, such as marking the locations with physical markers (like iron stakes) or using GPS coordinates. In the context provided, photoquadrats were photographed with spatial reference to transect lines, ensuring that the same areas were consistently monitored. This allows for accurate tracking of specific coral colonies over time.","percent cover using the methods of Kenyon et al. (2006b). Digital photographs recorded 
+in 2003 were sampled at 30-sec intervals and quantitatively analyzed for coral percent 
+cover using point-count software (Coral Point Count with Excel Extension, Kohler and 
+Gill, 2006), using 50 randomly stratified points per frame. The coral categories that could 
+be distinguished were Pocillopora, massive and encrusting Porites (e.g., P . lobata, P . 
+evermanni), Porites compressa, Montipora, and other live coral (e.g., Pavona, Fungia, 
+faviids). Laser-projected dots used to calibrate image size did not appear on videographic 
+imagery recorded during 2002 or 2003 surveys because of mechanical problems. Average 
+depth was calculated for the photo-documented portion of each towed-diver survey from 
+an SBE 39 temperature/pressure recorder (Sea-Bird Electronics, Inc.) mounted on the 
+habitat towboard, and survey distances were calculated using GPS and ArcView GIS 3.3.","operations; and (4) sea conditions. Detailed methods for recording videographic and size 
+class data are presented in Kenyon et al. (2006c). 
+ Twelve (35 cm x 50 cm) photoquadrats were concurrently photographed with 
+spatial reference to the same two 25-m transect lines (i.e., six photoquadrats per transect) 
+at each site according to the methods of Preskitt et al. (2004).  
+Data Extraction and Analysis 
+Capture, sampling, and analysis of frames from video transects are described in 
+Kenyon et al. (2006c). The taxa that could be identified were Pocillopora meandrina, P . 
+damicornis, P . ligulata, Porites lobata, P . compressa, Montipora capitata, and Montipora 
+sp. Detailed methods for determining coral percent cover from photoquadrat imagery are 
+also presented in Kenyon et al. (2006c).","edge of the reef crest with iron stakes . The
+corals were placed in an area where coral ­
+feeding butterflyfish (Chaetodon trifasciatus,
+C. auriga, C. lunula, C. lineolatus, and C.
+ephippium) were known to reside . The experi ­
+mental site was checked weekly to ensure that
+cages were free of sediment and algae. Corals
+were removed after 60 days and reweighed .
+Linear growth was determined by cutting five
+branches from the center of each coral and
+measuring the skeletal growth in the axial
+plane beyond the Alizarin red stain. To assess
+the parasite lode for each of the parasitized P .
+compressa colonies, a 3 ern x 5 em quadrat
+was placed on the side of a coral midway
+between the base and top of the coral, and the
+number of cysts visible within that quadrat
+was recorded . A reading was taken on two
+opposite sides of the coral. The unparasitized
+P. compressa colonies were thoroughly ex­
+amined for signs of parasite infection, and the
+number of cysts found on the colony was
+recorded .","provide minimum expected values. Statistical analyses were conducted using SigmaStat
+® 
+software. 
+Maragos et al. (2004) provide two indices of the relative occurrence and 
+abundance of 31 coral species at Kure Atoll based on qualitative Rapid Ecological 
+Assessment surveys at 54 sites. Methods described in Kenyon et al. (2006c) were used 
+to compare these indices with the relative abundance of coral species as determined by 
+percent cover analysis of photoquadrats in this study. 
+RESULTS 
+Towed-diver Surveys 
+The distance between frames sampled at 30-sec intervals from benthic tow videos 
+or still images depends on the tow speed; the average interframe distance ranged from 
+16.4 m to 27.5 m (mean = 22.3 m, n = 18 tows). The average benthic area captured 
+in laser-scaled frames was 3556 cm2 (SE = 77 cm2, n = 1124 frames). Towed divers 
+surveyed 39.1 km of benthic habitat (Table 1, Fig. 2), from which 1764 frames were",0.0,0.0,0.375,0.9446072256278756,0.8557010730557251,0.3502889046275676
+What is a drawback to lesion removal on diseased coral?,It can be somewhat difficult to do and time consuming.,"A drawback to lesion removal on diseased coral is that, although it can stop tissue loss at the initial site of infection and promote healing, re-infection can still occur. In the study, new lesions appeared on other areas of treated colonies, indicating that lesion removal does not prevent the overall progression of the disease and may not be a long-term solution. Additionally, the treatment was only performed once, which means that continued tissue loss could result from new infections.","of healing wounds created by the removal of disease
+lesions should not have long-term impacts on the
+coral colonies. Although potentially confounding evi-
+dence has been reported that wounds can increase
+susceptibility to some diseases (Aeby & Santavy
+2006, Page & Willis 2008), the above-mentioned
+treatments remain a potentially important means of
+containing some types of disease outbreaks in the
+short term. The increasingly numerous records of
+successful disease treatments will aid resource man-
+agers in addressing the growing threat of coral dis-
+ease outbreaks.
+While morbidity- and mortality-reducing tech-
+niques have been developed for many plant and ani-
+mal species (Nandakumar et al. 2001, Warrell et al.
+2008), only a few are available for corals. Therefore,
+our objective was to test lesion removal as a method
+of disease treatment to reduce morbidity or mortality
+from tissue loss associated with cMWS lesions.
+MATERIALS AND METHODS
+Study sites","For example, Williams (2013) found that growth
+anomaly removal was a successful treatment for A.
+acuminata but not for M. efflorescens located on the
+same reef under similar environmental conditions.
+Although somewhat time consuming, lesion removal
+would be effective in controlling disease in closed
+systems such as coral nurseries, at the onset of a dis-
+ease outbreak, on reefs with a low incidence of
+cMWS, or for treating colonies that are of the most
+value to the reef (Raymundo et al. 2008). While
+lesion removal has proven beneficial for cMWS-
+infected colonies, management actions that address
+the overarching drivers of coral disease (e.g. nutri-
+ent runoff from human and animal waste, overfish-
+ing, and rising surface seawater temperatures) are
+required to maintain the long-term viability of coral
+reefs (Bruckner 2002). The complexity of a coral’s
+response to disease, the efficacy of lesion treatment,
+and the response of different pathogens to treatment","likelihood of developing an appropriate method of
+control. Due to the declining state of many coral
+reefs, a treatment method that reduces morbidity in
+affected colonies may be warranted.
+Previous research has proposed that disruption of
+the coral animal through mechanical injury increases
+susceptibility to some diseases (Aeby & Santavy
+2006, Page & Willis 2008), suggesting that corals are
+either more susceptible because they have an open
+wound that can subsequently become infected or
+that some systemic change takes place to weaken
+the entire organism, thereby making it generally
+more susceptible to disease. In our study, although
+treated colonies were re-infected with cMWS within
+a few weeks post-lesion removal, new infections
+never occurred at the removal site, indicating that
+tissue disruption was not required for cMWS initia-
+tion. In addition, the development of new lesions
+was similar between the 2 groups, suggesting that
+the processes affecting cMWS pathogenesis contin-","Beurmann et al.: Removal of coral disease lesions
+an acute lesion in the last sampling interval, but no
+acute tissue loss lesions were observed on the treat-
+ment colonies. Despite the increased rate of tissue
+loss from aMWS infections, the late timing of the
+switch in disease state did not alter the average rates
+of tissue loss calculated.
+DISCUSSION
+In this study, we applied a lesion-removal tech-
+nique to cMWS-infected Montipora capitata colonies
+to assess its viability as a treatment measure.
+Lesion removal stopped tissue loss at the initial site
+of infection, and all wounded colonies healed
+within 5 wk of treatment. However, re-infection
+was ob served, and new lesions appeared on other
+areas of every control colony and all but 1 treat-
+ment colony (Fig. 4B). Lesion removal was only
+performed once in this study, so re-infection re -
+sulted in continued tissue loss on treated colonies.
+Tissue loss resulting from new lesions was likely
+the reason why the difference in total percent",0.499999999975,1.0,0.875,0.990531473210082,0.7314255736508131,0.18285639341270327
+What is a common and damaging coral disease on reefs in American Samoa?,Acropora white syndrome (AWS),A common and damaging coral disease on reefs in American Samoa is Acropora white syndrome (AWS).,"2007a, b). In contrast, other studies of WS (Sussman
+et al., 2008; Lunaet al., 2010) have provided evidence for
+the involvement of Vibrio spp. associated with lesions,
+illustrating that WS probably have multiple different
+causes.
+One of the most common and damaging coral dis-
+eases on the reefs within American Samoa is Acropora
+white syndrome (AWS) (Fig. 1a) (Aeby et al., 2009). As
+the name suggests, AWS appears to exclusively affect
+scleractinian corals of the family Acroporidae, resulting
+in a clear zone of demarcation between healthy tissue
+and white skeleton. AWS results in a progressive tissue
+loss leading to partial to total colony mortality depend-
+ing on the coral species affected and has been found to
+be transmissible through direct contact in controlled
+studies (Aebyet al., 2011); histological analyses of tissues
+from American Samoan corals with AWS revealed
+mostly tissue necrosis or wound repair processes to be
+evident (Work & Aeby, 2011). Our objective was to","the initiation of this widespread coral disease. Coral Reefs
+27: 257−272
+Raymundo LJ, Couch CS, Harvell CD (eds) (2008) Coral dis-
+ease handbook — guidelines for assessment, monitoring &
+management. https://www. nwhc. usgs. gov/ hfs/ Globals/
+Products/ Coral % 20 Disease % 20 Handbook. pdf
+Sheppard C, Dixon DJ, Gourlay M, Sheppard A, Payet R
+(2005) Coral mortality increases wave energy reaching
+shores protected by reef flats:  examples from the Sey-
+chelles. Estuar Coast Shelf Sci 64: 223−234 
+Ushijima B, Smith A, Aeby GS, Callahan SM (2012) Vibrio
+owensii induces the tissue loss disease Montipora white
+syndrome in the Hawaiian reef coral Montipora capitata.
+PLOS ONE 7: e46717
+Van de Water JAJM, Ainsworth TD, Leggat W, Bourne DG,
+Willis BL, van Oppen MJH (2015) The coral immune
+response facilitates protection against microbes during
+tissue regeneration. Mol Ecol 24: 3390–3404
+Warrell MJ, Riddell A, Yu LM, Phipps J and others (2008) A","32 widespread but a surprisingly low prevalence of disease (<0.5%), based on the examination of 
+33 >75,750 colonies. Twenty diseases were recorded affecting 16 coral taxa and included black 
+34 band disease, white syndromes, endolithic hypermycosis, skeletal eroding band, growth 
+35 anomalies and focal bleached patches. The three most common diseases were Acropora white 
+36 syndrome (59.1% of the survey sites), Porites growth anomalies (40.9%), and Porites white 
+37 syndrome (31.8%).  Over half of the coral genera within transects had lesions and corals from the 
+38 genera Acropora, Millepora and Lobophyllia were the most commonly affected. Cell-associated 
+39 microbial aggregates were found in four coral genera resembling patterns found in the Indo-
+40 Pacific. Differences in disease prevalence, coral cover, amount of heat stress as measured by 
+41 degree heating weeks (DHW) and extent of bleaching was evident among sites. Disease","Symposium 197–201.
+Aeby GS, Bourne DG, Wilson B & Work TM (2011) Coral
+diversity and the severity of disease outbreaks: a cross-
+regional comparison ofAcropora white syndrome in a
+species-rich region (American Samoa) with a species poor
+region (Northwestern Hawaiian Islands).J Mar Biol2011:8 .
+Ainsworth TD, Kramasky-Winter E, Loya Y, Hoegh-Guldberg O
+& Fine M (2007a) Coral disease diagnostics: what’s between a
+plague and a band?Appl Environ Microbiol73: 981–992.
+Ainsworth T, Kvennefors E, Blackall L, Fine M & Hoegh-
+Guldberg O (2007b) Disease and cell death in white
+syndrome of Acroporid corals on the Great Barrier Reef.
+Mar Biol151:1 9–29.
+Ainsworth TD, Thurber RV & Gates RD (2010) The future of
+coral reefs: a microbial perspective.Trends Ecol Evol25:
+233–240.
+Allers E, Niesner C, Wild C & Pernthaler J (2008) Microbes
+enriched in seawater after addition of coral mucus.Appl
+Environ Microbiol 74: 3274–3278.
+Altschul SF, Gish W, Miller W, Myers EW & Lipman DJ (1990)",0.8333333332916666,1.0,1.0,0.9777214103681996,0.9074999311355847,0.9768749827838962

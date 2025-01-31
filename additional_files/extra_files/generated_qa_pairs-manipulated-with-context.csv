@@ -1,0 +1,549 @@
+Question,Ground truth,Answer,Similar Chunk 1,Similar Chunk 2,Similar Chunk 3,Similar Chunk 4
+What is BBD and where has it been reported?,"BBD stands for Black Band Disease, which is a disease affecting coral reefs. It has been reported from coral reefs across the world, including the Red Sea.","BBD stands for Black Band Disease, which is a disease affecting coral reefs. It has been reported from coral reefs across the world, including the Red Sea.
+","338 BBD has been reported from coral reefs across the world [37] including the Red Sea [38,39].  
+339 BBD typically remains at low background levels [40,41] with seasonal outbreaks occurring [42–
+340 44].  At our sites in the Red Sea, there was a similar pattern with a low prevalence of infected 105 and is also made available for use under a CC0 license. (which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC The copyright holder for this preprint this version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint","18341 corals (0.02-0.12%) found at seven out of 22 sites.  Antonius [45] found similar levels of BBD 
+342 along the Saudi Arabian coast in the 1980s suggesting BBD levels have not changed 
+343 significantly along these reefs in the past 30 years. We also documented outbreak levels at one 
+344 site in the Al Lith region, which has been described elsewhere [38].  In fact, most of the BBD 
+345 cases were found at sites in Al Lith whereas no cases were found in the northern-most region 
+346 (Yanbu).  BBD is sensitive to water temperatures becoming more common in summer months 
+347 when water temperature and light levels are higher and usually disappears during colder winter 
+348 months [46–48].  BBD infections also appear following bleaching events[49,50].  Al Lith has 
+349 higher average SST ranges (26.3˚C to 31.1˚C) as compared to Yanbu with average SSTs ranging 
+350 from 24.0˚C to 29.7˚C.  Al Lith also had the highest level of bleaching among the regions","288 p=0.04), and white syndrome (Kruskal-Wallis, X2=10.2, df=2, p=0.006) but not growth 
+289 anomalies (Kruskal-Wallis, X2=4.6, df=2, p=0.1).  Average BBD prevalence was highest in Al 
+290 Lith (0.33% SE+0.3), although mainly due to one outbreak site, followed by Thuwal (0.009% 105 and is also made available for use under a CC0 license. (which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC The copyright holder for this preprint this version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint","Psammocora BBD 0 0 16.7 0 0 4.8
+Gardinoseris BBD 0 10 33 0 3.3 1.81 (0.29)
+Astreopora BBD 0 10 33.3 0 0.32 1.19 (0.52)
+Pavona BBD 0 0 16.7 0 0 10.2
+Platygyra BBD 0 0 16.7 0 0 1.9
+Goniopora BBD 0 0 16.7 0 0 0105 and is also made available for use under a CC0 license. (which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC The copyright holder for this preprint this version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint"
+What pattern of prevalence was observed for BBD in the Red Sea?,"The pattern of prevalence observed for BBD (black band disease) in the Red Sea indicated that it typically remains at low background levels, with seasonal outbreaks occurring. Specifically, at the study sites, there was a low prevalence of infected corals (0.02-0.12%) found at seven out of 22 sites. The average BBD prevalence was highest in Al Lith (0.33%), mainly due to one outbreak site, while no cases were found in the northern-most region (Yanbu). BBD infections were more common in summer months when water temperatures and light levels are higher and usually disappeared during colder winter months.","The pattern of prevalence observed for BBD (black band disease) in the Red Sea typically remains at low background levels, with seasonal outbreaks occurring. At the surveyed sites, a low prevalence of infected corals (0.02-0.12%) was found at seven out of 22 sites. The average BBD prevalence was highest in the Al Lith region (0.33%), mainly due to one outbreak site, while no cases were found in the northern-most region (Yanbu). BBD infections were more common during the summer months when water temperatures and light levels are higher, and usually disappear during colder winter months.
+","338 BBD has been reported from coral reefs across the world [37] including the Red Sea [38,39].  
+339 BBD typically remains at low background levels [40,41] with seasonal outbreaks occurring [42–
+340 44].  At our sites in the Red Sea, there was a similar pattern with a low prevalence of infected 105 and is also made available for use under a CC0 license. (which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC The copyright holder for this preprint this version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint","18341 corals (0.02-0.12%) found at seven out of 22 sites.  Antonius [45] found similar levels of BBD 
+342 along the Saudi Arabian coast in the 1980s suggesting BBD levels have not changed 
+343 significantly along these reefs in the past 30 years. We also documented outbreak levels at one 
+344 site in the Al Lith region, which has been described elsewhere [38].  In fact, most of the BBD 
+345 cases were found at sites in Al Lith whereas no cases were found in the northern-most region 
+346 (Yanbu).  BBD is sensitive to water temperatures becoming more common in summer months 
+347 when water temperature and light levels are higher and usually disappears during colder winter 
+348 months [46–48].  BBD infections also appear following bleaching events[49,50].  Al Lith has 
+349 higher average SST ranges (26.3˚C to 31.1˚C) as compared to Yanbu with average SSTs ranging 
+350 from 24.0˚C to 29.7˚C.  Al Lith also had the highest level of bleaching among the regions","288 p=0.04), and white syndrome (Kruskal-Wallis, X2=10.2, df=2, p=0.006) but not growth 
+289 anomalies (Kruskal-Wallis, X2=4.6, df=2, p=0.1).  Average BBD prevalence was highest in Al 
+290 Lith (0.33% SE+0.3), although mainly due to one outbreak site, followed by Thuwal (0.009% 105 and is also made available for use under a CC0 license. (which was not certified by peer review) is the author/funder. This article is a US Government work. It is not subject to copyright under 17 USC The copyright holder for this preprint this version posted January 28, 2021. ; https://doi.org/10.1101/2021.01.28.428586doi: bioRxiv preprint","15291 SE+0.005), and 0% in Yanbu.  Average white syndrome prevalence was highest in Yanbu 
+292 (0.47% SE+0.15) followed by Al Lith (0.06% SE+0.02) and Thuwal (0.07% SE+0.03). Average 
+293 prevalence of growth anomalies was 0.11% (SE+0.04) in Yanbu, 0.04% (SE+0.02) in Thuwal 
+294 and 0.003% (SE+0.003) in Al Lith.  
+295
+296 Fig 8.  Regional differences in disease prevalence at sites surveyed along the Saudi Arabian 
+297 coast of the Red Sea in October-November 2015.  Letters indicate results of Dunn’s multiple 
+298 group comparison tests.  Six sites each were surveyed in Al Lith and Yanbu and ten sites in 
+299 Thuwal.  
+300
+301 Table 3.  Regional differences in frequency of occurrence (FOC) and average prevalence 
+302 (+SEM) of different coral diseases found during surveys in the central Red Sea.  Prevalence data 
+303 includes diseased colonies only within transects and so will differ from frequency of disease"
+What type of waves pose the most significant disturbance to Hawaiian reefs?,"Large waves generated by the North Pacific swell, which approach from the north or northwest, pose the most significant wave disturbance to Hawaiian reefs.","Large waves generated by the North Pacific swell, which approach from the north or northwest, pose the most significant wave disturbance to Hawaiian reefs.
+","waves generated by the North Pacific swell, which approach from the north or northwest, 
+pose the most significant wave disturbance to Hawaiian reefs (Grigg, 1998; Friedlander 
+et al., 2005). On Kure fore reefs directly exposed to open ocean swell, highest coral 
+cover, dominated by Pocillopora , was found along the 8.8-km-long arc of reef extending 
+counterclockwise from north to west (Table 1, Fig. 2). Grigg (1998) showed that, at 
+wave-exposed stations on Oahu in the main Hawaiian Islands, Holocene accretion is 
+represented by only a thin veneer of living corals resting on an antecedent Pleistocene","in the present study that are based on data extracted from photographic imagery because 
+many coral colonies experience partial mortality that results in uneven contours and dead 
+areas within colony boundaries, attributes that were not factored into diameter-to-area 
+conversions. 
+Community Structure and Wave Exposure 
+Wave exposure is a major determinant controlling the development of Hawaiian 
+coral reefs ( Dollar, 1982; Storlazzi et al., 2005; Jokiel, 2006 ). Moberly and Chamberlain 
+(1972) described four types of ocean swell, varying in their magnitude and frequency, 
+which affect reef development in Hawaii: North Pacific winter swell, northeast trade 
+wind waves, Southern Ocean swell, and kona storm-generated waves. Of these, large 
+waves generated by the North Pacific swell, which approach from the north or northwest, 
+pose the most significant wave disturbance to Hawaiian reefs (Grigg, 1998; Friedlander","These large wave events, greater than 10 m, inﬂuence the growth forms and distribution of coral reef or­
+ganisms (Dollar, 1982; Dollar and Grigg, 2004; Grigg et al., 2008) and affect the reproductive performance of winter-breeding seabirds nesting on low islets in the Monument. Most large wave events, 5 to 10 m, approach the NWHI from the west, northwest, north and northeast, with the highest energy generally occurring from the northwest sector. The southern sides of most of the islands and atolls of the NWHI are exposed to fewer and weaker wave events. Annually, mean wave energy and wave power (energy transferred across a given area per unit time) are highest (approximately 1.3 W/m) be­tween November and March and lowest (approximately 0.3 W/m) between May and September (Figure 2.5). Extreme wave events, 10 m or higher, affect shal­low water coral reef communities with at least an order of magnitude more ener­gy than the typical winter waves (Grigg et al., 2008).","Benthic Communities 
+ 
+ 
+ 
+ 
+ 
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+114 Wave Action 
+High – north and west sectors experience regular large to huge wave events, especially in winter months 
+where waves can exceed more than 15 m in height. Primary benthic components on exposed reefs are energy tolerant species and growth forms such as crustose coralline algae, non-delicate ﬂeshy algae and encrusting 
+Porites corals. 
+Medium – east sectors experience nearly constant moderate wave action due to exposure from trade wind 
+generated swells. Southern exposures receive occasional large swells generated by storms of tropical origin, especially in summer months. 
+Low – the southwesterly parts of the islands generally represent the most protected sectors of the islands,"
+Which coral species dominates the highest coral cover on Kure fore reefs?,The coral species that dominates the highest coral cover on Kure fore reefs is Porites lobata.,The coral species that dominates the highest coral cover on Kure fore reefs is Porites lobata.,"Grigg (1983) reported a mean coral cover of 9% from two 50 m seaward transects 
+off the southwest sector of Kure Atoll. This value is consistent with average fore-reef 
+coral cover from all three methods in the present study (Tables 1, 2, Fig. 3) as well as a 
+sector-specific value from towed-diver surveys (7.2%, Table 1), video transects (6.0%), 
+and photoquadrats (6.0%). The dominance of Porites  with massive and encrusting growth 
+forms on the fore reef (Tables 1,2, Fig. 3) is consistent with the top ranking of Porites 
+lobata  from Maragos et al. (2004) but differs from the top ranking of Porites compressa 
+by Grigg (1983) at southwest fore-reef sites (Table 3). P . compressa  was rarely observed 
+anywhere on the fore reef in the present study (Tables 1,2, Fig. 3). 
+Estimates of total coral cover by Siciliano (2006) in the three habitats at Kure 
+were based in part on the coral size class data presented here and in part on visual","COMMUNITY STRUCTURE OF HERMATYPIC CORALS AT KURE ATOLL IN 
+THE NORTHWESTERN HAWAIIAN ISLANDS: STEMMING THE SHIFTING 
+BASELINE 
+BY 
+JEAN C. KENYON,1 MATTHEW J. DUNLAP,1 AND GRETA S. AEBY2 
+ABSTRACT 
+The distribution and abundance of scleractinian corals at Kure Atoll in the 
+Northwestern Hawaiian Islands was determined by georeferenced towed-diver surveys 
+that covered close to 27,000 m2 of benthic habitat and site-specific surveys at 21 sites 
+during 2000–2003. Three complementary methods (towed-diver surveys, video transects, 
+and photoquadrats) were used to quantify percent cover of corals by genus or species 
+in the fore-reef, back-reef, and lagoon habitats. Three genera, Porites , Pocillopora,  and 
+Montipora , accounted for more than 99% of the coral cover throughout the atoll, although 
+their relative abundances vary considerably according to habitat and geographic sector 
+within habitats. Fore-reef communities are dominated by massive and encrusting Porites","The average coral cover across 16,663 m2 surveyed along the fore reef was 9.7% 
+(Table 1). The differences among the eight fore-reef sectors in the average total percent 
+coral cover were statistically significant (Kruskal-Wallis test, H = 184.59, df = 7, p < 
+0.001), and there were significant differences among sectors in the relative abundance of 
+coral genera present (chi-square test, Χ2 = 231.60, df = 7, p < 0.001). Total coral cover 
+was highest along the arc of the fore reef proceeding counterclockwise from the north to 
+the west sector, where Pocillopora dominated. Total coral cover was less in the southwest 
+sector, where Pocillopora  codominated with massive/encrusting Porites . Relatively lower 
+coral cover was found along the arc of the fore reef proceeding counterclockwise from 
+the south to the northeast sector, where massive/encrusting Porites  accounted for nearly 
+two-thirds or more of the coral cover. Porites compressa , Montipora , and other taxa","Ten scleractinian taxa were seen in Kure photoquadrats ( Table 3 ). The differences 
+among the three habitats in their relative abundance of coral taxa were statistically 
+significant (chi-square test, Χ2 = 266.52, df = 6, p < 0.001). The fore reef and back reef 
+were dominated by Porites lobata  (Table 2, Fig. 3b). Representation by Pocillopora  was 
+highest on the fore reef (42.8% of total), while representation by Montipora was highest 
+on the back reef (14.4% of total). Of the three distinguishable species of Pocillopora  
+present in photoquadrats, P . meandrina  composed 80.8% of the total pocilloporid cover 
+throughout the atoll using this method. Similar to results from towed-diver surveys and 
+video transects, the lagoon was dominated by Porites compressa (Table 2, Fig. 3b)."
+What is the average number of parasites per host for infected fish in Hawai’i?,The average number of parasites per host for infected fish in Hawai’i is 6.9.,The average number of parasites per host for infected fish in Hawai’i is 6.9.,"Hawai’i are parasitized by S. istiblenni compared to the native
+range and infected fish have an average of 1.9 times more parasites
+per host, a finding that is again similar to the trematodes that
+infect Japanese marine mud snails in the Eastern Pacific [44]. The
+increased prevalence and intensity of S. istiblenni in Hawai’i raise
+the possibility that this parasite benefits from the loss of competing
+gut parasites [54]–[][56]. Alternatively, the increase in prevalence
+ofS. istiblenni may reflect favorable habitat in a host fish
+experiencing reduced stress from both competitors and parasites.Finally, favorable extrinsic factors such as large host populations
+(including intermediate and definitive hosts) or the presence of
+alternative hosts not found in the native range, could enhance
+transmission and lead to increased infection rates in the introduced
+range. None of these scenarios are mutually exclusive and all could
+be working in conjunction to result in increased prevalence and","of geographic location (Hawai’i vs. French Polynesia) after
+controlling for the effect of fish size (ANCOVA, F = 37.8,
+P,0.001). Hawaiian L. kasmira also harbored more parasites per
+infected host than populations in their native range of FrenchPolynesia (Hawai’i: N = 181, mean number per infected fish = 6.9,SE = 0.4; French Polynesia: N = 105, mean number per infectedfish = 2.6, SE = 0.2; unpaired t-test, t = 2.74, P= 0.044). This
+relationship was still significant after correcting for fish size(Hawai’i: N = 181, mean number per g
+21= 0.045, SE = 0.003;
+French Polynesia: N = 105, mean number per g21= 0.019,
+SE = 0.001; unpaired t-test, t = 5.62, P,0.001). The parasite was
+absent from most locations northwest of French Frigate Shoals inHawai’i, with only a small proportion of individuals infected (2 of13 individuals at Pearl and Hermes Atoll; Fig. 2).
+Our sampling effort indicates that S. istiblenni is either absent or
+rare in other regions of the South Pacific. We found no","Hawai’i via natural dispersal.
+S. istiblenni infects 82% of the L. kasmira in the Main Hawaiian
+Islands where the original introductions took place. While the host
+fish spread rapidly throughout the archipelago, reaching the farwestern Midway Atoll within 34 years [16], [41], the parasite haslagged behind and is only prevalent as far as French FrigateShoals, about half-way up the island chain (Fig. 2). Only twoInvasive Fish and Time-Lagged Spread of Parasite
+PLOS ONE | www.plosone.org 5 February 2013 | Volume 8 | Issue 2 | e56940","percent of fish that harbored parasites (prevalence), and the mean number
+(intensity 6standard error) and range of parasites per infected fish are listed.
+Northern Line Islands = Kiritimati and Palmyra. Data for French Polynesia arefrom Vignon et al. [18].
+doi:10.1371/journal.pone.0056940.t001Table 2. Molecular diversity indices for COI sequences from
+Spirocamallanus istiblenni .
+NN h h p
+French Polynesia
+Marquesas Islands 70 16 0.73 60.05 0.005 60.003
+Society Islands 49 4 0.26 60.08 0.001 60.001
+All French Polynesia 119 18 0.58 60.05 0.003 60.002
+Hawai’i
+Hawai’i Island 31 5 0.62 60.07 0.002 60.002
+Maui 45 6 0.72 60.04 0.003 60.002
+O’ahu 46 4 0.56 60.04 0.002 60.002
+Nihoa 55 5 0.67 60.40 0.003 60.002
+Necker 2 1 – –
+French Frigate Shoals 55 4 0.68 60.03 0.002 60.002
+Maro – – – –
+Laysan – – – –
+Pearl & Hermes 6 3 0.73 60.16 0.003 60.002
+Midway Atoll – – – –
+Kure Atoll – – – –
+All Hawai’i 240 7 0.67 60.02 0.003 60.002"
+What factors may contribute to the increased prevalence of S. istiblenni in Hawai’i?,"The increased prevalence of S. istiblenni in Hawai’i may be contributed by several factors:
+
+1. **Loss of Competing Gut Parasites**: The absence of competing gut parasites may benefit S. istiblenni, allowing it to thrive.
+
+2. **Reduced Host Stress**: Host fish may experience reduced stress from competitors and other parasites, creating a more favorable environment for S. istiblenni.
+
+3. **Favorable Habitat**: The introduced range may offer more suitable habitat conditions for the parasite.
+
+4. **Large Host Populations**: An abundance of host fish, including intermediate and definitive hosts, can enhance transmission rates of the parasite.
+
+5. **Presence of Alternative Hosts**: The existence of alternative hosts not found in the native range may also contribute to increased infection rates.
+
+These factors may be working in conjunction to result in the increased prevalence and intensity of S. istiblenni in the introduced range.","The increased prevalence of S. istiblenni in Hawai’i may be contributed by several factors, including:
+
+1. **Loss of Competing Gut Parasites**: The absence of competing gut parasites in the introduced range may benefit S. istiblenni, allowing it to thrive.
+
+2. **Reduced Host Stress**: Host fish may experience reduced stress from both competitors and parasites, creating a more favorable environment for S. istiblenni.
+
+3. **Favorable Habitat**: The habitat in Hawai’i may be more conducive to the survival and reproduction of S. istiblenni compared to its native range.
+
+4. **Large Host Populations**: The presence of large populations of host fish, including intermediate and definitive hosts, could enhance transmission rates.
+
+5. **Alternative Hosts**: The presence of alternative hosts not found in the native range may also facilitate increased infection rates.
+
+These factors are not mutually exclusive and could be working together to result in the increased prevalence and intensity of S. istiblenni in Hawai’i.
+","Hawai’i are parasitized by S. istiblenni compared to the native
+range and infected fish have an average of 1.9 times more parasites
+per host, a finding that is again similar to the trematodes that
+infect Japanese marine mud snails in the Eastern Pacific [44]. The
+increased prevalence and intensity of S. istiblenni in Hawai’i raise
+the possibility that this parasite benefits from the loss of competing
+gut parasites [54]–[][56]. Alternatively, the increase in prevalence
+ofS. istiblenni may reflect favorable habitat in a host fish
+experiencing reduced stress from both competitors and parasites.Finally, favorable extrinsic factors such as large host populations
+(including intermediate and definitive hosts) or the presence of
+alternative hosts not found in the native range, could enhance
+transmission and lead to increased infection rates in the introduced
+range. None of these scenarios are mutually exclusive and all could
+be working in conjunction to result in increased prevalence and","range. None of these scenarios are mutually exclusive and all could
+be working in conjunction to result in increased prevalence and
+intensity of S. istiblenni in the introduced range.
+Conclusion
+Here, we synthesize phylogeography, population genetics, and
+ecological survey data to confirm the alien status of the
+cryptogenic parasitic nematode S. istiblenni in Hawai’i. This species
+was brought to Hawai’i over 50 years ago during well-intentionedefforts to enhance local fisheries. The outcome for fisheries has
+been just the opposite, with L. kasmira regarded as a nuisance and,
+by some, as a threat to native species. Here we show that the
+introduced fish also brought an unwelcome passenger, S. istiblenni .
+Once introduced, S. istiblenni attained a two-fold increase in
+prevalence, as well as a similar increase in intensity. S. istiblenni lags
+behind its primary host L. kasmira in the introduced range but there
+is no obvious barrier to colonization of the entire Hawaiian","Pacific is poorly documented, and the uncertainty in the natural
+range of S. istiblenni stems from a lack of occurrence data. Outside
+of Hawai’i, S. istiblenni is known only from French Polynesia and
+Fiji [22], [23] (reexamination of materials from Okinawa hascalled into question the accuracy of earlier records [23]). Based onbiogeographic data from reef fish species, the most likely route ofnatural dispersal between the South Pacific and Hawai’i is alongthe Line Islands, which straddle the equator 1,400 km south ofHawai’i. The presence of several species (or genetic lineages) in the
+Line Islands and Hawai’i, but not elsewhere in the Pacific,
+confirms this avenue of dispersal [24], [25]. Therefore, naturalcolonization of the Hawaiian Islands by this parasite remains apossibility.
+Here, we describe a multidisciplinary approach, combining
+phylogeography and population genetics with ecological surveydata from the native and introduced ranges, to resolve the","infected fish have been found in the northwest end of the
+archipelago, indicating that the range of this alien parasite is still
+expanding, and like that of its host L. kasmira [42], may eventually
+span the entire archipelago. An abundance of host fish species in
+the northwest Hawaiian Islands, and at least two native copepods
+that can act as intermediate hosts for S. istiblenni (G.A. unpublished
+data), both support this hypothesis.
+Genetic evidence: Hawaiian populations show founder
+effect
+The Hawaiian population of S. istiblenni is dominated by two
+haplotypes (Table 3, Fig. 4) that constitute 79% of the genetic
+diversity. Only 7 haplotypes were detected in Hawai’i compared to
+18 in French Polynesia (Table 2), and rarefaction analyses
+confirmed the loss of genetic diversity during the initial
+introduction (Fig. 5); a pattern expected but often not detectedin introduced species [43] including parasites [44] (but see also
+[45]). We found no evidence of founder events (i.e. shifts in"
+How might the loss of competing gut parasites affect S. istiblenni in Hawai’i?,"The loss of competing gut parasites in Hawai’i may benefit S. istiblenni by allowing it to increase in prevalence and intensity. With fewer competitors for resources within the host fish, S. istiblenni could thrive more effectively, potentially leading to higher infection rates. Additionally, the reduced stress from both competitors and parasites may create a more favorable environment for S. istiblenni to flourish.","The loss of competing gut parasites in Hawai’i may benefit S. istiblenni by allowing it to increase in prevalence and intensity. Without competition from other parasites, S. istiblenni may have more resources available, leading to a higher rate of infection in host fish. Additionally, the reduction of stress from competitors and parasites could create a more favorable environment for S. istiblenni to thrive. Overall, these factors could contribute to the increased prevalence and intensity of S. istiblenni in the introduced range.
+","Hawai’i are parasitized by S. istiblenni compared to the native
+range and infected fish have an average of 1.9 times more parasites
+per host, a finding that is again similar to the trematodes that
+infect Japanese marine mud snails in the Eastern Pacific [44]. The
+increased prevalence and intensity of S. istiblenni in Hawai’i raise
+the possibility that this parasite benefits from the loss of competing
+gut parasites [54]–[][56]. Alternatively, the increase in prevalence
+ofS. istiblenni may reflect favorable habitat in a host fish
+experiencing reduced stress from both competitors and parasites.Finally, favorable extrinsic factors such as large host populations
+(including intermediate and definitive hosts) or the presence of
+alternative hosts not found in the native range, could enhance
+transmission and lead to increased infection rates in the introduced
+range. None of these scenarios are mutually exclusive and all could
+be working in conjunction to result in increased prevalence and","range. None of these scenarios are mutually exclusive and all could
+be working in conjunction to result in increased prevalence and
+intensity of S. istiblenni in the introduced range.
+Conclusion
+Here, we synthesize phylogeography, population genetics, and
+ecological survey data to confirm the alien status of the
+cryptogenic parasitic nematode S. istiblenni in Hawai’i. This species
+was brought to Hawai’i over 50 years ago during well-intentionedefforts to enhance local fisheries. The outcome for fisheries has
+been just the opposite, with L. kasmira regarded as a nuisance and,
+by some, as a threat to native species. Here we show that the
+introduced fish also brought an unwelcome passenger, S. istiblenni .
+Once introduced, S. istiblenni attained a two-fold increase in
+prevalence, as well as a similar increase in intensity. S. istiblenni lags
+behind its primary host L. kasmira in the introduced range but there
+is no obvious barrier to colonization of the entire Hawaiian","infected fish have been found in the northwest end of the
+archipelago, indicating that the range of this alien parasite is still
+expanding, and like that of its host L. kasmira [42], may eventually
+span the entire archipelago. An abundance of host fish species in
+the northwest Hawaiian Islands, and at least two native copepods
+that can act as intermediate hosts for S. istiblenni (G.A. unpublished
+data), both support this hypothesis.
+Genetic evidence: Hawaiian populations show founder
+effect
+The Hawaiian population of S. istiblenni is dominated by two
+haplotypes (Table 3, Fig. 4) that constitute 79% of the genetic
+diversity. Only 7 haplotypes were detected in Hawai’i compared to
+18 in French Polynesia (Table 2), and rarefaction analyses
+confirmed the loss of genetic diversity during the initial
+introduction (Fig. 5); a pattern expected but often not detectedin introduced species [43] including parasites [44] (but see also
+[45]). We found no evidence of founder events (i.e. shifts in","Pacific is poorly documented, and the uncertainty in the natural
+range of S. istiblenni stems from a lack of occurrence data. Outside
+of Hawai’i, S. istiblenni is known only from French Polynesia and
+Fiji [22], [23] (reexamination of materials from Okinawa hascalled into question the accuracy of earlier records [23]). Based onbiogeographic data from reef fish species, the most likely route ofnatural dispersal between the South Pacific and Hawai’i is alongthe Line Islands, which straddle the equator 1,400 km south ofHawai’i. The presence of several species (or genetic lineages) in the
+Line Islands and Hawai’i, but not elsewhere in the Pacific,
+confirms this avenue of dispersal [24], [25]. Therefore, naturalcolonization of the Hawaiian Islands by this parasite remains apossibility.
+Here, we describe a multidisciplinary approach, combining
+phylogeography and population genetics with ecological surveydata from the native and introduced ranges, to resolve the"
+What types of marine habitats are described in the assessment?,"The assessment describes marine habitats that include basalt surfaces exposed to high wave action, habitats for spiny lobsters (Panulirus marginatus) and slipper lobsters (Scyllarides squammosus), and shallow waters with minimal reef growth. It also mentions habitats with high benthic relief, particularly in depths of less than 27.4 m.","The assessment describes marine habitats that include basalt surfaces exposed to high wave action, habitats for spiny lobsters (Panulirus marginatus) and slipper lobsters (Scyllarides squammosus), and areas with minimal reef growth in shallow waters. It also mentions habitats with high benthic relief, particularly in depths of less than 27.4 m.
+","Geology and Benthic HabitatsA Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+EXISTING DATA GAPS
+ 
+• 	A comprehensive shallow-water benthic habitat map is required to support multiple research and monitor-
+ing activities. Currently only about 50% of the shallow-water area from 0-30 m has suf ﬁcient coverage and 
+quality of imagery to produce maps. 
+• 	A complete and seamless digital terrain and bathymetric models for the Papahanaumokuakea Marine National Monument (PMNM) to at least 500 m is currently lacking and is necessary to better understand the connection of shallow and deep-water habitats. It will also help guide assessment and monitoring activities. 
+• 	Need to complete high-resolution multibeam bathymetry for shallow to moderate (20 to 500 m) depths. 
+• 	Need to collect shallow (<20 m) bathymetric data using Light Detection and Ranging (LIDAR) or other appropriate technologies.","Geology and Benthic HabitatsA Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Figure 3.20. (A) Multibeam bathymetry data collected on the bank top at French Frigate Shoals. Black box corresponds
+to the location of the bathymetry (B) and backscatter (C) close-ups. Stars in (B) and (C) indicate the locations, from top tobottom (northwest to southeast), of the TOAD frame grabs shown in (D, E, and F). These data are used to create accurate habitat maps for moderate depth ecosystems in the NWHI using image processing techniques. 
+81","A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands
+78
+Geology and Benthic Habitatsmarine habitats are basalt surfaces exposed to high wave action and the effects of scour (surge combined with 
+sand and other sediments) is evident from the wave-cut bench in West Cove and the deeply cut sand channels and chasms at several locations in deeper water (Figures 3.14, 3.15). Reef growth in shallow waters, if any, is minimal and the punishing effects of large waves as demonstrated by the high wave cut sea cliffs above sea level and wave planed benches and shelves below sea level. The bank provides excellent habitat for spiny lobsters (Panulirus marginatus ) and slipper lobsters (Scyllarides squammosus ), especially in habitats of less 
+than 27.4 m depth and high benthic relief (Parrish and Polovina, 1994).
+Multibeam surveys around Mokumana-","Geology and Benthic HabitatsA Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Figure 3.27. Gardner Pinnacles multibeam data collected in 2002 during KM0206. 
+86"
+Which species of lobsters are mentioned as being found in the bank habitat?,The species of lobsters mentioned as being found in the bank habitat are spiny lobsters (Panulirus marginatus) and slipper lobsters (Scyllarides squammosus).,"The species of lobsters mentioned as being found in the bank habitat are spiny lobsters (Panulirus marginatus) and slipper lobsters (Scyllarides squammosus).
+","A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands
+78
+Geology and Benthic Habitatsmarine habitats are basalt surfaces exposed to high wave action and the effects of scour (surge combined with 
+sand and other sediments) is evident from the wave-cut bench in West Cove and the deeply cut sand channels and chasms at several locations in deeper water (Figures 3.14, 3.15). Reef growth in shallow waters, if any, is minimal and the punishing effects of large waves as demonstrated by the high wave cut sea cliffs above sea level and wave planed benches and shelves below sea level. The bank provides excellent habitat for spiny lobsters (Panulirus marginatus ) and slipper lobsters (Scyllarides squammosus ), especially in habitats of less 
+than 27.4 m depth and high benthic relief (Parrish and Polovina, 1994).
+Multibeam surveys around Mokumana-","Panulirus marginatus spiny lobster 42 
+Benthic predators Lutjanus kasmira bluestripe snapper 11 
+Parupeneus porphyreus whitesaddled goat ﬁsh 14 
+Parupeneus multifasciatus manybar goat ﬁsh 37 
+Pareupeneus cyclostomus yellowsaddle goat ﬁsh 2 
+Bodiandus bilunulatus Hawaiian hog ﬁsh/wrasse 15 
+Chaetodon fremblii bluestripe butter ﬂyﬁsh 30 
+Thalassoma ballieui blacktail wrasse 29 
+Pelagic predators Euthynnus afﬁ ns wavy-backed tuna 5 
+Apex predators Caranx melampygus blue jack 19 
+Caranx ignobilis white jack 36 
+Aprion virescens green job ﬁsh 6 
+Carcharhinus amblyrhynchos grey reef shark 6 
+Carcharhinus galapagensis Galapagos shark 28 
+Galeocerdo cuvier tiger shark 8 
+Epinephelus quernus Hawaiian grouper 2 
+There was a clear separation in the 13C signatures of the primary producers in the NWHI system. Phytoplankton 
+(Phyto) had an average 13C value of -23.4‰, consistent with other published values for oceanic phytoplankton.","Geology and Benthic Habitats
+  A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Brooks and St. Rogatien Banks 
+The Brooks and St. Rogatien Banks include four submerged banks between French Frigate Shoals and Gard-ner Pinnacles (Figure 3.25). These four banks are guyots ( ﬂat-topped seamounts) and all have at least two 
+different terraces near their summits that indicate previous sea level stands. 
+A 
+B C 
+Figure 3.25. 3-D perspective of Brooks Banks. (A) Perspective view of the Brooks Banks looking from the northeast. The
+Brooks Banks exhibit a classic ﬂat-topped morphology created by erosion when the banks were previously at or near sea-
+level. Multiple terraces around the bank edges are evidence for additional sea-level stands (B,C). Submarine canyonsincise the steep bank edges and blocks of material at the base of the slopes are probably slumps or landslide deposits. 
+84","Geology and Benthic HabitatsTable 3.2. Characteristics of the islands, atolls, and some submerged banks in the NWHI , listed in order from the north­
+west down to the southeast. Note that most of the subaerially exposed islands, sea stacks, and atolls are surrounded byextensive shallow banks. Island ages are from Clague (1996), with values in brackets from K-Ar dated basalt samples,and other ages estimated from geophysical calculations. Lagoon water volumes are from Hoeke et al., 2006. 
+REEF BACK-LAGOON EMER- REEF/ SUMMIT  ISLAND, ATOLL OR TYPE OF  HABITAT LONGITUDE LATITUDE AGE (MA) GENT LAGOON DEPTH BANK FEATURE <100 m LAND VOLUME (m) (km2) (km2) (103 m3) 
+Kure Atoll Closed atoll 178° 19.55’ 28° 25.28’ 29.8 0.86 167 141,000 -
+Nero Seamount Bank 177° 57.07’ 27° 58.88’ 29.1 0.00 17 - 68 
+Midway Atoll Closed atoll 177°22.01’ 28° 14.28’ [27.7], 28.7 1.42 223 213,000 -
+Pearl and Hermes Atoll Closed atoll 175° 51.09’ 27° 51.37’ [20.6], 26.8 0.36 1,166 2,930,000 -"
+What geological features indicate the effects of wave action in the Northwestern Hawaiian Islands?,"The effects of wave action in the Northwestern Hawaiian Islands are indicated by geological features such as spur and groove formations, and the distribution of benthic communities. High-energy environments typically feature energy-tolerant species, such as crustose coralline algae, non-delicate fleshy algae, and encrusting Porites corals, which thrive in areas exposed to significant wave disturbances. In contrast, sheltered areas may support different species of corals and algae that require quiescent habitats.","The geological features that indicate the effects of wave action in the Northwestern Hawaiian Islands include spur and groove formations, which are clearly visible in high-resolution bathymetry around Kure Atoll. Additionally, the primary benthic components on exposed reefs consist of energy-tolerant species and growth forms such as crustose coralline algae, non-delicate fleshy algae, and encrusting Porites corals, which are adapted to withstand high wave energy.
+","Oceanographic and Physical SettingA Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Ocean Waves 
+Common throughout the region and perhaps more signiﬁcant as a natural process affecting the geology and ecology of the Monument, are the extra-tropical storms and signiﬁcant wave events that regularly move across the North Paciﬁc in the boreal winter (Friedlander et al., 2008, Grigg et al., 2008). Among each of the islands, atolls and submerged banks of the NWHI, the distributions of species of corals and algae, and their associated ﬁsh and invertebrate assemblages are often determined not only by the ocean currents, but also by the expo­sure to ocean waves. Many species of corals and algae can only survive in sheltered or quiescent habitats. Other species; however, can survive or even thrive in the high wave-energy habitats on the northwestern fac­ing reefs that are exposed to tremendous waves caused by winter storms across the North Paciﬁc.","waves generated by the North Pacific swell, which approach from the north or northwest, 
+pose the most significant wave disturbance to Hawaiian reefs (Grigg, 1998; Friedlander 
+et al., 2005). On Kure fore reefs directly exposed to open ocean swell, highest coral 
+cover, dominated by Pocillopora , was found along the 8.8-km-long arc of reef extending 
+counterclockwise from north to west (Table 1, Fig. 2). Grigg (1998) showed that, at 
+wave-exposed stations on Oahu in the main Hawaiian Islands, Holocene accretion is 
+represented by only a thin veneer of living corals resting on an antecedent Pleistocene","Benthic Communities 
+ 
+ 
+ 
+ 
+ 
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+114 Wave Action 
+High – north and west sectors experience regular large to huge wave events, especially in winter months 
+where waves can exceed more than 15 m in height. Primary benthic components on exposed reefs are energy tolerant species and growth forms such as crustose coralline algae, non-delicate ﬂeshy algae and encrusting 
+Porites corals. 
+Medium – east sectors experience nearly constant moderate wave action due to exposure from trade wind 
+generated swells. Southern exposures receive occasional large swells generated by storms of tropical origin, especially in summer months. 
+Low – the southwesterly parts of the islands generally represent the most protected sectors of the islands,","Geology and Benthic HabitatsA Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+100 
+Figure 3.47. Spur and groove formations show up clearly in the high resolution bathymetry taken around Kure Atoll."
+What is the Darwin Point and its significance in atoll formation?,"The Darwin Point marks the threshold in atoll formation where vertical growth, or net accretion, of reef-building organisms is zero or negative. This point indicates that as a volcanic edifice subsides, the atoll can no longer maintain its structure and begins to drown, transforming into a guyot. Named after Charles Darwin, who proposed an evolutionary model for atoll formation in 1836, the Darwin Point is significant because it represents a crucial milestone in the life cycle of a Hawaiian volcano. Beyond this point, coral growth cannot keep pace with subsidence, leading to the eventual submergence of the atoll. Kure Atoll is currently near its Darwin Point and is considered the oldest Hawaiian island still above sea level.","The Darwin Point marks the threshold where vertical growth, or net accretion, of reef-building organisms is zero or negative, leading to the drowning of an atoll and its transformation into a guyot. Named after Charles Darwin, who first proposed an evolutionary model for atoll formation in 1836, the Darwin Point is significant as it indicates a critical milestone in the life of a Hawaiian volcano. Beyond this point, atolls can no longer maintain their structure due to subsidence or erosion, which is essential for understanding the dynamics of coral reef ecosystems and the life cycle of volcanic islands.
+","The tops and edges of the volcanoes, 
+if they are at or near sea level, support large and diverse coral reef communi­ties. As the volcanic edi ﬁ ce subsides, 
+an atoll can form as reef builders keep the top of the volcano near sea level by growing vertically and creating a thick carbonate cap. The Darwin Point marks the threshold where vertical growth, or net accretion, of reef building organisms is zero or negative and the atoll drowns and becomes a guyot (Figure 3.3; Grigg et al., 2008). This point, named after Charles Darwin, who ﬁrst proposed an 
+evolutionary model for atoll formation in 1836, marks a signi ﬁcant milestone in the life of a Hawaiian volcano. 
+Currently Kure Atoll lies very near its Darwin Point. It is the oldest Hawaiian island still above sea level although it consists of only 1 km
+2 of emergent land and 66 km2 of lagoon (Juvik and Juvik, 1998). Dozens of seamounts","and Assessment’s Biogeography Team. Silver Spring, MD. 522 pp. 
+Grigg, R.W. 
+    1982.  The Darwin Point: a threshold for atoll formation. Coral Reefs  1:29-34. 
+    1983.  Community structure, succession and development of coral reefs in Hawaii.  
+               Mar. Ecol. Prog. Ser.  11:1-14. 1998. Holocene coral reef accretion in Hawaii: a 
+               function of wave exposure and sea  level history. Coral Reefs  17:263-272. 
+Grigg, R.W. and J.E. Maragos    
+    1974.  Recolonization of hermatypic corals on submerged lava flows in Hawaii.  
+               Ecology 55(2):387-395. 
+Gross, M.G., J.D. Milliman, J.I. Tracey Jr., and H.S. Ladd.    
+    1969.  Marine geology of Kure and Midway Atolls, Hawaii: a preliminary report.  Pac.  
+               Sci.  23:17-25. 
+Harvell, C.D., K. Kim, J.M. Burkholder, R.R. Colwell, P.R. Epstein, D.J. Grimes, E.E. 
+Hofmann, E.K. Lipp, A.D.M.E. Osterhaus, R.M. Overstreet, J.W. Porter, G.W. Smith, and 
+G.R. Vasta","species decline is linked to lower winter water temperatures and lower average annual solar radiation (Grigg,1982), and coral development is limited by exten-sive sand shallows towards the eastern sides of the lagoons (Maragos et al.,2004). Moreover WWII era construction may have extirpated some corals fromMidway’s lagoon. Kure is the world’s most northern atoll and is referred to as the Darwin Point, where coral growth and subsidence/erosion balance one another (Grigg,1982). However, there are at least 30 submerged and presumably drowning seamounts to the southeast of Kure and within the PMNM, and the “Darwin point” may be better characterized as a Darwin zone stretching from Nihoa to Kure. 
+Examination of reefs in ordination space based on presence-absence of coral taxa reveal two major clusters","Figure 3.3. Reef accretion across the Hawaiian Archipelago. Note that the 
+net accretion rate diminishes to zero just beyond Kure Atoll, thereby de ﬁn­
+ing a threshold for atoll formation known as the Darwin Point beyond whichatolls drown. Source: Grigg, 1997; image: S. Hile. 
+66 Figure 3.4. Islands, banks and atolls of the Hawaiian Archipelago."
+How do coral reef communities relate to the tops and edges of volcanoes?,"Coral reef communities are closely related to the tops and edges of volcanoes that are at or near sea level. These areas support large and diverse coral reef communities because the volcanic structures provide a suitable habitat for coral growth. As the volcanic edifice subsides over time, reef builders (coral organisms) continue to grow vertically, maintaining the top of the volcano near sea level by creating a thick carbonate cap. This dynamic allows coral reefs to thrive in these environments, but once the volcanic structure reaches the Darwin Point, where vertical growth or net accretion of these organisms becomes zero or negative, the atoll can drown and transform into a guyot.","Coral reef communities are supported by the tops and edges of volcanoes that are at or near sea level. These areas provide suitable habitats for diverse coral species to thrive. As volcanic edifices subside over time, reef builders, such as corals, continue to grow vertically to keep the tops of the volcanoes near sea level, creating a thick carbonate cap. This process is essential for the formation and maintenance of coral reefs in these regions.
+","The tops and edges of the volcanoes, 
+if they are at or near sea level, support large and diverse coral reef communi­ties. As the volcanic edi ﬁ ce subsides, 
+an atoll can form as reef builders keep the top of the volcano near sea level by growing vertically and creating a thick carbonate cap. The Darwin Point marks the threshold where vertical growth, or net accretion, of reef building organisms is zero or negative and the atoll drowns and becomes a guyot (Figure 3.3; Grigg et al., 2008). This point, named after Charles Darwin, who ﬁrst proposed an 
+evolutionary model for atoll formation in 1836, marks a signi ﬁcant milestone in the life of a Hawaiian volcano. 
+Currently Kure Atoll lies very near its Darwin Point. It is the oldest Hawaiian island still above sea level although it consists of only 1 km
+2 of emergent land and 66 km2 of lagoon (Juvik and Juvik, 1998). Dozens of seamounts","1997; Rooney et al., 2008) has and con­tinues to erupt at the seaﬂ  oor creating 
+a chain of volcanoes that comprise the islands, banks, atolls and seamounts of the Hawaiian Archipelago (Figure 3.2). Each begins as a small subma­rine volcano and over time can grow to reach well above sea level. Eventually the volcanoes cool and subside as they slowly move away from the hot spot in a northwestward direction at about 8 cm/ yr (Clague and Dalrymple, 1987). 
+The tops and edges of the volcanoes, 
+if they are at or near sea level, support large and diverse coral reef communi­ties. As the volcanic edi ﬁ ce subsides,","their relative abundances vary considerably according to habitat and geographic sector 
+within habitats. Fore-reef communities are dominated by massive and encrusting Porites  
+and by Pocillopora , while the back reef is dominated by Montipora  and the lagoon by 
+Porites compressa . All taxa show habitat-specific differences in colony density and size-
+class distributions as assessed through colony counts within belt transects at fixed sites. 
+These demographic data provide the most detailed, spatially comprehensive description 
+of coral communities at Kure Atoll produced to date and can serve as a solid baseline for 
+determining the magnitude and direction of future changes. They are discussed within 
+the context of factors known to affect community development on Hawaiian coral reefs 
+including temperature, wave stress, coral bleaching and other diseases, marine debris, and 
+crown-of-thorns seastars. 
+INTRODUCTION","Benthic Communities 
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Changes In Coral Cover Over Time From Rapid Ecological Assessment Data 
+Most regions have low coral cover 
+(<20%), with higher values at Maro, Li­sianski and French Frigate Shoals. Cor­al cover values determined from REA surveys showed the highest coral cover values at Maro and Lisianski though their magnitude (>60%) was greater than the values derived from the line-intercept method in 2004-2006 (Figure 4.36). At each region, the coral cover values computed from the different sur­vey years (2004, 2005 and 2006) are highly similar, indicating little change overall in each region. 
+Coral Settlement and Recruitment"
+What is the current status of Kure Atoll in relation to its Darwin Point?,"Kure Atoll currently lies very near its Darwin Point, which is the threshold where the vertical growth or net accretion of reef building organisms is zero or negative. This means that Kure Atoll is at a stage where coral growth can no longer keep pace with the rate of geological subsidence. As a result, it is the oldest Hawaiian island still above sea level, but it consists of only 1 km² of emergent land and is experiencing ongoing subsidence.","Kure Atoll currently lies very near its Darwin Point, which is the threshold where coral growth can no longer keep pace with subsidence and erosion. It is the oldest Hawaiian island still above sea level, consisting of only 1 km² of emergent land and 66 km² of lagoon.
+","based on NOAA benthic habitat maps. Source: NOAA, 2003. A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Kure Atoll 
+Kure Atoll is the most northwestern island in the Hawaiian chain and occupies a singular position at the “Darwin Point”: the northern extent of coral reef development, beyond which coral growth cannot keep pace with the rate of geological subsidence. Kure’s coral is still growing slightly faster than the island is subsiding. North of Kure, where growth rates are even slower, the drowned Emperor Seamounts foretell the future of Kure and all of the Hawaiian Archipelago. As Kure Atoll continues its slow migration atop the Paci ﬁ c Plate, it too will eventu-
+ally slip below the surface (Grigg, 1982). 
+This 29.8 million year old atoll (Clague, 
+1996) is nearly circular, with a reef 9.6 km in diameter enclosing a lagoon with two islets that include over 0.81 km
+2 of 
+emergent land, ﬂ anked by almost 324 
+km2 of coral reef habitat (Figures 3.44,","species decline is linked to lower winter water temperatures and lower average annual solar radiation (Grigg,1982), and coral development is limited by exten-sive sand shallows towards the eastern sides of the lagoons (Maragos et al.,2004). Moreover WWII era construction may have extirpated some corals fromMidway’s lagoon. Kure is the world’s most northern atoll and is referred to as the Darwin Point, where coral growth and subsidence/erosion balance one another (Grigg,1982). However, there are at least 30 submerged and presumably drowning seamounts to the southeast of Kure and within the PMNM, and the “Darwin point” may be better characterized as a Darwin zone stretching from Nihoa to Kure. 
+Examination of reefs in ordination space based on presence-absence of coral taxa reveal two major clusters","respectively.) Hence, in terms of coral cover, Kure appears to have somewhat more 
+attenuated coral development than more southerly atolls in the Hawaiian Archipelago 
+with similar histories of limited human disturbance, but not markedly so. Coral colony 
+average densities are also higher in all three habitats at Kure than at Pearl and Hermes 
+(Kenyon et al., 2007). 
+In measuring gross carbonate production by hermatypic corals on different islands 
+along the Hawaiian Archipelago, Grigg (1982) calculated a minimum value at Kure, 
+where he proposed that deposition by reef-building corals can no longer keep pace with 
+subsidence rates and erosion, a latitudinal threshold termed the Darwin Point. Siciliano 
+(2006) constructed a calcium carbonate budget for Kure Atoll which, in contrast to the 
+assumptions and methods of Grigg (1982), was based on the growth rates of all the major 
+coral genera in each of the three habitats, factored in the contribution of coralline algae","The tops and edges of the volcanoes, 
+if they are at or near sea level, support large and diverse coral reef communi­ties. As the volcanic edi ﬁ ce subsides, 
+an atoll can form as reef builders keep the top of the volcano near sea level by growing vertically and creating a thick carbonate cap. The Darwin Point marks the threshold where vertical growth, or net accretion, of reef building organisms is zero or negative and the atoll drowns and becomes a guyot (Figure 3.3; Grigg et al., 2008). This point, named after Charles Darwin, who ﬁrst proposed an 
+evolutionary model for atoll formation in 1836, marks a signi ﬁcant milestone in the life of a Hawaiian volcano. 
+Currently Kure Atoll lies very near its Darwin Point. It is the oldest Hawaiian island still above sea level although it consists of only 1 km
+2 of emergent land and 66 km2 of lagoon (Juvik and Juvik, 1998). Dozens of seamounts"
+What is the saturation horizon and its significance for calcium carbonate structures?,"The saturation horizon is the depth in the ocean at which the concentration of carbonate ions is critical for the stability of calcium carbonate (CaCO3) structures. Above this depth, calcium carbonate can precipitate and form solid structures, such as those found in corals and calcareous algae. Below the saturation horizon, calcium carbonate tends to dissolve due to the lower concentrations of carbonate ions.
+
+The significance of the saturation horizon for calcium carbonate structures is that it determines the depth at which organisms like corals can effectively calcify and build their skeletons. As anthropogenic CO2 emissions increase, the saturation horizon moves shallower, meaning that the depth where corals can calcify becomes increasingly limited. This has implications for coral ecosystems, as it affects their ability to grow and thrive in deeper waters.","The saturation horizon is the depth in the ocean at which the concentration of carbonate ions is critical for the stability of calcium carbonate structures. Below this depth, calcium carbonate tends to dissolve due to the lower availability of carbonate ions. The significance of the saturation horizon for calcium carbonate structures, such as those formed by corals and other calcifying organisms, is that it determines the depth at which these organisms can effectively calcify. As more CO2 is released into the atmosphere, the saturation horizon moves shallower, meaning that the depth at which corals can calcify will also become shallower, potentially impacting their growth and survival.
+","3 secreting organisms. The ﬁrst is calcite, which is 
+the less soluble form found in crustose coraline algaes, and the other is the aragonite form of calcium carbonate, which is 
+utilized by scleractinian corals and other pteropods. There is a critical concentration of carbonate ions in seawater below which calcium carbonate will dissolve. The solubility of calcium carbonate is a function of depth and pressure. The critical concentration occurs at a depth known as the “saturation horizon”, under which calcium carbonate structures tend to dis­solve. Due to increased amounts of CO
+2 in seawater and the resultant decrease in the carbonate ion concentration (equa­
+tion 2) the saturation horizon will move ever shallower with increasing releases of anthropogenic CO2 into the atmosphere. 
+This means that the depth at which corals are able to calcify will grow shallower as more CO2 is input into the atmosphere.","This means that the depth at which corals are able to calcify will grow shallower as more CO2 is input into the atmosphere. 
+Latitude also plays a role when looking at where saturation boundaries occur. Lower latitudes near the equator tend to have saturation states conducive to the solidi ﬁed structure of corals, while poleward areas are already showing evidence 
+of undersaturation at the surface waters. Currently the surface waters of the NWHI still fall within saturation parameters (Feely et al., 2002).","2 in the 
+atmosphere increases, the availability of carbonate ions for calcifying organisms (corals, calcareous algae, plankton etc.) to incorporate into their skeletons decreases and the carbonate equilibrium shifts facilitating the dissolution of the calcium carbonate skeleton (Kleypas et al., 1999; Royal Society, 2005; Kleypas et al., 2006). 
+There are two forms of calcium carbonate found in skeletons of CaCO
+3 secreting organisms. The ﬁrst is calcite, which is 
+the less soluble form found in crustose coraline algaes, and the other is the aragonite form of calcium carbonate, which is","Management Concerns and Responsibilities 
+ 
+ 
+ Equation 1: The Carbonate Equilibrium 
+ Skeletal formation 
+-CaCO3 + CO2 + H2O  Ca2+ + 2HCO3Skeletal dissolution 
+  Equation 2: Acidi ﬁcation 
+CO2 + H2O  H2CO3  H+ + HCO3- H+ + CO32­
+ 
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+344 structure changes there can be will be an ecosystem wide effect as habitat availability and species ranges 
+change. 
+Evidence of undersaturation has been reported in the Intermediate Paci ﬁc in relatively shallow waters of be­
+tween 200 m and 1,000 m (Feely et al., 2002). This is of concern to the NWHI deepwater habitat which for 
+these purposes will be de ﬁ ned as depths greater than 50 m. A number of corals have identi ﬁed habitat ranging"
+How does increased CO2 in seawater affect the saturation horizon and coral calcification?,"Increased CO2 in seawater leads to a decrease in the concentration of carbonate ions, which in turn affects the saturation horizon. The saturation horizon is the depth at which calcium carbonate structures, such as those produced by corals, tend to dissolve. As more CO2 is released into the atmosphere and absorbed by the ocean, the saturation horizon moves shallower. This means that the depth at which corals are able to calcify also becomes shallower, making it more challenging for corals to maintain their calcium carbonate structures in increasingly acidified waters.","Increased CO2 in seawater leads to a decrease in the concentration of carbonate ions. This results in the saturation horizon moving shallower, meaning that the depth at which calcium carbonate structures, such as those formed by corals, can remain stable becomes shallower. As a consequence, the ability of corals to calcify is negatively impacted, as they require a certain concentration of carbonate ions to build their calcium carbonate structures. Therefore, with more CO2 input into the atmosphere, coral calcification is hindered due to the changing conditions in seawater.
+","3 secreting organisms. The ﬁrst is calcite, which is 
+the less soluble form found in crustose coraline algaes, and the other is the aragonite form of calcium carbonate, which is 
+utilized by scleractinian corals and other pteropods. There is a critical concentration of carbonate ions in seawater below which calcium carbonate will dissolve. The solubility of calcium carbonate is a function of depth and pressure. The critical concentration occurs at a depth known as the “saturation horizon”, under which calcium carbonate structures tend to dis­solve. Due to increased amounts of CO
+2 in seawater and the resultant decrease in the carbonate ion concentration (equa­
+tion 2) the saturation horizon will move ever shallower with increasing releases of anthropogenic CO2 into the atmosphere. 
+This means that the depth at which corals are able to calcify will grow shallower as more CO2 is input into the atmosphere.","This means that the depth at which corals are able to calcify will grow shallower as more CO2 is input into the atmosphere. 
+Latitude also plays a role when looking at where saturation boundaries occur. Lower latitudes near the equator tend to have saturation states conducive to the solidi ﬁed structure of corals, while poleward areas are already showing evidence 
+of undersaturation at the surface waters. Currently the surface waters of the NWHI still fall within saturation parameters (Feely et al., 2002).","The degree to which ocean acidi ﬁcation will affect Monument coral reefs is presently under investigation. Plans 
+are underway to establish a baseline of the carbonate chemistry of the NWHI. This would be done by utiliz­
+ing the CTD (conductivity, temperature, depth) sensor scanner onboard R/V Hiialakai and outﬁtting it with a 
+pH sensor. Carbonate chemistry of a water sample can be characterized by taking three measurements; the dissolved inorganic carbon, alkalinity and pH. All three of these measurements are planned to be performed onboard during regular CTD casts and the seawater samples brought back for further analysis. These types of measurements, taken from deepwater habitats and lagoon waters (from small boat platforms) will help the Monument to develop an understanding of the current carbonate chemistry of the waters and allow us to moni­tor future changes. 
+Ocean Acidiﬁcation","Islands. Atoll research bulletin. 543:505. 
+Kleypas, J.A., R.A. Feely, V.J. Fabry, C. Langdon, C.L. Sabine, and L.L. Robbins. 2006. Impacts of Ocean Acidiﬁ cation 
+on Coral Reefs and Other Marine Calci ﬁ ers: A Guide for Future Research, report of a workshop held 18-20 April 2005, St. 
+Petersburg, FL, sponsored by NSF, NOAA and the U.S. Geological Survey. 88 pp. Kleypas, J.A. and C. Langdon. 2006. Coral Reefs and Changing Seawater Carbonate Chemistry. Coastal and Estuarine 
+Studies 61:73-110. 
+Kleypas, J.A., R.W. Buddemeier, D. Archer, J.-P. Gattuso, C. Langdon, and B.N. Opdyke. 1999. Geochemical Conse­
+quences of Increased Atmospheric Carbon Dioxide on Coral Reefs. Science 284:118-120. 
+Naughton, M.B., M.D. Romano, and T.S. Zimmerman. 2007. A conservation action plan for Black-footed Albatross ( Phoe-
+bastria nigripes ) and Lasan Albatross ( P. immutabilis ), Ver. 1.0."
+What types of echinoderms were surveyed in the Northwestern Hawaiian Islands?,"The types of echinoderms surveyed in the Northwestern Hawaiian Islands included sea urchins (echinoids), sea stars (asteroids), and sea cucumbers (holothuroids). The most common echinoid was the burrowing sea urchin, Echinostrephus sp., and the most common sea star was Linckia multifora.","The types of echinoderms surveyed in the Northwestern Hawaiian Islands included sea urchins (echinoids), sea stars (asteroids), and sea cucumbers (holothuroids). The most common echinoid observed was the burrowing sea urchin, Echinostrephus sp., while the most common sea star was Linckia multifora, and the most common sea cucumber was Actinopyga obesa.
+","Benthic Communities
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+Figure 4.51 Mean density of Echinoids, Asteriods and Holothuroids per m2 from towed diver surveys. Sources: NWHI
+RAMP, Brainard et al., in prep.; maps: L. Wedding. 
+islands/atolls. Sea urchins were the most common invertebrate observed during these surveys, with Kure","found throughout much of the NWHI. 
+Data collected during REA surveys included species level information on the three target classes of inverte-
+brates and followed the general patterns of the towed-diver data. The most common echinoid throughout the NWHI was the burrowing sea urchin, Echinostrephus  sp., with the highest densities recorded at Midway and 
+Kure (>12 individuals/m
+2). As in towed-diver surveys, sea cucumbers were present at all islands/atolls but in 
+low densities. The most common sea cucumber was Actinopyga obesa , with a density of .03 individuals/ m2 at 
+Kure. The most common sea-star was Linckia multifora . 
+147","Nonindigenous and Invasive Species
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ A Marine Biogeographic Assessment of the Northwestern Hawaiian Islands 
+288 REFERENCES 
+Abbott, D.P., A.T. Newberry, and K.M. Morris. 1997. Section 6B: Ascidians (Urochordata). Reef and Shore Fauna of Ha­
+waii. Bishop Museum Special Publication. 64 (6B). 64 pp. 
+Botany, University of Hawaii Manoa. 2001. Algae: Invasive alien Acanthophora spicifera . Available from Internet URL: 
+http://www.hawaii.edu/reefalgae/invasive_algae/rhodo/acanthophora_spicifera.htm . 
+Botany, University of Hawaii Manoa. 2001. Algae: Invasive alien Hypnea musciformis . Available from Internet URL: http:// 
+www.hawaii.edu/reefalgae/invasive_algae/rhodo/hypnea_musciformis.htm . 
+Brock, V. 1960. The introduction of aquatic animals into Hawaiian water. Int. Revue Hydrobiol. 45: 463-480. Brostoff, W. 1989. Avrainvillea amadelpha  (Codiales, Chlorophyta) from Oahu Hawaii. Pac Sci 43: 166-9.","DeFelice, R.C., D. Minton, and L.S. Godwin. 2002. Records of shallow-water marine invertebrates from French Frigate 
+Shoals, Northwestern Hawaiian Islands, with a note on non-indigenous species. Report to the U.S. Fish and Wildlife Ser­vice. Bishop Museum, Hawai‘i Biological Survey, Bishop Museum Technical Report No. 23. 
+Doty, M. S. 1961. Acanthophora, a possible invader of the marine ﬂora of Hawaii. Pac. Sci. 15(4): 547- 552. 
+Draft Environmental Impact Statement and Management Plan for the Northwestern Hawaiian Islands Proposed National 
+Marine Sanctuary. 2006. Available from Internet URL: http://hawaiireef.noaa.gov/management/mp.html . 
+Eldredge, L.G. 2003. Coral Reef Invasions. In: De Poorter, M. (Ed.). 2003. Aliens (17): 9. 
+Eldredge, L.G. and J.T. Carlton. 2002. Hawai’i marine bioinvasions: a preliminary assessment. Paci ﬁc Science 56(2): 
+211-212. Eldredge, L.G. 2005. Assessment of the Potential Threat of the Introduction of Marine Nonindigenous Species in the"
