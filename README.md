@@ -1,4 +1,3 @@
-<h1 align="center">FRONTEND NOTES: Coral AI Research Assistant</h1>
 
 <p align="center">
   An Open-Source AI Chatbot Template Built With Next.js and the AI SDK by Vercel.
