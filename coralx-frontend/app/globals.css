@@ -22,6 +22,7 @@
     }
 }
 
+
 @layer base {
     :root {
         --background: linear-gradient(to right, rgba(234, 236, 243) 67%, rgba(234, 236, 243) 83%, rgba(234, 236, 243) 100%);
