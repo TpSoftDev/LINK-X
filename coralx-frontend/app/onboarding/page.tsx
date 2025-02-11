@@ -46,7 +46,7 @@ export default function OnboardingPage() {
           </Select>
           
           <label className="block mt-4 mb-2">Topics of Interest</label>
-          <Input type="text" name="topics" placeholder="e.g., Investing, Machine Learning" onChange={handleChange} />
+          <Input type="text" name="topics" placeholder="e.g., Investing, Finance" onChange={handleChange} />
 
           <label className="block mt-4 mb-2">Interests for Personalization</label>
           <Input type="text" name="interests" placeholder="e.g., Basketball, Video Games" onChange={handleChange} />
