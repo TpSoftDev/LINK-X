@@ -2,10 +2,10 @@
 FROM python:3.10-slim
 
 # Allow statements and log messages to immediately appear in the Knative logs
-ENV PYTHONUNBUFFERED True
+ENV PYTHONUNBUFFERED=True
 
 # Set the application home directory
-ENV APP_HOME /app
+ENV APP_HOME=/app
 WORKDIR $APP_HOME
 
 # Copy requirements and install dependencies
@@ -24,14 +24,14 @@ COPY src/index.pkl /app/index.pkl
 COPY src $APP_HOME/src
 
 # Environment variables
-ENV MODULE app
+ENV MODULE=app
 ENV QT_X11_NO_MITSHM=1
-ENV PORT 8080
+ENV PORT=8080
 
 # Install Flask and CORS if not included in requirements
 RUN pip install -U Flask flask-cors types-flask-cors
 
-# Install FAISS (CPU version).
+# Install FAISS (CPU version)
 RUN pip install faiss-cpu
 
 # Set the entry point to run the app
