@@ -7,8 +7,8 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Coral AI Research Assistant',
-  description: 'Coral AI Research Assistant from the Coral X Foundation.',
+  title: 'Link-X',
+  description: 'Link-X: The Personalized Learning Platform',
 };
 
 export const viewport = {

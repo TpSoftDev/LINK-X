@@ -17,28 +17,26 @@ export const authConfig = {
       const isOnLogin = nextUrl.pathname.startsWith('/login');
       const isOnLanding = nextUrl.pathname === '/';
 
-      // If user is not logged in and tries to access /, show the landing page
-      if (!isLoggedIn && isOnLanding) {
-        return true;
-      }
+      // If user is not logged in and tries to access /, allow access to the landing page
+      if (!isLoggedIn && isOnLanding) return true;
 
       // If user is logged in and tries to access /, /login, or /register redirect to /chat (in the future, this will be changesd to the user dashboard page)
       if (isLoggedIn && (isOnLanding || isOnLogin || isOnRegister)) {
-        return Response.redirect(new URL('/chat', nextUrl as unknown as URL))
+        return Response.redirect(new URL('/chat', nextUrl));
       }
 
-      if (isOnRegister || isOnLogin) {
-        return true; // Always allow access to register and login pages
-      }
+      // Always allow access to register and login pages
+      if (isOnRegister || isOnLogin) return true; 
 
-      if (isOnChat) {
-        if (isLoggedIn) return true;
-        return Response.redirect(new URL('/login', nextUrl as unknown as URL)); // Redirect unauthenticated users to login page
-      }
+      // If on /chat, only allow access if logged in, else redirect to login
+      // if (isOnChat && !isLoggedIn) {
+      //   return Response.redirect(new URL('/login', nextUrl));
+      // }
 
-      if (!isLoggedIn) {
-        return Response.redirect(new URL('/login', nextUrl as unknown as URL)); // Redirect any other unauthorized access back to login
-      }
+      // For any other unauthorized access, redirect to /login
+      // if (!isLoggedIn) {
+      //   return Response.redirect(new URL('/login', nextUrl));
+      // }
 
       return true;
     },
