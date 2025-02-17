@@ -29,9 +29,9 @@ export const authConfig = {
       if (isOnRegister || isOnLogin) return true; 
 
       // If on /chat, only allow access if logged in, else redirect to login
-      // if (isOnChat && !isLoggedIn) {
-      //   return Response.redirect(new URL('/login', nextUrl));
-      // }
+      if (isOnChat && !isLoggedIn) {
+        return Response.redirect(new URL('/login', nextUrl));
+      }
 
       // For any other unauthorized access, redirect to /login
       // if (!isLoggedIn) {
