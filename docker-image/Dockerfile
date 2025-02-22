@@ -16,6 +16,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy environment files, Firebase credentials, and code
 COPY src/.env ./
 
+# Use Environment Variables
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+ENV AUTH_SECRET=${AUTH_SECRET}
+ENV POSTGRES_URL=${POSTGRES_URL}
+
 # Copy FAISS index and metadata
 COPY src/index.faiss /app/index.faiss
 COPY src/index.pkl /app/index.pkl
@@ -27,6 +32,7 @@ COPY src $APP_HOME/src
 ENV MODULE=app
 ENV QT_X11_NO_MITSHM=1
 ENV PORT=8080
+EXPOSE 8080
 
 # Install Flask and CORS if not included in requirements
 RUN pip install -U Flask flask-cors types-flask-cors

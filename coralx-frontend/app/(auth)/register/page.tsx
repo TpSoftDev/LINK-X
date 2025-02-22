@@ -2,44 +2,61 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useActionState, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { AuthForm } from '@/components/auth-form';
 import { SubmitButton } from '@/components/submit-button';
-
-import { register, type RegisterActionState } from '../actions';
 
 export default function Page() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
-
-  const [state, formAction] = useActionState<RegisterActionState, FormData>(
-    register,
-    {
-      status: 'idle',
-    },
-  );
+  const [state, setState] = useState<'idle' | 'in_progress' | 'success' | 'failed' | 'user_exists' | 'invalid_data'>('idle');
 
   useEffect(() => {
-    if (state.status === 'user_exists') {
+    if (state === 'user_exists') {
       toast.error('Account already exists');
-    } else if (state.status === 'failed') {
+    } else if (state === 'failed') {
       toast.error('Failed to create account');
-    } else if (state.status === 'invalid_data') {
+    } else if (state === 'invalid_data') {
       toast.error('Failed validating your submission!');
-    } else if (state.status === 'success') {
+    } else if (state === 'success') {
       toast.success('Account created successfully');
       setIsSuccessful(true);
       router.refresh();
     }
   }, [state, router]);
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     setEmail(formData.get('email') as string);
-    formAction(formData);
+
+    setState('in_progress');
+    
+    const response = await fetch('/api/register', { // Flask API endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.get('email'),
+        password: formData.get('password'),
+      }),
+    });
+
+    if (response.ok) {
+      setState('success');
+    } else {
+      const { error } = await response.json();
+      if (error === 'User already exists') {
+        setState('user_exists');
+      } else if (error === 'Invalid data') {
+        setState('invalid_data');
+      } else {
+        setState('failed');
+      }
+    }
   };
 
   return (

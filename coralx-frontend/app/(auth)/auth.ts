@@ -2,12 +2,16 @@ import { compare } from 'bcrypt-ts';
 import NextAuth, { type User, type Session } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
-import { getUser } from '@/lib/db/queries';
-
 import { authConfig } from './auth.config';
 
 interface ExtendedSession extends Session {
   user: User;
+}
+
+interface UserResponse {
+  id: string;
+  email: string;
+  // Add any additional fields that your Flask API returns
 }
 
 export const {
@@ -19,14 +23,37 @@ export const {
   ...authConfig,
   providers: [
     Credentials({
-      credentials: {},
-      async authorize({ email, password }: any) {
-        const users = await getUser(email);
-        if (users.length === 0) return null;
-        // biome-ignore lint: Forbidden non-null assertion.
-        const passwordsMatch = await compare(password, users[0].password!);
-        if (!passwordsMatch) return null;
-        return users[0] as any;
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'text', placeholder: 'Email address' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials, request) {
+        if (!credentials) return null;
+        // Cast credentials to the expected type
+        const { email, password } = credentials as { email: string; password: string };
+
+        try {
+          // Call the backend API using fetch
+          const response = await fetch('http://localhost:8080/user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (response.ok) {
+            const data: UserResponse = await response.json();
+            return data; // Return the user data on successful authentication
+          } else {
+            console.error('Authentication failed:', response.statusText);
+            return null;
+          }
+        } catch (error) {
+          console.error('Error authenticating user:', error);
+          return null;
+        }
       },
     }),
   ],
@@ -35,20 +62,12 @@ export const {
       if (user) {
         token.id = user.id;
       }
-
       return token;
     },
-    async session({
-      session,
-      token,
-    }: {
-      session: ExtendedSession;
-      token: any;
-    }) {
+    async session({ session, token }: { session: ExtendedSession; token: any }) {
       if (session.user) {
         session.user.id = token.id as string;
       }
-
       return session;
     },
   },

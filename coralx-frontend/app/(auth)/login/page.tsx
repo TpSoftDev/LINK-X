@@ -2,41 +2,62 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useActionState, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { AuthForm } from '@/components/auth-form';
 import { SubmitButton } from '@/components/submit-button';
-
-import { login, type LoginActionState } from '../actions';
 
 export default function Page() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
-
-  const [state, formAction] = useActionState<LoginActionState, FormData>(
-    login,
-    {
-      status: 'idle',
-    },
-  );
+  const [state, setState] = useState<'idle' | 'in_progress' | 'success' | 'failed' | 'invalid_data'>('idle');
 
   useEffect(() => {
-    if (state.status === 'failed') {
+    if (state === 'failed') {
       toast.error('Invalid credentials!');
-    } else if (state.status === 'invalid_data') {
+    } else if (state === 'invalid_data') {
       toast.error('Failed validating your submission!');
-    } else if (state.status === 'success') {
+    } else if (state === 'success') {
+      toast.success('Logged in successfully');
       setIsSuccessful(true);
       router.refresh();
     }
-  }, [state.status, router]);
+  }, [state, router]);
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     setEmail(formData.get('email') as string);
-    formAction(formData);
+    setState('in_progress');
+
+    const response = await fetch('/api/login', { // Flask API endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.get('email'),
+        password: formData.get('password'),
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const token = data.token;
+
+      // Store the JWT token in localStorage, sessionStorage, or cookies
+      localStorage.setItem('token', token);
+
+      setState('success');
+    } else {
+      const { error } = await response.json();
+      if (error === 'Invalid credentials') {
+        setState('failed');
+      } else if (error === 'Invalid data') {
+        setState('invalid_data');
+      }
+    }
   };
 
   return (
