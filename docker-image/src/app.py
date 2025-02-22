@@ -128,6 +128,23 @@ def login():
     }, app.config['SECRET_KEY'], algorithm='HS256')
 
     return jsonify({'token': token}), 200
+
+
+@app.route('/api/refresh-token', methods=['POST'])
+def refresh_token():
+    token = request.get_json().get('token')
+    try:
+        decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        new_token = jwt.encode({
+            'id': decoded['id'],
+            'email': decoded['email'],
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        }, app.config['SECRET_KEY'], algorithm='HS256')
+        return jsonify({'token': new_token}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token expired'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Invalid token'}), 401
     
 
 @app.route('/chat', methods=['POST'])
@@ -299,12 +316,12 @@ def delete_trailing_messages():
         return jsonify({"error": "Message ID is required"}), 400
 
     # Find the message
-    message = getMessageById(id=message_id)
+    message = get_message_by_id(id=message_id)
     if not message:
         return jsonify({"error": "Message not found"}), 404
 
     # Remove messages created after this message's timestamp
-    deleteMessagesByChatIdAfterTimestamp(chatId=message.chatId, timestamp=message.createdAt)
+    delete_messages_by_chat_id_after_timestamp(chatId=message.chatId, timestamp=message.createdAt)
 
     return jsonify({"message": "Trailing messages deleted"}), 200
 
@@ -319,7 +336,7 @@ def update_chat_visibility():
     if not chat_id or not visibility:
         return jsonify({"error": "Chat ID and visibility are required"}), 400
 
-    updateChatVisiblityById(chatId=chat_id, visibility=visibility)
+    update_chat_visibility_by_id(chatId=chat_id, visibility=visibility)
 
     return jsonify({"message": "Chat visibility updated successfully"}), 200
 
@@ -332,7 +349,7 @@ def get_suggestions():
         return jsonify({"error": "Document ID is required"}), 400
 
     try:
-        suggestions = getSuggestionsByDocumentId(document_id)
+        suggestions = get_suggestions_by_document_id(document_id)
 
         if not suggestions:
             return jsonify([]), 200  # Return an empty array if no suggestions found
@@ -346,6 +363,107 @@ def get_suggestions():
         return jsonify(suggestions), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+@app.route('/documents', methods=['GET'])
+def get_documents():
+    document_id = request.args.get('id')
+    
+    if not document_id:
+        return jsonify({'error': 'Missing id'}), 400
+
+    user_id = request.args.get('userId')
+    
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    documents = get_documents_by_id(db=Session(), id=document_id)
+    
+    if not documents:
+        return jsonify({'error': 'Document not found'}), 404
+
+    document = documents[0]
+    
+    if document['userId'] != user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    return jsonify(documents), 200
+
+
+@app.route('/documents', methods=['POST'])
+def save_document_route():
+    document_id = request.args.get('id')
+    if not document_id:
+        return jsonify({'error': 'Missing id'}), 400
+
+    user_id = request.args.get('userId')
+    
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    data = request.get_json()
+    content = data.get('content')
+    title = data.get('title')
+    kind = data.get('kind')
+
+    if not content or not title or not kind:
+        return jsonify({'error': 'Content, title, and kind are required'}), 400
+
+    # Save the document with the provided user ID
+    document = save_document(
+        db=Session(),
+        id=document_id,
+        content=content,
+        title=title,
+        kind=kind,
+        user_id=user_id
+    )
+
+    return jsonify(document), 200
+
+
+@app.route('/documents', methods=['PATCH'])
+def delete_documents_by_timestamp():
+    document_id = request.args.get('id')
+    if not document_id:
+        return jsonify({'error': 'Missing id'}), 400
+
+    user_id = request.args.get('userId')
+    
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
+    data = request.get_json()
+    timestamp = data.get('timestamp')
+
+    if not timestamp:
+        return jsonify({'error': 'Timestamp is required'}), 400
+
+    try:
+        timestamp = datetime.fromisoformat(timestamp)
+    except ValueError:
+        return jsonify({'error': 'Invalid timestamp format'}), 400
+
+    documents = get_documents_by_id(db=Session(), id=document_id)
+
+    if not documents:
+        return jsonify({'error': 'Document not found'}), 404
+
+    document = documents[0]
+
+    if document['userId'] != user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    # Delete documents created after the given timestamp
+    delete_documents_by_id_after_timestamp(
+        db=Session(),
+        id=document_id,
+        timestamp=timestamp
+    )
+
+    return jsonify({'message': 'Documents deleted successfully'}), 200
+
+
 
 
 if __name__ == '__main__':
