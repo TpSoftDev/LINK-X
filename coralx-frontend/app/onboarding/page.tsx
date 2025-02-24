@@ -35,6 +35,22 @@ export default function OnboardingPage() {
     }));
   }; 
   const router = useRouter(); 
+  const handleSubmit = async () => {
+    const user_id = "c457f944-e52b-438a-8c01-daa538a921d4"; // Replace this with the actual logged-in user's ID
+  
+    const response = await fetch("api/user-preference", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({...formData }),
+    });
+  
+    if (response.ok) {
+      router.push("/");
+    } else {
+      console.error("Failed to save preferences");
+    }
+  };
+  
   
 
   return (
@@ -106,7 +122,7 @@ export default function OnboardingPage() {
 </div>
 
 
-<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push("/")}>
+<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSubmit}>
   Save Preferences
 </Button>
 
