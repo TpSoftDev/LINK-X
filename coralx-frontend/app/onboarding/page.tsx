@@ -122,7 +122,7 @@ export default function OnboardingPage() {
 </div>
 
 
-<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push("/chat")}>
+<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push("/dashboard")}>
   Save Preferences
 </Button>
 
