@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 //import { Progress } from "@/components/ui/progress";
 import { BarChart3, BookOpen, Clock, TrendingUp, Newspaper, GraduationCap, ChevronRight } from "lucide-react";
-
+import Header from '@/components/link-x/Header';
 
 
 export default function Dashboard() {
   const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6 md:p-8 lg:p-12">
+      <Header isLoggedIn={true}/>
       <h1 className="text-4xl font-bold mb-8 text-blue-400">Financial Learning Dashboard</h1>
       <h2 className="text-1xl font-bold mb-8 text-white">
         Welcome back to Link-X! Here's an overview of your financial learning journey.
