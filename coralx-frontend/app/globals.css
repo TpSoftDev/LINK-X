@@ -70,7 +70,7 @@
         min-height: 100vh;
         position: relative;
         z-index: 0;
-        background-image: url('/images/coralAI-Background.png');
+        /* background-image: url('/images/coralAI-Background.png'); */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
