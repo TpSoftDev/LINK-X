@@ -1,22 +1,21 @@
-import type { Metadata } from 'next';
-import { Toaster } from 'sonner';
-
-import { ThemeProvider } from '@/components/theme-provider';
-
-import './globals.css';
+import type { Metadata } from "next";
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SessionProvider } from "next-auth/react"; // ✅ Import SessionProvider
+import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Link-X',
-  description: 'Link-X: The Personalized Learning Platform',
+  metadataBase: new URL("https://chat.vercel.ai"),
+  title: "Link-X",
+  description: "Link-X: The Personalized Learning Platform",
 };
 
 export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
 };
 
-const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
-const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
+const LIGHT_THEME_COLOR = "hsl(0 0% 100%)";
+const DARK_THEME_COLOR = "hsl(240deg 10% 3.92%)";
 const THEME_COLOR_SCRIPT = `\
 (function() {
   var html = document.documentElement;
@@ -35,20 +34,13 @@ const THEME_COLOR_SCRIPT = `\
   updateThemeColor();
 })();`;
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      // `next-themes` injects an extra classname to the body element to avoid
-      // visual flicker before hydration. Hence the `suppressHydrationWarning`
-      // prop is necessary to avoid the React hydration mismatch warning.
-      // https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -57,15 +49,17 @@ export default async function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Toaster position="top-center" />
-          {children}
-        </ThemeProvider>
+        <SessionProvider> {/* ✅ Wrap the entire app in SessionProvider */}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster position="top-center" />
+            {children} {/* ✅ Now all pages have access to the session */}
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

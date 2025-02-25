@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useActionState } from "react";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,8 +10,20 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useRouter } from "next/navigation";
+import { saveOnboarding, type OnboardingActionState } from "./actions";
 
 export default function OnboardingPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return; // Wait for session to load
+    if (!session?.user?.id) {
+      console.error("❌ No session found, redirecting to login...");
+      router.push("/login");
+    }
+  }, [session, status, router]);
+
   const [formData, setFormData] = useState({
     name: "",
     job: "",
@@ -28,29 +42,36 @@ export default function OnboardingPage() {
       [name]: value,
     }));
   };
+
   const handleCheckboxChange = (checked: CheckedState, name: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: checked === true, // Converts "indeterminate" to false
     }));
   }; 
-  const router = useRouter(); 
+
   const handleSubmit = async () => {
-    const user_id = "c457f944-e52b-438a-8c01-daa538a921d4"; // Replace this with the actual logged-in user's ID
-  
-    const response = await fetch("api/user-preference", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({...formData }),
+    if (!session?.user?.id) {
+      console.error("❌ User ID not found, cannot save onboarding data.");
+      return;
+    }
+
+    const form = new FormData();
+    form.append("userId", session.user.id);
+    Object.entries(formData).forEach(([key, value]) => {
+      form.append(key, value.toString());
     });
-  
-    if (response.ok) {
-      router.push("/");
+
+    console.log("🚀 Submitting onboarding data:", Object.fromEntries(form.entries()));
+
+    const response = await saveOnboarding({ status: "idle" } as OnboardingActionState, form);
+    if (response.status === "success") {
+      console.log("✅ Onboarding data saved successfully!");
+      router.push("/chat");
     } else {
-      console.error("Failed to save preferences");
+      console.error("❌ Failed to save onboarding data.");
     }
   };
-  
   
 
   return (
@@ -113,16 +134,12 @@ export default function OnboardingPage() {
           </Select>
 
           <div className="flex items-center mt-4">
-  <Checkbox 
-    id="quizzes" 
-    checked={formData.quizzes} 
-    onCheckedChange={(checked) => handleCheckboxChange(checked, "quizzes")} 
-  />
+          <Checkbox checked={formData.quizzes} onCheckedChange={(checked) => handleCheckboxChange(checked, "quizzes")} />
   <label htmlFor="quizzes" className="ml-2">Include quizzes for progress tracking</label>
 </div>
 
 
-<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push("/chat")}>
+<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"onClick={handleSubmit}>
   Save Preferences
 </Button>
 
