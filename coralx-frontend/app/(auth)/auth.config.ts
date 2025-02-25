@@ -14,6 +14,7 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnChat = nextUrl.pathname.startsWith('/chat');
       const isOnRegister = nextUrl.pathname.startsWith('/register');
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       const isOnLogin = nextUrl.pathname.startsWith('/login');
       const isOnLanding = nextUrl.pathname === '/';
 
@@ -22,7 +23,7 @@ export const authConfig = {
 
       // If user is logged in and tries to access /, /login, redirect to /chat (in the future, this will be changesd to the user dashboard page)
       if (isLoggedIn && (isOnLanding || isOnLogin)) {
-        return Response.redirect(new URL('/chat', nextUrl));
+        return Response.redirect(new URL('/dashboard', nextUrl));
       }
 
       //once the user is registered, they are taken to the onboarding

@@ -19,13 +19,15 @@ export default function OnboardingPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "loading") return; // Wait for session to load
-    if (!session?.user?.id) {
-      console.error("❌ No session found, redirecting to login...");
-      router.push("/login");
-    }
-  }, [session, status, router]);
+  // useEffect(() => {
+  //   console.log("🔍 Checking session in Onboarding:", { session, status });
+    
+  //   if (status === "loading") return;
+  //   if (!session?.user?.id) {
+  //     console.warn("❌ No session found, redirecting to login...");
+  //     router.push("/login");
+  //   }
+  // }, [session, status, router]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -49,18 +51,14 @@ export default function OnboardingPage() {
   const handleCheckboxChange = (checked: CheckedState, name: string) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: checked === true, // Converts "indeterminate" to false
+      [name]: checked === true,
     }));
   }; 
 
   const handleSubmit = async () => {
-    if (!session?.user?.id) {
-      console.error("❌ User ID not found, cannot save onboarding data.");
-      return;
-    }
+    
 
     const form = new FormData();
-    form.append("userId", session.user.id);
     Object.entries(formData).forEach(([key, value]) => {
       form.append(key, value.toString());
     });
@@ -144,7 +142,7 @@ export default function OnboardingPage() {
 
 
 
-<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"onClick={handleSubmit}>
+<Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"onClick={handleSubmit}>Save Preferences
 </Button>
 
         </CardContent>
