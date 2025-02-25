@@ -10,7 +10,10 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useRouter } from "next/navigation";
+
 import { saveOnboarding, type OnboardingActionState } from "./actions";
+
+import Header from '@/components/link-x/Header';
 
 export default function OnboardingPage() {
   const { data: session, status } = useSession();
@@ -67,7 +70,7 @@ export default function OnboardingPage() {
     const response = await saveOnboarding({ status: "idle" } as OnboardingActionState, form);
     if (response.status === "success") {
       console.log("✅ Onboarding data saved successfully!");
-      router.push("/chat");
+      router.push("/dashboard");
     } else {
       console.error("❌ Failed to save onboarding data.");
     }
@@ -76,6 +79,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-gray-100 bg-gray-950 p-6">
+      <Header isLoggedIn={false} showAuthButton={false}/>
       <Card className="w-full max-w-lg p-6 relative bg-gray-650 border-blue-500/20 shadow-lg"> {/* Ensure relative positioning */}
         <CardContent>
         <h1 className="text-xl font-semibold mb-4 text-blue-400">Personalized Learning Setup</h1>
@@ -139,8 +143,8 @@ export default function OnboardingPage() {
 </div>
 
 
+
 <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"onClick={handleSubmit}>
-  Save Preferences
 </Button>
 
         </CardContent>
