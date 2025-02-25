@@ -10,9 +10,10 @@ type HeaderProps = {
 }
 
 const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
-    const { resolvedTheme } = useTheme()
-    // Select logo based on light or dark theme
-    const logoSrc = resolvedTheme === "dark" ? "/images/Logo-dark.png" : "/images/Logo-light.png"
+  // Check for computer's theme 
+  // const { resolvedTheme } = useTheme()
+  // Select logo based on light or dark theme
+  // const logoSrc = resolvedTheme === "dark" ? "/images/Logo-dark.png" : "/images/Logo-light.png"
 
   return (
     <header className="absolute top-4 left-0 w-full h-[8vh] flex items-center">
@@ -20,7 +21,9 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
         <div className="flex justify-between items-center w-full h-full">
           <Link href="/" className="flex items-center h-full relative">
             <Image
-              src={logoSrc}
+              // src={logoSrc}
+              src={"/images/Logo-dark.png"}
+
               alt="Link-X Logo"
               width={288}
               height={197}
@@ -32,7 +35,9 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
             {showAuthButton && (
                 <Link
                     href={isLoggedIn ? "/logout" : "/login"}      // TODO: Define actual method for logging out later
-                    className="hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                    // className="hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                    // For now, use Dark mode styling across the board
+                    className="hover:bg-gray-700 focus:ring-4 focus:ring-gray-800 rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                 >
                     {isLoggedIn ? "Log out" : "Log in"}
                 </Link>
