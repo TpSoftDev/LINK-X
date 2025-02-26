@@ -8,10 +8,15 @@ import {
 import { createRoot } from 'react-dom/client';
 
 import { Suggestion as PreviewSuggestion } from '@/components/suggestion';
-import type { Suggestion } from '@/lib/db/schema';
 import { BlockKind } from '@/components/block';
 
-export interface UISuggestion extends Suggestion {
+// Define backend API endpoint
+const API_URL = 'http://localhost:8080/suggestions';
+
+export interface UISuggestion {
+  id: string;
+  originalText: string;
+  suggestedText: string;
   selectionStart: number;
   selectionEnd: number;
 }
@@ -19,6 +24,30 @@ export interface UISuggestion extends Suggestion {
 interface Position {
   start: number;
   end: number;
+}
+
+async function fetchSuggestions(documentId: string): Promise<UISuggestion[]> {
+  try {
+    const response = await fetch(`${API_URL}?documentId=${documentId}`, {
+      headers: {
+        'X-User-Id': getUserId(),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error fetching suggestions: ${response.statusText}`);
+    }
+
+    const suggestions = await response.json();
+    return suggestions;
+  } catch (error) {
+    console.error('Failed to load suggestions:', error);
+    return [];
+  }
+}
+
+function getUserId(): string {
+  return 'user-123';
 }
 
 function findPositionsInDoc(doc: Node, searchText: string): Position | null {
@@ -44,26 +73,17 @@ function findPositionsInDoc(doc: Node, searchText: string): Position | null {
   return positions;
 }
 
-export function projectWithPositions(
-  doc: Node,
-  suggestions: Array<Suggestion>,
-): Array<UISuggestion> {
+export async function projectWithPositions(doc: Node, documentId: string): Promise<UISuggestion[]> {
+  const suggestions = await fetchSuggestions(documentId);
+
   return suggestions.map((suggestion) => {
     const positions = findPositionsInDoc(doc, suggestion.originalText);
 
     if (!positions) {
-      return {
-        ...suggestion,
-        selectionStart: 0,
-        selectionEnd: 0,
-      };
+      return { ...suggestion, selectionStart: 0, selectionEnd: 0 };
     }
 
-    return {
-      ...suggestion,
-      selectionStart: positions.start,
-      selectionEnd: positions.end,
-    };
+    return { ...suggestion, selectionStart: positions.start, selectionEnd: positions.end };
   });
 }
 
@@ -124,7 +144,6 @@ export function createSuggestionWidget(
   return {
     dom,
     destroy: () => {
-      // Wrapping unmount in setTimeout to avoid synchronous unmounting during render
       setTimeout(() => {
         root.unmount();
       }, 0);

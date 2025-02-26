@@ -1,12 +1,12 @@
-from sqlalchemy import select, and_, desc, asc, gt, gte
+from sqlalchemy import select, and_, desc, asc
 from sqlalchemy.orm import Session
-from schema import User, Chat, Message, Vote, Document, Suggestion  # Import your models
+from src.db.schema import User, Chat, Message, Vote, Document, Suggestion  # Import your models
 
 # Get User by Email
 def get_user_by_email(db: Session, email: str):
     """Retrieve a user by email from the database."""
     try:
-        result = db.execute(select(User).filter_by(email=email)).scalars().all()
+        result = db.execute(select(User).filter_by(email=email)).scalars().first()
         return result
     except Exception as e:
         print(f"Error retrieving user: {e}")
@@ -145,8 +145,8 @@ def get_document_by_id(db: Session, document_id: str):
 def delete_documents_by_id_after_timestamp(db: Session, document_id: str, timestamp: str):
     """Delete documents by ID after a specific timestamp."""
     try:
-        db.query(Suggestion).filter(and_(Suggestion.document_id == document_id, gt(Suggestion.created_at, timestamp))).delete()
-        db.query(Document).filter(and_(Document.id == document_id, gt(Document.created_at, timestamp))).delete()
+        db.query(Suggestion).filter(and_(Suggestion.document_id == document_id, Suggestion.created_at > timestamp)).delete()
+        db.query(Document).filter(and_(Document.id == document_id, Document.created_at > timestamp)).delete()
         db.commit()
     except Exception as e:
         print(f"Error deleting documents: {e}")
@@ -184,7 +184,7 @@ def get_message_by_id(db: Session, message_id: str):
 def delete_messages_by_chat_id_after_timestamp(db: Session, chat_id: str, timestamp: str):
     """Delete messages from a chat after a specific timestamp."""
     try:
-        db.query(Message).filter(and_(Message.chat_id == chat_id, gte(Message.created_at, timestamp))).delete()
+        db.query(Message).filter(and_(Message.chat_id == chat_id, Message.created_at >= timestamp)).delete()
         db.commit()
     except Exception as e:
         print(f"Error deleting messages: {e}")

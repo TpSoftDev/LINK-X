@@ -5,15 +5,13 @@ import pickle
 import numpy as np
 from dotenv import load_dotenv
 import os
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.schema import Base
+from src.db.schema import Base, Suggestion, User, Document, Chat, Message, Vote
 from alembic import command
 from alembic.config import Config
-import traceback
-import bcrypt
 import jwt
 import datetime
 from werkzeug.security import check_password_hash
@@ -101,7 +99,7 @@ def create_user_route():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email')
@@ -117,7 +115,7 @@ def login():
         return jsonify({'error': 'User not found'}), 404
 
     # Check password (assuming you store hashed passwords in the DB)
-    if not check_password_hash(user['password'], password):
+    if not check_password_hash(user.password, password):
         return jsonify({'error': 'Invalid credentials'}), 401
 
     # Create JWT token
@@ -130,7 +128,7 @@ def login():
     return jsonify({'token': token}), 200
 
 
-@app.route('/api/refresh-token', methods=['POST'])
+@app.route('/refresh-token', methods=['POST'])
 def refresh_token():
     token = request.get_json().get('token')
     try:
@@ -279,7 +277,7 @@ def migrate():
         return jsonify({"error": f"Error running migrations: {str(e)}"}), 500
 
 
-@app.route('/api/save-model-id', methods=['POST'])
+@app.route('/save-model-id', methods=['POST'])
 def save_model_id():
     """Save the selected AI model ID."""
     data = request.get_json()
@@ -292,7 +290,7 @@ def save_model_id():
     return jsonify({"message": f"Model ID {model_id} saved successfully"}), 200
 
 
-@app.route('/api/generate-title', methods=['POST'])
+@app.route('/generate-title', methods=['POST'])
 def generate_title_from_message():
     """Generate a short title based on the user's first message."""
     data = request.get_json()
@@ -306,7 +304,7 @@ def generate_title_from_message():
     return jsonify({"title": title}), 200
 
 
-@app.route('/api/delete-trailing-messages', methods=['POST'])
+@app.route('/delete-trailing-messages', methods=['POST'])
 def delete_trailing_messages():
     """Delete messages after a given timestamp in a chat."""
     data = request.get_json()
@@ -326,7 +324,7 @@ def delete_trailing_messages():
     return jsonify({"message": "Trailing messages deleted"}), 200
 
 
-@app.route('/api/update-chat-visibility', methods=['POST'])
+@app.route('/update-chat-visibility', methods=['POST'])
 def update_chat_visibility():
     """Update the visibility status of a chat."""
     data = request.get_json()
@@ -464,6 +462,69 @@ def delete_documents_by_timestamp():
     return jsonify({'message': 'Documents deleted successfully'}), 200
 
 
+@app.route('/suggestions', methods=['POST'])
+def save_suggestions_route():
+    """Save multiple suggestions for a specific document."""
+    data = request.get_json()
+    document_id = data.get('documentId')
+    original_text = data.get('originalText')
+    suggested_text = data.get('suggestedText')
+    description = data.get('description')
+    user_id = data.get('userId')
+
+    # Validate input
+    if not document_id or not original_text or not suggested_text or not user_id:
+        return jsonify({"error": "Document ID, original text, suggested text, and user ID are required"}), 400
+
+    try:
+        # Create suggestion objects
+        suggestions = [
+            Suggestion(
+                documentId=document_id,
+                originalText=original_text,
+                suggestedText=suggested_text,
+                description=description,
+                userId=user_id,
+                documentCreatedAt=datetime.utcnow()
+            )
+        ]
+
+        # Use the save_suggestions function to save the suggestions
+        db = Session()
+        save_suggestions(db, suggestions)
+
+        return jsonify({"message": "Suggestions saved successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": f"Error saving suggestions: {str(e)}"}), 500
+    
+
+@app.route('/document/<document_id>', methods=['GET'])
+def get_document_by_id_route(document_id):
+    """Retrieve a document by its ID."""
+    try:
+        # Retrieve the document using the get_document_by_id function
+        document = get_document_by_id(db=Session(), document_id=document_id)
+        
+        if not document:
+            return jsonify({"error": "Document not found"}), 404
+
+        return jsonify(document), 200  # Return the document as JSON
+
+    except Exception as e:
+        return jsonify({"error": f"Error retrieving document: {str(e)}"}), 500
+    
+
+@app.route('/chat/<chat_id>', methods=['DELETE'])
+def delete_chat_by_id_route(chat_id):
+    """Delete a chat by its ID and all associated messages and votes."""
+    try:
+        # Call the function to delete the chat and its associated data
+        delete_chat_by_id(db=Session(), chat_id=chat_id)
+
+        return jsonify({"message": "Chat and its associated messages and votes deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Error deleting chat: {str(e)}"}), 500
 
 
 if __name__ == '__main__':

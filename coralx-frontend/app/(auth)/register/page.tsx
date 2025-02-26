@@ -34,7 +34,7 @@ export default function Page() {
 
     setState('in_progress');
     
-    const response = await fetch('/api/register', { // Flask API endpoint
+    const response = await fetch('http://localhost:8080/user', { // Flask API endpoint
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
