@@ -17,9 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/.env ./  
 
 # Use Environment Variables
-ENV OPENAI_API_KEY=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
-ENV AUTH_SECRET=78e7acf9b1069552eea5b7d29fc42c2d
-ENV POSTGRES_URL=postgresql://neondb_owner:npg_9mcyfEOhr3RB@ep-yellow-sun-a5h8no3u-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+ENV OPENAI_API_KEY=
+ENV AUTH_SECRET=
+ENV POSTGRES_URL=
 
 # Copy FAISS index and metadata
 COPY src/index.faiss /app/index.faiss
