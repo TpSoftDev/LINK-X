@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useTheme } from "next-themes"
+// import { useTheme } from "next-themes"
 
 type HeaderProps = {
     showAuthButton?: boolean    // Shows Auth Button by default. 
@@ -23,7 +23,6 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
             <Image
               // src={logoSrc}
               src={"/images/Logo-dark.png"}
-
               alt="Link-X Logo"
               width={288}
               height={197}
@@ -42,7 +41,6 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
                     {isLoggedIn ? "Log out" : "Log in"}
                 </Link>
             )}
-
           </div>
         </div>
       </nav>
