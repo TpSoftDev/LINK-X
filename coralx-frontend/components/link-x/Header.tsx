@@ -33,7 +33,7 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
     <header className="absolute top-4 left-0 w-full h-[8vh] flex items-center">
       <nav className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center w-full h-full">
-          <Link href="/" className="flex items-center h-full relative">
+          <Link href="/dashboard" className="flex items-center h-full relative">
             <Image
               // src={logoSrc}
               src={"/images/Logo-dark.png"}
