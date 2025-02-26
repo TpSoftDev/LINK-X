@@ -23,14 +23,17 @@ export default function Page() {
     } else if (state === 'success') {
       toast.success('Logged in successfully');
       setIsSuccessful(true);
-      router.refresh();
+      
+      console.log('Redirecting to /chat'); // Debugging log
+      router.push('/chat');
     }
   }, [state, router]);
+  
 
   const handleSubmit = async (formData: FormData) => {
     setEmail(formData.get('email') as string);
     setState('in_progress');
-
+  
     const response = await fetch('http://localhost:8080/login', {
       method: 'POST',
       headers: {
@@ -41,15 +44,17 @@ export default function Page() {
         password: formData.get('password'),
       }),
     });
-
+  
     if (response.ok) {
       const data = await response.json();
       const token = data.token;
-
-      // Store the JWT token in localStorage, sessionStorage, or cookies
+  
+      // Store the JWT token in localStorage or cookies
       localStorage.setItem('token', token);
-
+  
       setState('success');
+      // Redirect to the chat page after login
+      router.push('/chat');
     } else {
       const { error } = await response.json();
       if (error === 'Invalid credentials') {

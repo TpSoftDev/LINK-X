@@ -9,10 +9,9 @@ Base = declarative_base()
 # User model
 class User(Base):
     __tablename__ = 'User'
-
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String(64), nullable=False, unique=True)
-    password = Column(String(64))
+    password = Column(String(255))
 
     # relationships
     chats = relationship("Chat", back_populates="user")
@@ -22,7 +21,6 @@ class User(Base):
 # Chat model
 class Chat(Base):
     __tablename__ = 'Chat'
-
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     createdAt = Column(DateTime, nullable=False, default=datetime.utcnow)
     title = Column(Text, nullable=False)
@@ -37,11 +35,10 @@ class Chat(Base):
 # Message model
 class Message(Base):
     __tablename__ = 'Message'
-
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     chatId = Column(UUID(as_uuid=True), ForeignKey('Chat.id'), nullable=False)
     role = Column(String, nullable=False)
-    content = Column(Text, nullable=False)  # Use a plain string for the content field
+    content = Column(Text, nullable=False)
     createdAt = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # relationships
@@ -51,7 +48,6 @@ class Message(Base):
 # Vote model
 class Vote(Base):
     __tablename__ = 'Vote'
-
     chatId = Column(UUID(as_uuid=True), ForeignKey('Chat.id'), primary_key=True)
     messageId = Column(UUID(as_uuid=True), ForeignKey('Message.id'), primary_key=True)
     isUpvoted = Column(Boolean, nullable=False)
@@ -63,7 +59,6 @@ class Vote(Base):
 # Document model
 class Document(Base):
     __tablename__ = 'Document'
-
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     createdAt = Column(DateTime, nullable=False, default=datetime.utcnow)
     title = Column(Text, nullable=False)
@@ -78,7 +73,6 @@ class Document(Base):
 # Suggestion model
 class Suggestion(Base):
     __tablename__ = 'Suggestion'
-
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     documentId = Column(UUID(as_uuid=True), ForeignKey('Document.id'), nullable=False)
     documentCreatedAt = Column(DateTime, nullable=False)

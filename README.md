@@ -361,3 +361,19 @@ Evaluation results are saved in:
 - OpenAI for embeddings and GPT-4
 - Facebook Research for FAISS
 - RAGAS for evaluation metrics
+
+
+
+
+
+
+To run frontend: 
+navigate to coralx-frontend 
+pnpm dev
+
+To run backend:
+navigate to LINK-X
+docker build -t <name of container> docker-image
+cd docker-image/src
+docker run --env-file .env -p 8080:8080 <name of container>
+

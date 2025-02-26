@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
 
-import { auth } from '@/app/(auth)/auth';
 import { Chat } from '@/components/chat';
 import { DEFAULT_MODEL_NAME, models } from '@/lib/ai/models';
 import { convertToUIMessages } from '@/lib/utils';
@@ -11,9 +11,30 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;
 
+  // Retrieve the JWT token from localStorage
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+  if (!token) {
+    // If no token is found, redirect to login
+    redirect('/login');
+  }
+
+  // Decode the JWT token to get user info (optional)
+  let userId = null;
+  try {
+    const decodedToken: any = jwtDecode(token);
+    userId = decodedToken?.userId; // Assuming the token has a 'userId' field
+  } catch (err) {
+    console.error('Failed to decode JWT token', err);
+    redirect('/login'); // Redirect if decoding fails
+  }
+
   // Fetch the chat details from the backend API
   const chatResponse = await fetch(`${process.env.BACKEND_URL}/chat/${id}`, {
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Include the JWT token in the request
+    },
   });
 
   if (!chatResponse.ok) {
@@ -27,22 +48,24 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
-  const session = await auth();
-
   // Check chat visibility and ensure the user has access if it's private
   if (chat.visibility === 'private') {
-    if (!session || !session.user) {
+    // Ensure the user is logged in and has access to this chat
+    if (!userId) {
       return notFound();
     }
 
-    if (session.user.id !== chat.userId) {
-      return notFound();
+    if (userId !== chat.userId) {
+      return notFound(); // User is not allowed to access the chat
     }
   }
 
   // Fetch messages associated with the chat from the backend API
   const messagesResponse = await fetch(`${process.env.BACKEND_URL}/chat/${id}/messages`, {
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`, // Include the JWT token here as well
+    },
   });
 
   if (!messagesResponse.ok) {
@@ -64,7 +87,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         initialMessages={convertToUIMessages(messagesFromDb)}
         selectedModelId={selectedModelId}
         selectedVisibilityType={chat.visibility}
-        isReadonly={session?.user?.id !== chat.userId}
+        isReadonly={userId !== chat.userId}
       />
       <DataStreamHandler id={id} />
     </>

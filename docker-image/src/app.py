@@ -35,6 +35,7 @@ INDEX_PATH = "/app/"
 PICKLE_PATH = "/app/"
 
 # SQLAlchemy configuration
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "your_default_secret")
 POSTGRES_URL = os.getenv("POSTGRES_URL")
 if not POSTGRES_URL:
     raise ValueError("POSTGRES_URL is not defined in the environment")
@@ -120,8 +121,8 @@ def login():
 
     # Create JWT token
     token = jwt.encode({
-        'id': user['id'],
-        'email': user['email'],
+        'id': str(user.id),
+        'email': user.email,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }, app.config['SECRET_KEY'], algorithm='HS256')
 
