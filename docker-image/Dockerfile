@@ -17,9 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/.env ./  
 
 # Use Environment Variables
-ENV OPENAI_API_KEY=
-ENV AUTH_SECRET=
-ENV POSTGRES_URL=
 
 # Copy FAISS index and metadata
 COPY src/index.faiss /app/index.faiss
