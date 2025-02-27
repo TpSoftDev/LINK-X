@@ -59,7 +59,7 @@ export default function Dashboard() {
                     <Button
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-white flex items-center"
-              onClick={() => router.push("/chat")} // Navigate to /chat
+              onClick={() => router.push("/learn")} // Navigate to /chat
             >
               Enroll <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
