@@ -11,6 +11,28 @@ import {
   boolean,
 } from 'drizzle-orm/pg-core';
 
+
+//code for onboarding
+export const onboarding = pgTable('onboarding', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  job: text('job'),
+  traits: text('traits'),
+  learningStyle: text('learning_style'),
+  depth: text('depth'),
+  topics: text('topics'),
+  interests: text('interests'),
+  schedule: text('schedule'),
+  quizzes: boolean('quizzes').notNull().default(false),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export type Onboarding = InferSelectModel<typeof onboarding>;
+
+
 export const user = pgTable('User', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   email: varchar('email', { length: 64 }).notNull(),
