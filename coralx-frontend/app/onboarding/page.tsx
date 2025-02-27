@@ -29,6 +29,8 @@ export default function OnboardingPage() {
   //   }
   // }, [session, status, router]);
 
+  //form data
+
   const [formData, setFormData] = useState({
     name: "",
     job: "",
