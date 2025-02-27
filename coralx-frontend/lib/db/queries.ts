@@ -15,6 +15,7 @@ import {
   type Message,
   message,
   vote,
+  onboarding
 } from './schema';
 import { BlockKind } from '@/components/block';
 
@@ -25,6 +26,127 @@ import { BlockKind } from '@/components/block';
 // biome-ignore lint: Forbidden non-null assertion.
 const client = postgres(process.env.POSTGRES_URL!);
 const db = drizzle(client);
+
+//code for posting onboarding data
+
+
+export async function saveOnboardingData({
+  userId,
+  name,
+  job,
+  traits,
+  learningStyle,
+  depth,
+  topics,
+  interests,
+  schedule,
+  quizzes,
+}: {
+  userId: string;
+  name: string;
+  job?: string;
+  traits?: string;
+  learningStyle?: string;
+  depth?: string;
+  topics?: string;
+  interests?: string;
+  schedule?: string;
+  quizzes: boolean;
+}) {
+  try {
+    console.log("✅ Saving onboarding data to database for user:", userId);
+    
+    const result = await db.insert(onboarding).values({
+      userId,
+      name,
+      job,
+      traits,
+      learningStyle,
+      depth,
+      topics,
+      interests,
+      schedule,
+      quizzes,
+      createdAt: new Date(),
+    });
+
+    console.log("✅ Successfully inserted:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to save onboarding data in database", error);
+    throw error;
+  }
+}
+
+
+export async function getOnboardingDataByUserId(userId: string) {
+  try {
+    return await db
+      .select()
+      .from(onboarding)
+      .where(eq(onboarding.userId,userId));
+  } catch (error) {
+    console.error("Failed to fetch onboarding data for user", error);
+    throw error;
+  }
+}
+
+export async function updateOnboardingData({
+  userId,
+  name,
+  job,
+  traits,
+  learningStyle,
+  depth,
+  topics,
+  interests,
+  schedule,
+  quizzes,
+}: {
+  userId: string;
+  name?: string;
+  job?: string;
+  traits?: string;
+  learningStyle?: string;
+  depth?: string;
+  topics?: string;
+  interests?: string;
+  schedule?: string;
+  quizzes?: boolean;
+}) {
+  try {
+    return await db
+      .update(onboarding)
+      .set({
+        name,
+        job,
+        traits,
+        learningStyle,
+        depth,
+        topics,
+        interests,
+        schedule,
+        quizzes,
+        createdAt: new Date(),
+      })
+      .where(eq(onboarding.userId,userId));
+  } catch (error) {
+    console.error("Failed to update onboarding data in database", error);
+    throw error;
+  }
+}
+
+export async function deleteOnboardingDataByUserId(userId: string) {
+  try {
+    return await db.delete(onboarding).where(eq(onboarding.userId,userId));
+  } catch (error) {
+    console.error("Failed to delete onboarding data for user", error);
+    throw error;
+  }
+}
+
+
+
 
 export async function getUser(email: string): Promise<Array<User>> {
   try {
