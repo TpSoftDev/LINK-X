@@ -14,15 +14,21 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnChat = nextUrl.pathname.startsWith('/chat');
       const isOnRegister = nextUrl.pathname.startsWith('/register');
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       const isOnLogin = nextUrl.pathname.startsWith('/login');
       const isOnLanding = nextUrl.pathname === '/';
 
       // If user is not logged in and tries to access /, allow access to the landing page
       if (!isLoggedIn && isOnLanding) return true;
 
-      // If user is logged in and tries to access /, /login, or /register redirect to /chat (in the future, this will be changesd to the user dashboard page)
-      if (isLoggedIn && (isOnLanding || isOnLogin || isOnRegister)) {
-        return Response.redirect(new URL('/chat', nextUrl));
+      // If user is logged in and tries to access /, /login, redirect to /chat (in the future, this will be changesd to the user dashboard page)
+      if (isLoggedIn && (isOnLanding || isOnLogin)) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+
+      //once the user is registered, they are taken to the onboarding
+      if(isLoggedIn && isOnRegister) {
+        return Response.redirect(new URL('/onboarding', nextUrl));
       }
 
       // Always allow access to register and login pages
