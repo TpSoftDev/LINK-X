@@ -28,7 +28,7 @@
         --background: linear-gradient(to right, rgba(234, 236, 243) 67%, rgba(234, 236, 243) 83%, rgba(234, 236, 243) 100%);
         --foreground: rgb(10, 10, 11);
         --foreground-rgb: rgb(0, 0, 0);
-        --background-image: url('/images/coralAI-Background.png');
+        /* --background-image: url('/images/coralAI-Background.png'); */
         --background-overlay: rgba(0, 0, 0, 0.05);
         --button: linear-gradient(to right, rgb(132, 200, 255) 0%, rgb(174, 216, 255) 33%, rgb(255, 255, 255) 100%);
         --button-hover: rgb(58, 97, 140);
@@ -70,7 +70,7 @@
         min-height: 100vh;
         position: relative;
         z-index: 0;
-        background-image: url('/images/coralAI-Background.png');
+        /* background-image: url('/images/coralAI-Background.png'); */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
