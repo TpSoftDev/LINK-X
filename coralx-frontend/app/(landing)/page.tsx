@@ -1,26 +1,71 @@
-import Link from "next/link"
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import ProductShowcase from "@/components/ProductShowcase";
+import About from "@/components/About";
+import Newsletter from "@/components/Newsletter";
+import Footer from "@/components/Footer";
 
-import Header from '@/components/link-x/Header';
+const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function LandingPage() {
+  useEffect(() => {
+    // Simulating page loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Handle initial page transitions
+  useEffect(() => {
+    if (!isLoading) {
+      document.body.style.overflow = "auto";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+  }, [isLoading]);
+
   return (
-  <div className="relative min-h-screen font-[family-name:var(--font-geist-sans)]">
-      <Header isLoggedIn={false}/>
-      <main className="flex flex-col items-center justify-center h-screen">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Learn it your way.</h1>
-          <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300">Personalized education, powered by AI</p>
+    <>
+      {/* Loading screen */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[100] flex items-center justify-center bg-background transition-opacity duration-700",
+          isLoading ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+      >
+        <div className="text-5xl font-bold relative">
+          <span className="text-primary">INSIGHT</span>
+          <div 
+            className={cn(
+              "absolute bottom-0 left-0 h-1 bg-primary transition-all duration-1000 ease-in-out",
+              isLoading ? "w-0" : "w-full"
+            )}
+          />
         </div>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <Link
-            className="rounded-lg border border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="/register"
-            rel="noopener noreferrer"
-          >
-            Get Started
-          </Link>
-        </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Main content */}
+      <div 
+        className={cn(
+          "transition-opacity duration-700",
+          isLoading ? "opacity-0" : "opacity-100"
+        )}
+      >
+        <Navbar />
+        <main>
+          <Hero />
+          <ProductShowcase />
+          <About />
+          <Newsletter />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
-}
+};
+
+export default Index;
