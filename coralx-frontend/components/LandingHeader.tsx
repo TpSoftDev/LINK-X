@@ -1,14 +1,10 @@
-
-"use client";
-
 import { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+import LandingHeader from './landing/LandingHeader';
 
-const LandingHeader = () => {
+const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -20,11 +16,29 @@ const LandingHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+      // Close mobile menu if open
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+      
+      // Scroll to the element
+      window.scrollTo({
+        top: targetElement.offsetTop - 80, // Offset for header height
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const navItems = [
-    { name: "Features", href: "#features" },
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "For Students", href: "#for-students" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "Features", href: "#features", id: "features" },
+    { name: "How It Works", href: "#how-it-works", id: "how-it-works" },
+    { name: "For Students", href: "#for-students", id: "for-students" },
+    { name: "Pricing", href: "#pricing", id: "pricing" },
   ];
 
   return (
@@ -37,26 +51,22 @@ const LandingHeader = () => {
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/images/Logo-dark.png"
-            alt="Link-X Logo"
-            width={144}
-            height={98}
-            className="h-8 w-auto object-contain"
-            priority
-          />
-        </Link>
+        <a href="#" className="flex items-center">
+          <span className="text-2xl font-bold text-gradient">
+            LINK-X
+          </span>
+        </a>
 
         <nav className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <Link
+            <a
               key={item.name}
               href={item.href}
               className="text-sm font-medium text-gray-300 hover:text-blue-400 transition-colors"
+              onClick={(e) => handleSmoothScroll(e, item.id)}
             >
               {item.name}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -64,15 +74,13 @@ const LandingHeader = () => {
           <Button
             variant="ghost"
             className="text-sm font-medium text-gray-300 hover:text-blue-400"
-            asChild
           >
-            <Link href="/login">Log In</Link>
+            Log In
           </Button>
           <Button
             className="bg-blue-600 hover:bg-blue-700 text-white border-0"
-            asChild
           >
-            <Link href="/register">Get Started</Link>
+            Get Started
           </Button>
         </div>
 
@@ -94,29 +102,27 @@ const LandingHeader = () => {
         <div className="px-6 py-4 space-y-6">
           <nav className="flex flex-col space-y-6">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.name}
                 href={item.href}
                 className="text-lg font-medium text-gray-300 hover:text-blue-400"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => handleSmoothScroll(e, item.id)}
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
           </nav>
           <div className="flex flex-col space-y-4 pt-6 border-t border-gray-800">
             <Button
               variant="ghost"
               className="justify-center text-gray-300"
-              asChild
             >
-              <Link href="/login">Log In</Link>
+              Log In
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white border-0 justify-center"
-              asChild
             >
-              <Link href="/register">Get Started</Link>
+              Get Started
             </Button>
           </div>
         </div>
