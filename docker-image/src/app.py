@@ -1,20 +1,17 @@
+import os
+import firebase_admin
+from firebase_admin import auth, credentials
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import faiss
 import pickle
 import numpy as np
 from dotenv import load_dotenv
-import os
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.db.schema import Base, Suggestion, User, Document, Chat, Message, Vote
 from alembic import command
 from alembic.config import Config
-import jwt
-import datetime
-from werkzeug.security import check_password_hash
 
 from src.db.queries import (
     get_user_by_email, create_user, save_chat, delete_chat_by_id, get_chats_by_user_id,
@@ -24,172 +21,240 @@ from src.db.queries import (
     get_message_by_id, delete_messages_by_chat_id_after_timestamp, update_chat_visibility_by_id
 )
 
-# Load environment variables
 load_dotenv()
 
+# Initialize Flask
 app = Flask(__name__)
-CORS(app)  # Enable CORS for cross-origin requests
+CORS(app)
 
-# File paths for FAISS index and metadata
-INDEX_PATH = "/app/"
-PICKLE_PATH = "/app/"
+# Initialize Firebase Admin
+cred = credentials.Certificate("firebaseKey.json")
+firebase_admin.initialize_app(cred)
 
 # SQLAlchemy configuration
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "your_default_secret")
 POSTGRES_URL = os.getenv("POSTGRES_URL")
 if not POSTGRES_URL:
     raise ValueError("POSTGRES_URL is not defined in the environment")
 
-# Create database engine and session
+# Create engine, session, and tables
 engine = create_engine(POSTGRES_URL)
 Session = sessionmaker(bind=engine)
-
-# Create tables (you can remove this if Alembic handles migrations)
 Base.metadata.create_all(engine)
 
-# Load FAISS index
+# FAISS and metadata paths
+INDEX_PATH = "/app/"
+PICKLE_PATH = "/app/"
+
+# Attempt to load FAISS index
 try:
     faiss_index = faiss.read_index("/app/index.faiss")
-    print(f"FAISS index successfully loaded from /app/index.faiss")
+    print("FAISS index successfully loaded from /app/index.faiss")
 except Exception as e:
     print(f"Error loading FAISS index: {e}")
     faiss_index = None
 
-# Load metadata
+# Attempt to load metadata
 try:
     with open("/app/index.pkl", "rb") as f:
         metadata = pickle.load(f)
-    print(f"Metadata successfully loaded from /app/index.pkl")
+    print("Metadata successfully loaded from /app/index.pkl")
 except Exception as e:
     print(f"Error loading metadata: {e}")
     metadata = None
 
+
+# Firebase Token Verification
+def verify_session_cookie():
+    session_cookie = request.cookies.get('session')
+    if not session_cookie:
+        return jsonify({"error": "Unauthorized - Missing session cookie"}), 401
+
+    try:
+        # check_revoked=True ensures you can revoke sessions from Firebase console
+        decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+        return decoded_claims
+    except Exception as e:
+        return jsonify({"error": str(e)}), 401
+
+
+# Unprotected Routes
 @app.route('/')
 def home():
     """Serve the main UI."""
-    return render_template('index.html')  # Ensure index.html exists in /templates directory
+    return render_template('index.html')
 
+@app.route('/citations', methods=['GET'])
+def citations():
+    """Example unprotected route that returns citation data (if you want it public)."""
+    try:
+        citation_data = []
+        if metadata:
+            for idx, doc in enumerate(metadata.values()):
+                citation_data.append({
+                    "source": doc.metadata.get("source", "Unknown"),
+                    "citation": f"Mock APA Citation for Document {idx + 1}"
+                })
+        return jsonify({"citations": citation_data})
+    except Exception as e:
+        return jsonify({"error": f"Error generating citations: {e}"}), 500
 
-@app.route('/user', methods=['GET'])
-def get_user():
-    """Get user by email."""
-    email = request.args.get('email')
-    if email:
-        try:
-            user_data = get_user_by_email(db=Session(), email=email)
-            return jsonify(user_data), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-    return jsonify({"error": "Email is required"}), 400
-
-
-@app.route('/user', methods=['POST'])
-def create_user_route():
-    """Create a new user."""
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+@app.route('/migrate', methods=['POST'])
+def migrate():
+    """Run Alembic migrations (optionally protected if needed)."""
+    # If you want to protect migrations, uncomment the following:
+    # user = verify_session_cookie()
+    # if isinstance(user, dict) and "error" in user:
+    #     return user
 
     try:
-        user = create_user(db=Session(), email=email, password=password)
-        return jsonify(user), 201
+        alembic_cfg = Config("alembic.ini")
+        alembic_cfg.set_main_option("sqlalchemy.url", POSTGRES_URL)
+
+        print("⏳ Running migrations...")
+        command.upgrade(alembic_cfg, "head")
+        print("✅ Migrations completed.")
+
+        return jsonify({"message": "Migrations completed successfully!"}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error running migrations: {str(e)}"}), 500
+
+
+# Protected Routes
+
+@app.route('/sessionLogout', methods=['POST'])
+def session_logout():
+
+    response = jsonify({'message': 'Logged out'})
+    response.set_cookie('session', '', max_age=0)
+    return response
+
+@app.route('/sessionLogin', methods=['POST'])
+def session_login():
+    data = request.get_json()
+    id_token = data.get('idToken')
+    if not id_token:
+        return jsonify({'error': 'Missing ID token'}), 400
+
+    try:
+
+        expires_in = 60 * 60 * 24 * 5
+        session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
+
+        response = jsonify({'message': 'Session cookie set'})
+
+        response.set_cookie(
+            'session',
+            session_cookie,
+            max_age=expires_in, 
+            httponly=True,      
+            secure=True,        
+            samesite='Strict'  
+        )
+        return response
+    except Exception as e:
+        return jsonify({'error': str(e)}), 401
+    
+@app.route('/chats', methods=['GET'])
+def get_chats():
+    """Retrieve chats for the authenticated user."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    user_id = user["uid"]
+    try:
+        chats = get_chats_by_user_id(db=Session(), user_id=user_id)
+        return jsonify(chats), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-
-    # Validate input
-    if not email or not password:
-        return jsonify({'error': 'Invalid data'}), 400
-
-    # Fetch user from the database
-    user = get_user_by_email(db=Session(), email=email)  # Corrected function reference
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-
-    # Check password (assuming you store hashed passwords in the DB)
-    if not check_password_hash(user.password, password):
-        return jsonify({'error': 'Invalid credentials'}), 401
-
-    # Create JWT token
-    token = jwt.encode({
-        'id': str(user.id),
-        'email': user.email,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-    }, app.config['SECRET_KEY'], algorithm='HS256')
-
-    return jsonify({'token': token}), 200
-
-
-@app.route('/refresh-token', methods=['POST'])
-def refresh_token():
-    token = request.get_json().get('token')
-    try:
-        decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-        new_token = jwt.encode({
-            'id': decoded['id'],
-            'email': decoded['email'],
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        }, app.config['SECRET_KEY'], algorithm='HS256')
-        return jsonify({'token': new_token}), 200
-    except jwt.ExpiredSignatureError:
-        return jsonify({'error': 'Token expired'}), 401
-    except jwt.InvalidTokenError:
-        return jsonify({'error': 'Invalid token'}), 401
-    
 
 @app.route('/chat', methods=['POST'])
 def save_chat_route():
     """Save a new chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+    user_id = user["uid"]
+
     data = request.json
     chat_id = data.get('id')
-    user_id = data.get('userId')
     title = data.get('title')
 
     if not chat_id or not user_id or not title:
         return jsonify({"error": "Chat ID, user ID, and title are required"}), 400
 
     try:
-        chat = save_chat(db=Session(), user_id=user_id, title=title)  # Corrected reference to save_chat
+        chat = save_chat(db=Session(), user_id=user_id, title=title)
         return jsonify(chat), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@app.route('/chats', methods=['GET'])
-def get_chats_by_user():
-    """Get chats for a specific user."""
-    user_id = request.args.get('userId')
-    if user_id:
-        try:
-            chats = get_chats_by_user_id(db=Session(), user_id=user_id)  # Corrected reference to get_chats_by_user_id
-            return jsonify(chats), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-    return jsonify({"error": "User ID is required"}), 400
-
+@app.route('/chats', methods=['DELETE'])
+def delete_chat_param_missing():
+    return jsonify({"error": "chat_id is required in the URL"}), 400
 
 @app.route('/chat/<chat_id>', methods=['GET'])
 def get_chat_by_id_route(chat_id):
-    """Get chat by ID."""
+    """Get a single chat by ID."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
     try:
-        chat = get_chat_by_id(db=Session(), chat_id=chat_id)  # Corrected reference to get_chat_by_id
-        return jsonify(chat), 200
+        chat = db_session.query(Chat).filter(Chat.id == chat_id).first()
+        if not chat:
+            return jsonify({"error": "Chat not found"}), 404
+
+        if str(chat.userId) != user["uid"]:
+            return jsonify({"error": "Unauthorized"}), 401
+
+        chat_data = {
+            "id": str(chat.id),
+            "createdAt": chat.createdAt.isoformat(),
+            "title": chat.title,
+            "userId": str(chat.userId),
+            "visibility": chat.visibility
+        }
+        return jsonify(chat_data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
 
+@app.route('/chat/<chat_id>', methods=['DELETE'])
+def delete_chat_by_id_route(chat_id):
+    """Delete a chat by its ID."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    try:
+        delete_chat_by_id(db=Session(), chat_id=chat_id)
+        return jsonify({"message": "Chat and its associated messages deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error deleting chat: {str(e)}"}), 500
+
+@app.route('/messages/<chat_id>', methods=['GET'])
+def get_messages_by_chat(chat_id):
+    """Retrieve messages for a specific chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    try:
+        messages = get_messages_by_chat_id(db=Session(), chat_id=chat_id)
+        return jsonify(messages), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/message', methods=['POST'])
 def save_message():
     """Save messages for a chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
     data = request.json
     messages = data.get('messages')
 
@@ -197,25 +262,18 @@ def save_message():
         return jsonify({"error": "Messages are required"}), 400
 
     try:
-        saved_messages = save_messages(db=Session(), messages=messages)  # Corrected reference to save_messages
-        return jsonify(saved_messages), 201
+        saved = save_messages(db=Session(), messages=messages)
+        return jsonify(saved), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-@app.route('/messages/<chat_id>', methods=['GET'])
-def get_messages_by_chat(chat_id):
-    """Get messages for a chat by ID."""
-    try:
-        messages = get_messages_by_chat_id(db=Session(), chat_id=chat_id)  # Corrected reference to get_messages_by_chat_id
-        return jsonify(messages), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 
 @app.route('/message/vote', methods=['POST'])
 def vote_on_message():
     """Vote on a message in a chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
     data = request.json
     chat_id = data.get('chatId')
     message_id = data.get('messageId')
@@ -225,180 +283,57 @@ def vote_on_message():
         return jsonify({"error": "Chat ID, message ID, and vote type are required"}), 400
 
     try:
-        vote = vote_message(db=Session(), chat_id=chat_id, message_id=message_id, vote_type=vote_type)  # Fixed function call
+        vote = vote_message(db=Session(), chat_id=chat_id, message_id=message_id, vote_type=vote_type)
         return jsonify(vote), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route('/vote/<chat_id>', methods=['GET'])
-def get_votes_by_chat(chat_id):
-    """Get all votes for a chat."""
+def get_votes_for_chat(chat_id):
+    """Get votes for a particular chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
     try:
-        votes = get_votes_by_chat_id(db=Session(), chat_id=chat_id)  # Corrected function reference
+        votes = get_votes_by_chat_id(db=Session(), chat_id=chat_id)
         return jsonify(votes), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@app.route('/citations', methods=['GET'])
-def citations():
-    """
-    Generate APA citations for the documents in the FAISS index.
-    This example uses mock data or specific logic from your citation generation scripts.
-    """
-    try:
-        citation_data = []
-        for idx, doc in enumerate(metadata.values()):
-            citation_data.append({
-                "source": doc.metadata.get("source", "Unknown"),
-                "citation": f"Mock APA Citation for Document {idx + 1}"
-            })
-
-        return jsonify({"citations": citation_data})
-    except Exception as e:
-        return jsonify({"error": f"Error generating citations: {e}"}), 500
-
-
-@app.route('/migrate', methods=['POST'])
-def migrate():
-    """
-    Run Alembic migrations.
-    """
-    try:
-        alembic_cfg = Config("alembic.ini")
-        alembic_cfg.set_main_option("sqlalchemy.url", POSTGRES_URL)
-        
-        print("⏳ Running migrations...")
-        command.upgrade(alembic_cfg, "head")
-        print("✅ Migrations completed.")
-        
-        return jsonify({"message": "Migrations completed successfully!"}), 200
-    except Exception as e:
-        return jsonify({"error": f"Error running migrations: {str(e)}"}), 500
-
-
-@app.route('/save-model-id', methods=['POST'])
-def save_model_id():
-    """Save the selected AI model ID."""
-    data = request.get_json()
-    model_id = data.get('model')
-
-    if not model_id:
-        return jsonify({"error": "Model ID is required"}), 400
-
-    # In a real setup, save this to a database or user session
-    return jsonify({"message": f"Model ID {model_id} saved successfully"}), 200
-
-
-@app.route('/generate-title', methods=['POST'])
-def generate_title_from_message():
-    """Generate a short title based on the user's first message."""
-    data = request.get_json()
-    message = data.get('message')
-
-    if not message:
-        return jsonify({"error": "Message is required"}), 400
-
-    # Simulate AI-based title generation (replace with actual AI call if needed)
-    title = message[:80]  # Truncate to 80 characters
-    return jsonify({"title": title}), 200
-
-
-@app.route('/delete-trailing-messages', methods=['POST'])
-def delete_trailing_messages():
-    """Delete messages after a given timestamp in a chat."""
-    data = request.get_json()
-    message_id = data.get('id')
-
-    if not message_id:
-        return jsonify({"error": "Message ID is required"}), 400
-
-    # Find the message
-    message = get_message_by_id(id=message_id)
-    if not message:
-        return jsonify({"error": "Message not found"}), 404
-
-    # Remove messages created after this message's timestamp
-    delete_messages_by_chat_id_after_timestamp(chatId=message.chatId, timestamp=message.createdAt)
-
-    return jsonify({"message": "Trailing messages deleted"}), 200
-
-
-@app.route('/update-chat-visibility', methods=['POST'])
-def update_chat_visibility():
-    """Update the visibility status of a chat."""
-    data = request.get_json()
-    chat_id = data.get('chatId')
-    visibility = data.get('visibility')
-
-    if not chat_id or not visibility:
-        return jsonify({"error": "Chat ID and visibility are required"}), 400
-
-    update_chat_visibility_by_id(chatId=chat_id, visibility=visibility)
-
-    return jsonify({"message": "Chat visibility updated successfully"}), 200
-
-@app.route('/suggestions', methods=['GET'])
-def get_suggestions():
-    """Fetch suggestions for a specific document ID."""
-    document_id = request.args.get('documentId')
-
-    if not document_id:
-        return jsonify({"error": "Document ID is required"}), 400
-
-    try:
-        suggestions = get_suggestions_by_document_id(document_id)
-
-        if not suggestions:
-            return jsonify([]), 200  # Return an empty array if no suggestions found
-
-        # Assuming suggestions have a userId field for ownership check
-        session_user_id = request.headers.get("X-User-Id")  # Example: Use auth headers
-
-        if suggestions[0]["userId"] != session_user_id:
-            return jsonify({"error": "Unauthorized"}), 401
-
-        return jsonify(suggestions), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-
 @app.route('/documents', methods=['GET'])
-def get_documents():
+def get_documents_route():
+    """Get documents belonging to authenticated user."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    user_id = user["uid"]
     document_id = request.args.get('id')
-    
+
     if not document_id:
         return jsonify({'error': 'Missing id'}), 400
 
-    user_id = request.args.get('userId')
-    
-    if not user_id:
-        return jsonify({'error': 'User ID is required'}), 400
-
     documents = get_documents_by_id(db=Session(), id=document_id)
-    
     if not documents:
         return jsonify({'error': 'Document not found'}), 404
 
-    document = documents[0]
-    
-    if document['userId'] != user_id:
+    if documents[0]['userId'] != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
 
     return jsonify(documents), 200
 
-
 @app.route('/documents', methods=['POST'])
 def save_document_route():
+    """Save a document for the authenticated user."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    user_id = user["uid"]
     document_id = request.args.get('id')
     if not document_id:
         return jsonify({'error': 'Missing id'}), 400
-
-    user_id = request.args.get('userId')
-    
-    if not user_id:
-        return jsonify({'error': 'User ID is required'}), 400
 
     data = request.get_json()
     content = data.get('content')
@@ -408,7 +343,6 @@ def save_document_route():
     if not content or not title or not kind:
         return jsonify({'error': 'Content, title, and kind are required'}), 400
 
-    # Save the document with the provided user ID
     document = save_document(
         db=Session(),
         id=document_id,
@@ -420,26 +354,27 @@ def save_document_route():
 
     return jsonify(document), 200
 
-
 @app.route('/documents', methods=['PATCH'])
 def delete_documents_by_timestamp():
+    """Delete documents after a certain timestamp for the authenticated user."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    user_id = user["uid"]
     document_id = request.args.get('id')
     if not document_id:
         return jsonify({'error': 'Missing id'}), 400
 
-    user_id = request.args.get('userId')
-    
-    if not user_id:
-        return jsonify({'error': 'User ID is required'}), 400
-
     data = request.get_json()
-    timestamp = data.get('timestamp')
+    timestamp_str = data.get('timestamp')
 
-    if not timestamp:
+    if not timestamp_str:
         return jsonify({'error': 'Timestamp is required'}), 400
 
+    from datetime import datetime
     try:
-        timestamp = datetime.fromisoformat(timestamp)
+        timestamp = datetime.fromisoformat(timestamp_str)
     except ValueError:
         return jsonify({'error': 'Invalid timestamp format'}), 400
 
@@ -448,12 +383,9 @@ def delete_documents_by_timestamp():
     if not documents:
         return jsonify({'error': 'Document not found'}), 404
 
-    document = documents[0]
-
-    if document['userId'] != user_id:
+    if documents[0]['userId'] != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
 
-    # Delete documents created after the given timestamp
     delete_documents_by_id_after_timestamp(
         db=Session(),
         id=document_id,
@@ -462,23 +394,67 @@ def delete_documents_by_timestamp():
 
     return jsonify({'message': 'Documents deleted successfully'}), 200
 
+@app.route('/document/<document_id>', methods=['GET'])
+def get_document_by_id_endpoint(document_id):
+    """Retrieve a single document by its ID."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    try:
+        doc = get_document_by_id(db=Session(), document_id=document_id)
+        if not doc:
+            return jsonify({"error": "Document not found"}), 404
+
+        if doc['userId'] != user["uid"]:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        return jsonify(doc), 200
+    except Exception as e:
+        return jsonify({"error": f"Error retrieving document: {str(e)}"}), 500
+
+@app.route('/suggestions', methods=['GET'])
+def get_suggestions_route():
+    """Fetch suggestions for a specific document ID."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    document_id = request.args.get('documentId')
+    if not document_id:
+        return jsonify({"error": "Document ID is required"}), 400
+
+    try:
+        suggestions = get_suggestions_by_document_id(document_id)
+        if not suggestions:
+            return jsonify([]), 200
+
+        if suggestions[0]["userId"] != user["uid"]:
+            return jsonify({"error": "Unauthorized"}), 401
+
+        return jsonify(suggestions), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/suggestions', methods=['POST'])
-def save_suggestions_route():
-    """Save multiple suggestions for a specific document."""
+def save_suggestions_endpoint():
+    """Save suggestions for a specific document."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
     data = request.get_json()
     document_id = data.get('documentId')
     original_text = data.get('originalText')
     suggested_text = data.get('suggestedText')
     description = data.get('description')
-    user_id = data.get('userId')
+    user_id = user["uid"]
 
-    # Validate input
-    if not document_id or not original_text or not suggested_text or not user_id:
-        return jsonify({"error": "Document ID, original text, suggested text, and user ID are required"}), 400
+    if not document_id or not original_text or not suggested_text:
+        return jsonify({"error": "documentId, originalText, and suggestedText are required"}), 400
 
     try:
-        # Create suggestion objects
+        from datetime import datetime
         suggestions = [
             Suggestion(
                 documentId=document_id,
@@ -489,44 +465,80 @@ def save_suggestions_route():
                 documentCreatedAt=datetime.utcnow()
             )
         ]
-
-        # Use the save_suggestions function to save the suggestions
-        db = Session()
-        save_suggestions(db, suggestions)
-
+        db_session = Session()
+        save_suggestions(db_session, suggestions)
         return jsonify({"message": "Suggestions saved successfully"}), 201
     except Exception as e:
         return jsonify({"error": f"Error saving suggestions: {str(e)}"}), 500
-    
 
-@app.route('/document/<document_id>', methods=['GET'])
-def get_document_by_id_route(document_id):
-    """Retrieve a document by its ID."""
-    try:
-        # Retrieve the document using the get_document_by_id function
-        document = get_document_by_id(db=Session(), document_id=document_id)
-        
-        if not document:
-            return jsonify({"error": "Document not found"}), 404
+@app.route('/delete-trailing-messages', methods=['POST'])
+def delete_trailing_messages():
+    """Delete messages after a given timestamp in a chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
 
-        return jsonify(document), 200  # Return the document as JSON
+    data = request.get_json()
+    message_id = data.get('id')
 
-    except Exception as e:
-        return jsonify({"error": f"Error retrieving document: {str(e)}"}), 500
-    
+    if not message_id:
+        return jsonify({"error": "Message ID is required"}), 400
 
-@app.route('/chat/<chat_id>', methods=['DELETE'])
-def delete_chat_by_id_route(chat_id):
-    """Delete a chat by its ID and all associated messages and votes."""
-    try:
-        # Call the function to delete the chat and its associated data
-        delete_chat_by_id(db=Session(), chat_id=chat_id)
+    msg = get_message_by_id(id=message_id)
+    if not msg:
+        return jsonify({"error": "Message not found"}), 404
 
-        return jsonify({"message": "Chat and its associated messages and votes deleted successfully"}), 200
+    delete_messages_by_chat_id_after_timestamp(chatId=msg.chatId, timestamp=msg.createdAt)
+    return jsonify({"message": "Trailing messages deleted"}), 200
 
-    except Exception as e:
-        return jsonify({"error": f"Error deleting chat: {str(e)}"}), 500
+@app.route('/update-chat-visibility', methods=['POST'])
+def update_chat_visibility():
+    """Update the visibility status of a chat."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
 
+    data = request.get_json()
+    chat_id = data.get('chatId')
+    visibility = data.get('visibility')
+
+    if not chat_id or not visibility:
+        return jsonify({"error": "Chat ID and visibility are required"}), 400
+
+    update_chat_visibility_by_id(db=Session(), chat_id=chat_id, visibility=visibility)
+
+    return jsonify({"message": "Chat visibility updated successfully"}), 200
+
+@app.route('/save-model-id', methods=['POST'])
+def save_model_id():
+    """Save the selected AI model ID. Optionally protect this route."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    data = request.get_json()
+    model_id = data.get('model')
+
+    if not model_id:
+        return jsonify({"error": "Model ID is required"}), 400
+
+    return jsonify({"message": f"Model ID {model_id} saved successfully"}), 200
+
+@app.route('/generate-title', methods=['POST'])
+def generate_title_from_message():
+    """Generate a short title from the user's first message."""
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    data = request.get_json()
+    message = data.get('message')
+
+    if not message:
+        return jsonify({"error": "Message is required"}), 400
+
+    title = message[:80]
+    return jsonify({"title": title}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)

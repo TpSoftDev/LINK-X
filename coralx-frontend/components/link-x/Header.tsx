@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { signOut } from "next-auth/react"
-// import { useTheme } from "next-themes"
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebaseconfig";
+import { useAuth } from "@/app/(auth)/AuthContext";
 
 type HeaderProps = {
-    showAuthButton?: boolean    // Shows Auth Button by default. 
-    isLoggedIn: boolean         // Always needs to know if logged in
-}
+  showAuthButton?: boolean;
+  isLoggedIn: boolean;
+};
 
 const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
-  // Check for computer's theme 
-  // const { resolvedTheme } = useTheme()
-  // Select logo based on light or dark theme
-  // const logoSrc = resolvedTheme === "dark" ? "/images/Logo-dark.png" : "/images/Logo-light.png"
+  const router = useRouter();
+  const { user } = useAuth();
 
-  const router = useRouter()
-
-  const handleSignOut = () => {
-    signOut({
-      redirectTo: "/",
-    })
-  }
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   const handleLogin = () => {
-    router.push("/login")
-  }
+    router.push("/login");
+  };
 
   return (
     <header className="absolute top-4 left-0 w-full h-[8vh] flex items-center">
@@ -35,7 +35,6 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
         <div className="flex justify-between items-center w-full h-full">
           <Link href="/dashboard" className="flex items-center h-full relative">
             <Image
-              // src={logoSrc}
               src={"/images/Logo-dark.png"}
               alt="Link-X Logo"
               width={288}
@@ -49,16 +48,16 @@ const Header = ({ showAuthButton = true, isLoggedIn }: HeaderProps) => {
               <button
                 type="button"
                 className="w-full cursor-pointer hover:bg-gray-700 focus:ring-4 focus:ring-gray-800 rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                onClick={isLoggedIn ? handleSignOut : handleLogin}
+                onClick={user ? handleSignOut : handleLogin} // ✅ Check if user is logged in
               >
-                {isLoggedIn ? "Sign out" : "Log in"}
+                {user ? "Sign out" : "Log in"}
               </button>
             )}
           </div>
         </div>
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
