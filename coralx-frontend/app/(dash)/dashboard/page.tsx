@@ -1,9 +1,10 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 //import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { populateMarket, type MarketActionState } from "./api/actions";
+//import { populateMarket, type MarketActionState } from "./api/actions";
 //import { Progress } from "@/components/ui/progress";
 import {
   BarChart3,
@@ -15,9 +16,91 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Header from "@/components/link-x/Header";
+import { fetchRecentMarketPrices } from "./api/actions";
+import { market } from "@/lib/db/schema";
 
 export default function Dashboard() {
   const router = useRouter();
+  const [marketPrices, setMarketPrices] = useState<{ price: number; date: Date }[]>([]);
+  const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
+  const [sp500Change, setSp500Change] = useState<string>("");
+  useEffect(() => {
+    const getPrices = async () => {
+      try {
+        const response = await fetchRecentMarketPrices();
+        if (response.status === "success") {
+          setMarketPrices(response.prices); // Update state with the fetched data
+          if (response.prices.length > 1) {
+            const firstPrice = response.prices[0].price;
+            const lastPrice = response.prices[response.prices.length - 1].price;
+
+            const change = ((lastPrice - firstPrice) / firstPrice) * 100;
+            setSp500Change(`${change.toFixed(2)}%`);
+          }
+          console.log(marketPrices)
+          setStatus("success");
+        } else {
+          setStatus("failed");
+        }
+      } catch (error) {
+        console.error("❌ Error fetching market prices:", error);
+        setStatus("failed");
+      }
+    };
+
+    getPrices(); // Fetch data when the page loads
+  }, []);
+
+  // Function to draw the chart
+  const renderChart = () => {
+    if (status === "loading") {
+      return <p className="text-gray-400">Loading chart...</p>;
+    }
+  
+    if (status === "failed") {
+      return <p className="text-red-500">Failed to load data.</p>;
+    }
+  
+    // Get the min and max prices to scale the Y-axis
+    const prices = marketPrices.map((data) => data.price);
+    const dates = marketPrices.map((data) => new Date(data.date));
+  
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+  
+    const minDate = Math.min(...dates.map((date) => date.getTime()));
+    const maxDate = Math.max(...dates.map((date) => date.getTime()));
+    const halfDate = new Date((minDate + maxDate) / 2);
+
+    const minDateFormatted = new Date(minDate).toLocaleDateString();
+    const maxDateFormatted = new Date(maxDate).toLocaleDateString();
+    const halfDateFormatted = halfDate.toLocaleDateString();
+  
+  
+    // Create the path data by scaling the prices and dates
+    const pathData = marketPrices.map((data, index) => {
+      const scaledX = ((new Date(data.date).getTime() - minDate) / (maxDate - minDate)) * 300; // Scale X to fit the width (300)
+      const scaledY = ((data.price - minPrice) / (maxPrice - minPrice)) * 100; // Scale Y to fit the height (100)
+  
+      return `${index === 0 ? "M" : "L"}${scaledX},${100 - scaledY}`; // Move (M) to the first point and Line (L) to the others
+    }).join(" ");
+  
+    return (
+      <>
+        <svg className="w-full h-24" viewBox="0 0 300 100" preserveAspectRatio="none">
+          <path d={pathData} fill="none" stroke="#3b82f6" strokeWidth="2" />
+        </svg>
+  
+        {/* Render the date range only when the data is available */}
+        <div className="flex justify-between text-xs text-gray-400 mt-2">
+          <span>{minDateFormatted}</span>
+          <span>{halfDateFormatted}</span>
+          <span>{maxDateFormatted}</span>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
       <Header isLoggedIn={true} />
@@ -132,31 +215,18 @@ export default function Dashboard() {
                   Today's Market Movement
                 </h3>
                 <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <svg
-                    className="w-full h-24"
-                    viewBox="0 0 300 100"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M0,50 C50,30 100,70 150,50 S250,40 300,60"
-                      fill="none"
-                      stroke="#3b82f6"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                  <div className="flex justify-between text-xs text-gray-400 mt-2">
-                    <span>9:30 AM</span>
-                    <span>12:00 PM</span>
-                    <span>4:00 PM</span>
-                  </div>
-                </div>
+        {renderChart()}
+
+      </div>
               </div>
               <ul className="space-y-4">
+                <li className="flex items-start space-x-3 bg-gray-800/50 p-3 rounded-lg">
+                  <BarChart3 className="h-5 w-5 text-blue-400 mt-0.5" />
+                  <span className="text-white">
+                    S&P 500 {"The " + sp500Change && (parseFloat(sp500Change) >= 0 ? "has gained " : "has lost ")} {sp500Change + " over the last 30 days"} 
+                  </span>
+                </li>
                 {[
-                  {
-                    icon: BarChart3,
-                    text: "S&P 500 reaches new all-time high",
-                  },
                   {
                     icon: Newspaper,
                     text: "Federal Reserve hints at potential rate cut",
@@ -175,30 +245,6 @@ export default function Dashboard() {
                   </li>
                 ))}
               </ul>
-
-              {/* Button to Populate Market Table */}
-              <div className="mt-6 flex justify-center">
-                <Button
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                  onClick={async () => {
-                    try {
-                      console.log("🟢 Starting market table population...");
-                      const response = await populateMarket(); // Call Server Action instead of fetch
-
-                      if (response.status === "success") {
-                        alert("✅ Market table populated successfully!");
-                      } else {
-                        alert("❌ Failed to populate market table");
-                      }
-                    } catch (error) {
-                      console.error("❌ Error populating market table:", error);
-                      alert("❌ Failed to populate market table");
-                    }
-                  }}
-                >
-                  Populate Market Table
-                </Button>
-              </div>
             </CardContent>
           </Card>
         </div>

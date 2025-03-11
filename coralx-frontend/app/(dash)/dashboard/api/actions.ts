@@ -2,49 +2,70 @@
 
 import { z } from "zod";
 import { auth } from "@/app/(auth)/auth";
-import { saveMarketItem, getMarketItemById, updateMarketItemPrice, deleteMarketItemById, saveNewsItem, getAllNews, deleteNewsById } from "@/lib/db/queries";
+import { getRecentMarketPrices, getMarketItemById, deleteMarketItemById, saveNewsItem, getAllNews, deleteNewsById } from "@/lib/db/queries";
+import { TimestampFsp } from "drizzle-orm/mysql-core";
 
 // Schema validation
 const marketSchema = z.object({
-  name: z.string().min(1),
-  price: z.string().min(1).regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  snp500: z.number(),
+  date: z.date(),
 });
 
 export interface MarketActionState {
   status: "idle" | "in_progress" | "success" | "failed" | "invalid_data";
 }
 
-export const populateMarket = async (): Promise<MarketActionState> => {
+export const fetchRecentMarketPrices = async (): Promise<{
+  prices: { price: number; date: Date }[]; // Array of price-date pairs
+  status: "success" | "failed";
+}> => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      console.error("❌ User session not found");
-      return { status: "failed" };
-    }
+    console.log(`📊 Fetching recent prices for snp500`);
 
-    console.log("🌱 Populating Market Table...");
+    // Fetch the recent market prices (which now returns price and date)
+    const prices = await getRecentMarketPrices();
 
-    const marketData = [
-      { name: "Apple", price: "1.99" },
-      { name: "Banana", price: "0.79" },
-      { name: "Orange", price: "1.49" },
-      { name: "Grapes", price: "2.99" },
-      { name: "Watermelon", price: "4.99" },
-    ];
+    console.log("✅ Successfully fetched market prices:", prices);
 
-    for (const item of marketData) {
-      // Validate each item before saving
-      marketSchema.parse(item);
-      await saveMarketItem(item);
-    }
-
-    console.log("✅ Market table populated successfully!");
-    return { status: "success" };
+    // Return the result, maintaining the price and date structure
+    return { prices, status: "success" };
   } catch (error) {
-    console.error("❌ Error populating Market table:", error);
-    return { status: "failed" };
+    console.error("❌ Error fetching recent market prices:", error);
+    return { prices: [], status: "failed" };
   }
 };
+
+// export const populateMarket = async (): Promise<MarketActionState> => {
+//   try {
+//     const session = await auth();
+//     if (!session?.user?.id) {
+//       console.error("❌ User session not found");
+//       return { status: "failed" };
+//     }
+
+//     console.log("🌱 Populating Market Table...");
+
+//     const marketData = [
+//       { name: "Apple", price: "1.99" },
+//       { name: "Banana", price: "0.79" },
+//       { name: "Orange", price: "1.49" },
+//       { name: "Grapes", price: "2.99" },
+//       { name: "Watermelon", price: "4.99" },
+//     ];
+
+//     for (const item of marketData) {
+//       // Validate each item before saving
+//       marketSchema.parse(item);
+//       //await saveMarketItem(item);
+//     }
+
+//     console.log("✅ Market table populated successfully!");
+//     return { status: "success" };
+//   } catch (error) {
+//     console.error("❌ Error populating Market table:", error);
+//     return { status: "failed" };
+//   }
+// };
 
 
 // Schema validation for news item

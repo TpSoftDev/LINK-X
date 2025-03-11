@@ -1,3 +1,4 @@
+import { time } from 'console';
 import type { InferSelectModel } from 'drizzle-orm';
 import {
   pgTable,
@@ -10,6 +11,7 @@ import {
   foreignKey,
   boolean,
   decimal,
+  date,
 } from 'drizzle-orm/pg-core';
 
 
@@ -35,8 +37,8 @@ export type Onboarding = InferSelectModel<typeof onboarding>;
 
 export const market = pgTable("Market", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  name: varchar("name", { length: 64 }).notNull(),
-  price: varchar("price", { length: 20 }).notNull(), // Store as string
+  snp500: decimal("snp500").notNull(), 
+  date: date("date").notNull(), 
 });
 
 

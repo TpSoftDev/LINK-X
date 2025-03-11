@@ -94,25 +94,51 @@ export async function deleteNewsById(id: string) {
 
 
 //code for market price
-export async function saveMarketItem({
-  name,
-  price,
-}: {
-  name: string;
-  price: string;
-}) {
+// export async function saveMarketItem({
+//   snp500,
+//   date,
+// }: {
+//   snp500: number;
+//   date: Date;
+// }) {
+//   try {
+//     console.log("✅ Saving price on:", date, "with price:", snp500);
+
+//     const result = await db.insert(market).values({
+//       snp500,
+//       date
+//     });
+
+//     console.log("✅ Successfully inserted:", result);
+//     return result;
+//   } catch (error) {
+//     console.error("❌ Failed to save market item", error);
+//     throw error;
+//   }
+// }
+
+/**
+ * Get the last 30 prices for a specific market item
+ */
+export async function getRecentMarketPrices() {
   try {
-    console.log("✅ Saving market item:", name, "with price:", price);
+    console.log("📊 Fetching last 30 prices for market item:");
 
-    const result = await db.insert(market).values({
-      name,
-      price
-    });
-
-    console.log("✅ Successfully inserted:", result);
-    return result;
+    const result = await db
+      .select({ price: market.snp500, date: market.date })
+      .from(market)
+      .orderBy(asc(market.date)) // Ensure 'date' column exists for sorting
+      .limit(30);
+      //const prices = result.map((row) => parseFloat(row.price));
+      const prices = result.map((row) => ({
+        price: parseFloat(row.price),  // Convert price to float
+        date: new Date(row.date)  // Keep the date as is
+      }));
+   
+    console.log("✅ Successfully fetched prices:");
+    return prices;
   } catch (error) {
-    console.error("❌ Failed to save market item", error);
+    console.error("❌ Failed to fetch recent market prices", error);
     throw error;
   }
 }
@@ -132,28 +158,28 @@ export async function getMarketItemById(id: string) {
 /**
  * Update a Market item's price
  */
-export async function updateMarketItemPrice({
-  id,
-  price,
-}: {
-  id: string;
-  price: string;
-}) {
-  try {
-    console.log("🔄 Updating market item price for ID:", id);
+// export async function updateMarketItemPrice({
+//   id,
+//   price,
+// }: {
+//   id: string;
+//   price: string;
+// }) {
+//   try {
+//     console.log("🔄 Updating market item price for ID:", id);
 
-    const result = await db
-      .update(market)
-      .set({price})
-      .where(eq(market.id, id));
+//     const result = await db
+//       .update(market)
+//       .set({price})
+//       .where(eq(market.id, id));
 
-    console.log("✅ Successfully updated:", result);
-    return result;
-  } catch (error) {
-    console.error("❌ Failed to update market item price", error);
-    throw error;
-  }
-}
+//     console.log("✅ Successfully updated:", result);
+//     return result;
+//   } catch (error) {
+//     console.error("❌ Failed to update market item price", error);
+//     throw error;
+//   }
+// }
 
 /**
  * Delete a Market item by ID
