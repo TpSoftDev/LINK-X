@@ -9,11 +9,12 @@ import {
   primaryKey,
   foreignKey,
   boolean,
+  decimal,
 } from 'drizzle-orm/pg-core';
 
 
 //code for onboarding
-export const onboarding = pgTable('onboarding', {
+export const onboarding = pgTable('Onboarding', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   userId: uuid('user_id')
     .notNull()
@@ -31,6 +32,25 @@ export const onboarding = pgTable('onboarding', {
 });
 
 export type Onboarding = InferSelectModel<typeof onboarding>;
+
+export const market = pgTable("Market", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: varchar("name", { length: 64 }).notNull(),
+  price: varchar("price", { length: 20 }).notNull(), // Store as string
+});
+
+
+export type Market = InferSelectModel<typeof market>;
+
+export const news = pgTable("News", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  title: varchar("Title", { length: 64 }).notNull(),
+  subject: varchar("Subject", { length: 64 }).notNull(), // Store as string
+  link: varchar("Link", { length: 120 }).notNull(), 
+});
+
+
+export type News = InferSelectModel<typeof news>;
 
 
 export const user = pgTable('User', {

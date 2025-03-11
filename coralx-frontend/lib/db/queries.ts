@@ -15,7 +15,9 @@ import {
   type Message,
   message,
   vote,
-  onboarding
+  onboarding,
+  market,
+  news
 } from './schema';
 import { BlockKind } from '@/components/block';
 
@@ -26,6 +28,149 @@ import { BlockKind } from '@/components/block';
 // biome-ignore lint: Forbidden non-null assertion.
 const client = postgres(process.env.POSTGRES_URL!);
 const db = drizzle(client);
+
+
+// Save a news article
+export async function saveNewsItem({
+  title,
+  subject,
+  link,
+}: {
+  title: string;
+  subject: string;
+  link: string;
+}) {
+  try {
+    console.log("✅ Saving news item:", title);
+
+    const result = await db.insert(news).values({
+      title,
+      subject,
+      link,
+    });
+
+    console.log("✅ Successfully inserted:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to save news item", error);
+    throw error;
+  }
+}
+
+// Get all news articles
+export async function getAllNews() {
+  try {
+    return await db.select().from(news);
+  } catch (error) {
+    console.error("❌ Failed to fetch news", error);
+    throw error;
+  }
+}
+
+// Get a news article by ID
+export async function getNewsById(id: string) {
+  try {
+    return await db.select().from(news).where(eq(news.id, id));
+  } catch (error) {
+    console.error("❌ Failed to fetch news by ID", error);
+    throw error;
+  }
+}
+
+// Delete a news article by ID
+export async function deleteNewsById(id: string) {
+  try {
+    console.log("🗑️ Deleting news item with ID:", id);
+
+    const result = await db.delete(news).where(eq(news.id, id));
+
+    console.log("✅ Successfully deleted:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to delete news item", error);
+    throw error;
+  }
+}
+
+
+//code for market price
+export async function saveMarketItem({
+  name,
+  price,
+}: {
+  name: string;
+  price: string;
+}) {
+  try {
+    console.log("✅ Saving market item:", name, "with price:", price);
+
+    const result = await db.insert(market).values({
+      name,
+      price
+    });
+
+    console.log("✅ Successfully inserted:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to save market item", error);
+    throw error;
+  }
+}
+
+/**
+ * Get a Market item by ID
+ */
+export async function getMarketItemById(id: string) {
+  try {
+    return await db.select().from(market).where(eq(market.id, id));
+  } catch (error) {
+    console.error("❌ Failed to fetch market item by ID", error);
+    throw error;
+  }
+}
+
+/**
+ * Update a Market item's price
+ */
+export async function updateMarketItemPrice({
+  id,
+  price,
+}: {
+  id: string;
+  price: string;
+}) {
+  try {
+    console.log("🔄 Updating market item price for ID:", id);
+
+    const result = await db
+      .update(market)
+      .set({price})
+      .where(eq(market.id, id));
+
+    console.log("✅ Successfully updated:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to update market item price", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a Market item by ID
+ */
+export async function deleteMarketItemById(id: string) {
+  try {
+    console.log("🗑️ Deleting market item with ID:", id);
+
+    const result = await db.delete(market).where(eq(market.id, id));
+
+    console.log("✅ Successfully deleted:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Failed to delete market item", error);
+    throw error;
+  }
+}
 
 //code for posting onboarding data
 
