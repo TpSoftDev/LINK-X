@@ -26,10 +26,10 @@ const Header = () => {
         setMobileMenuOpen(false);
       }
       
-      // Scroll to the element
-      window.scrollTo({
-        top: targetElement.offsetTop - 80, // Offset for header height
-        behavior: 'smooth'
+      // Scroll to the element with smooth behavior
+      targetElement.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   };
@@ -44,15 +44,15 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out py-4 px-6",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out py-5 md:py-6 w-full",
         isScrolled 
           ? "bg-black/80 backdrop-blur shadow-sm" 
           : "bg-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-[1400px] w-full mx-auto flex items-center justify-between">
         <a href="#" className="flex items-center">
-          <span className="text-2xl font-bold text-gradient">
+          <span className="text-2xl md:text-3xl font-bold text-gradient">
             LINK-X
           </span>
         </a>
@@ -92,7 +92,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile menu */}
       <div
         className={cn(
           "fixed inset-0 bg-black z-40 md:hidden transition-transform duration-300 ease-in-out pt-20",

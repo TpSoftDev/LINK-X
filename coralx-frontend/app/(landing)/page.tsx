@@ -9,20 +9,13 @@ import LandingHeader from "@/components/landing/LandingHeader";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white">
-      <LandingHeader/>
+    <div className="flex flex-col bg-black text-white min-h-screen w-full overflow-hidden">
+      <LandingHeader />
       <Hero />
       <Features />
       <InfoSection />
       <ForStudents />
-      <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
-        }}>
       <Cta />
-      </div>
       <Footer />
     </div>
   );

@@ -36,14 +36,15 @@ const LandingHeader = () => {
           : "bg-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="w-full flex items-center justify-between px-6">
+
         <Link href="/" className="flex items-center">
           <Image
             src="/images/Logo-dark.png"
             alt="Link-X Logo"
-            width={144}
-            height={98}
-            className="h-8 w-auto object-contain"
+            width={288}
+            height={197}
+            className="max-h-[8vh] w-auto object-contain"
             priority
           />
         </Link>
