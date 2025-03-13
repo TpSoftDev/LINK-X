@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 //import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input"; 
 //import { populateMarket, type MarketActionState } from "./api/actions";
 //import { Progress } from "@/components/ui/progress";
 import {
@@ -14,6 +15,7 @@ import {
   Newspaper,
   GraduationCap,
   ChevronRight,
+  Plus,
 } from "lucide-react";
 import Header from "@/components/link-x/Header";
 import { fetchRecentMarketPrices } from "./api/actions";
@@ -21,6 +23,7 @@ import { market } from "@/lib/db/schema";
 
 export default function Dashboard() {
   const router = useRouter();
+  const [search, setSearch] = useState("");
   const [marketPrices, setMarketPrices] = useState<{ price: number; date: Date }[]>([]);
   const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
   const [sp500Change, setSp500Change] = useState<string>("");
@@ -172,32 +175,60 @@ export default function Dashboard() {
         {/* Recommended Courses */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-blue-500/20 shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-xl text-blue-400">
-                Recommended Courses
-              </CardTitle>
-            </CardHeader>
+            <div className="mb-4">
+              <CardHeader>
+                <CardTitle className="text-xl text-blue-400">Courses and Topics</CardTitle>
+              </CardHeader>
+              <div className="px-4 sm:px-6">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Input
+                      type="text"
+                      placeholder="Search courses..."
+                      className="bg-gray-800/80 text-white border-blue-500/30 focus:border-blue-400/50 pl-10 h-10 rounded-lg shadow-inner shadow-blue-900/10 focus-visible:ring-blue-500/40 focus-visible:ring-offset-gray-900 w-full"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-blue-400/70"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <Button className="bg-green-600 hover:bg-green-700 text-white h-10 px-4 shadow-md shadow-green-900/20 border border-green-500/30 whitespace-nowrap">
+                    <Plus className="h-5 w-5 mr-2" />
+                    Upload Course
+                  </Button>
+                </div>
+              </div>
+            </div>
             <CardContent>
               <ul className="space-y-4">
-                {[
-                  "Advanced Stock Trading",
-                  "Cryptocurrency Fundamentals",
-                  "Personal Finance Mastery",
-                ].map((course, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg"
-                  >
-                    <span className="text-white">{course}</span>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white flex items-center"
-                      onClick={() => router.push("/learn")} // Navigate to /chat
-                    >
-                      Enroll <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </li>
-                ))}
+                {["Advanced Stock Trading", "Cryptocurrency Fundamentals", "Personal Finance Mastery"].map(
+                  (course, index) => (
+                    <li key={index} className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg">
+                      <span className="text-white">{course}</span>
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center"
+                        onClick={() => router.push("/learn")} // Navigate to /learn
+                      >
+                        Learn <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </li>
+                  ),
+                )}
               </ul>
             </CardContent>
           </Card>
