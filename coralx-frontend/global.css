@@ -25,20 +25,19 @@
     --ring: 210 100% 50%;
     --radius: 0.5rem;
   }
+}
 
+@layer base {
   * {
     @apply border-border;
-    box-sizing: border-box;
   }
 
-  html, body {
-    @apply w-full overflow-x-hidden;
+  html {
     scroll-behavior: smooth;
-    max-width: 100%;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
 
@@ -47,11 +46,11 @@
   }
 
   .section {
-    @apply py-16 md:py-24 px-6 w-full;
+    @apply py-16 md:py-24 px-6;
   }
 
   .section-inner {
-    @apply max-w-7xl mx-auto w-full;
+    @apply max-w-7xl mx-auto;
   }
 
   .reveal {

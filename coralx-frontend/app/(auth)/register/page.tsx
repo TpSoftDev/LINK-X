@@ -38,26 +38,42 @@ export default function Page() {
   const handleSubmit = async (formData: FormData) => {
     setEmail(formData.get("email") as string);
     setState("in_progress");
-
+  
     try {
-      // Create user with Firebase Authentication
+      // 1. Create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.get("email") as string,
         formData.get("password") as string
       );
-
-      // Get Firebase ID token
+  
+      // 2. Create user record in Postgres via Flask
+      const postgresResponse = await fetch("https://your-backend-url/createUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password")
+        })
+      });
+  
+      if (!postgresResponse.ok) {
+        const errorData = await postgresResponse.json();
+        console.error("Postgres user creation error:", errorData.error);
+        setState("failed");
+        toast.error("Failed to create Postgres user record");
+        return;
+      }
+  
+      // 3. Continue with Firebase flow (get token, set state, redirect)
       const token = await userCredential.user.getIdToken();
-
-      // Store token in localStorage (for backend authentication)
       localStorage.setItem("token", token);
-
+  
       setState("success");
-      router.push("/dashboard"); // Redirect to chat page
+      router.push("/dashboard");
     } catch (error: any) {
-      console.error("Firebase Registration Error:", error.message);
-
+      console.error("Registration Error:", error.message);
+  
       if (error.code === "auth/email-already-in-use") {
         setState("user_exists");
         toast.error("Email is already registered!");

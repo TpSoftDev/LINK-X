@@ -9,7 +9,7 @@ import numpy as np
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.db.schema import Base, Suggestion, User, Document, Chat, Message, Vote
+from src.db.schema import Base, Suggestion, User, Document, Chat, Message, Vote, Onboarding
 from alembic import command
 from alembic.config import Config
 
@@ -18,7 +18,8 @@ from src.db.queries import (
     get_chat_by_id, save_messages, get_messages_by_chat_id, vote_message,
     get_votes_by_chat_id, save_document, get_documents_by_id, get_document_by_id,
     delete_documents_by_id_after_timestamp, save_suggestions, get_suggestions_by_document_id,
-    get_message_by_id, delete_messages_by_chat_id_after_timestamp, update_chat_visibility_by_id
+    get_message_by_id, delete_messages_by_chat_id_after_timestamp, update_chat_visibility_by_id, 
+    create_onboarding
 )
 
 load_dotenv()
@@ -120,6 +121,46 @@ def migrate():
 
 
 # Protected Routes
+
+@app.route('/onboarding', methods=['POST'])
+def create_onboarding_route():
+    data = request.get_json()
+    required_fields = ["userId", "name", "quizzes"]
+    if not all(field in data for field in required_fields):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        db_session = Session()
+        new_onboarding = create_onboarding(
+            db=db_session,
+            user_id=data["userId"],
+            name=data["name"],
+            job=data.get("job"),
+            traits=data.get("traits"),
+            learningStyle=data.get("learningStyle"),
+            depth=data.get("depth"),
+            topics=data.get("topics"),
+            interests=data.get("interests"),
+            schedule=data.get("schedule"),
+            quizzes=data["quizzes"],
+        )
+        return jsonify({"message": "Onboarding record created", "id": str(new_onboarding.id)}), 201
+    except Exception as e:
+        print("Error creating onboarding record:", e)
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/createUser', methods=['POST'])
+def create_user_route():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+    try:
+        new_user = create_user(Session(), email, password)
+        return jsonify({"id": str(new_user.id), "email": new_user.email}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/sessionLogout', methods=['POST'])
 def session_logout():

@@ -38,22 +38,18 @@ export default function Page() {
     setState("in_progress");
 
     try {
-      // Sign in with Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.get("email") as string,
         formData.get("password") as string
       );
 
-      // Get the Firebase user token
       const token = await userCredential.user.getIdToken();
 
-      // Store token in localStorage
       localStorage.setItem("token", token);
 
       setState("success");
 
-      // Redirect to chat page
       router.push("/dashboard");
     } catch (error: any) {
       console.error("Firebase Auth Error:", error.message);

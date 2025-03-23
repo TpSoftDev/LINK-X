@@ -17,6 +17,7 @@ class User(Base):
     chats = relationship("Chat", back_populates="user")
     documents = relationship("Document", back_populates="user")
     suggestions = relationship("Suggestion", back_populates="user")
+    onboarding = relationship("Onboarding", back_populates="user", uselist=False)
 
 # Chat model
 class Chat(Base):
@@ -86,3 +87,26 @@ class Suggestion(Base):
     # relationships
     document = relationship("Document", back_populates="suggestions")
     user = relationship("User", back_populates="suggestions")
+
+# Onboarding model
+class Onboarding(Base):
+    __tablename__ = 'Onboarding'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    userId = Column(
+        UUID(as_uuid=True),
+        ForeignKey('User.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    name = Column(Text, nullable=False)
+    job = Column(Text)          
+    traits = Column(Text)       
+    learningStyle = Column(Text)  
+    depth = Column(Text)       
+    topics = Column(Text)      
+    interests = Column(Text)    
+    schedule = Column(Text)     
+    quizzes = Column(Boolean, nullable=False, default=False)
+    createdAt = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    # relationships
+    user = relationship("User", back_populates="onboarding")

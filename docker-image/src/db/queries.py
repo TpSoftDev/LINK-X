@@ -1,7 +1,8 @@
 from sqlalchemy import select, and_, desc, asc
 from sqlalchemy.orm import Session
-from src.db.schema import User, Chat, Message, Vote, Document, Suggestion  # Import your models
+from src.db.schema import User, Chat, Message, Vote, Document, Suggestion, Onboarding  # Import your models
 from werkzeug.security import generate_password_hash, check_password_hash
+from typing import Optional
 
 # Get User by Email
 def get_user_by_email(db: Session, email: str):
@@ -206,3 +207,39 @@ def update_chat_visibility_by_id(db: Session, chat_id: str, visibility: str):
     except Exception as e:
         print(f"Error updating chat visibility: {e}")
         raise
+
+def create_onboarding(
+    db: Session,
+    user_id: str,
+    name: str,
+    job: Optional[str] = None,
+    traits: Optional[str] = None,
+    learningStyle: Optional[str] = None,
+    depth: Optional[str] = None,
+    topics: Optional[str] = None,
+    interests: Optional[str] = None,
+    schedule: Optional[str] = None,
+    quizzes: bool = False
+) -> Onboarding:
+    """Create a new onboarding record."""
+    try:
+        onboarding_record = Onboarding(
+            userId=user_id,
+            name=name,
+            job=job,
+            traits=traits,
+            learningStyle=learningStyle,
+            depth=depth,
+            topics=topics,
+            interests=interests,
+            schedule=schedule,
+            quizzes=quizzes,
+        )
+        db.add(onboarding_record)
+        db.commit()
+        db.refresh(onboarding_record)
+        return onboarding_record
+    except Exception as e:
+        print("Error creating onboarding record:", e)
+        db.rollback()
+        raise e
