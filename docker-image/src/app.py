@@ -1,3 +1,4 @@
+from datetime import date
 import os
 import firebase_admin
 from firebase_admin import auth, credentials
@@ -14,8 +15,9 @@ from alembic import command
 from alembic.config import Config
 
 from src.db.queries import (
+    delete_market_item_by_id, delete_news_by_id, get_all_news, get_market_item_by_id, get_news_by_id, get_recent_market_prices, 
     get_user_by_email, create_user, save_chat, delete_chat_by_id, get_chats_by_user_id,
-    get_chat_by_id, save_messages, get_messages_by_chat_id, vote_message,
+    get_chat_by_id, save_market_item, save_messages, get_messages_by_chat_id, save_news_item, vote_message,
     get_votes_by_chat_id, save_document, get_documents_by_id, get_document_by_id,
     delete_documents_by_id_after_timestamp, save_suggestions, get_suggestions_by_document_id,
     get_message_by_id, delete_messages_by_chat_id_after_timestamp, update_chat_visibility_by_id, 
@@ -71,7 +73,6 @@ def verify_session_cookie():
         return jsonify({"error": "Unauthorized - Missing session cookie"}), 401
 
     try:
-        # check_revoked=True ensures you can revoke sessions from Firebase console
         decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
         return decoded_claims
     except Exception as e:
@@ -583,3 +584,204 @@ def generate_title_from_message():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
+
+@app.route('/market', methods=['POST'])
+def create_market_item():
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    data = request.get_json()
+    snp500 = data.get("snp500")
+    date_str = data.get("date")
+
+    if snp500 is None or not date_str:
+        return jsonify({"error": "snp500 and date are required"}), 400
+
+    try:
+        market_date = date.fromisoformat(date_str)
+    except ValueError:
+        return jsonify({"error": "Invalid date format (use YYYY-MM-DD)"}), 400
+
+    db_session = Session()
+    try:
+        new_item = save_market_item(
+            db=db_session,
+            snp500=snp500,
+            date_value=market_date
+        )
+        return jsonify({
+            "id": str(new_item.id),
+            "snp500": float(new_item.snp500),
+            "date": new_item.date.isoformat()
+        }), 201
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/market/recent', methods=['GET'])
+def get_recent_market_data():
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    limit_count = request.args.get("limit", default=30, type=int)
+
+    db_session = Session()
+    try:
+        results = get_recent_market_prices(db_session, limit_count=limit_count)
+        return jsonify([
+            {
+                "price": float(item["price"]),
+                "date": item["date"].isoformat()
+            }
+            for item in results
+        ]), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/market/<market_id>', methods=['GET'])
+def get_single_market_item(market_id):
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
+    try:
+        item = get_market_item_by_id(db_session, market_id)
+        if not item:
+            return jsonify({"error": "Market item not found"}), 404
+
+        return jsonify({
+            "id": str(item[0].id) if isinstance(item, list) else str(item.id),
+            "snp500": float(item[0].snp500) if isinstance(item, list) else float(item.snp500),
+            "date": (item[0].date.isoformat()
+                     if isinstance(item, list)
+                     else item.date.isoformat())
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/market/<market_id>', methods=['DELETE'])
+def remove_market_item(market_id):
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
+    try:
+        delete_market_item_by_id(db_session, market_id)
+        return jsonify({"message": "Market item deleted"}), 200
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+@app.route('/news', methods=['POST'])
+def create_news_item():
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    data = request.get_json()
+    title = data.get("title")
+    subject = data.get("subject")
+    link = data.get("link")
+
+    if not title or not subject or not link:
+        return jsonify({"error": "title, subject, and link are required"}), 400
+
+    db_session = Session()
+    try:
+        new_article = save_news_item(
+            db=db_session,
+            title=title,
+            subject=subject,
+            link=link
+        )
+        return jsonify({
+            "id": str(new_article.id),
+            "title": new_article.title,
+            "subject": new_article.subject,
+            "link": new_article.link
+        }), 201
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/news', methods=['GET'])
+def get_all_news_items():
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
+    try:
+        articles = get_all_news(db_session)
+        return jsonify([
+            {
+                "id": str(a.id),
+                "title": a.title,
+                "subject": a.subject,
+                "link": a.link
+            }
+            for a in articles
+        ]), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/news/<news_id>', methods=['GET'])
+def get_news_item_by_id(news_id):
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
+    try:
+        article = get_news_by_id(db_session, news_id)
+        if not article:
+            return jsonify({"error": "News article not found"}), 404
+        item = article[0] if isinstance(article, list) else article
+        return jsonify({
+            "id": str(item.id),
+            "title": item.title,
+            "subject": item.subject,
+            "link": item.link
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
+
+
+@app.route('/news/<news_id>', methods=['DELETE'])
+def remove_news_item(news_id):
+    user = verify_session_cookie()
+    if isinstance(user, dict) and "error" in user:
+        return user
+
+    db_session = Session()
+    try:
+        delete_news_by_id(db_session, news_id)
+        return jsonify({"message": "News article deleted"}), 200
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()

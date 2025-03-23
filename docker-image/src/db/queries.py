@@ -1,8 +1,10 @@
 from sqlalchemy import select, and_, desc, asc
 from sqlalchemy.orm import Session
-from src.db.schema import User, Chat, Message, Vote, Document, Suggestion, Onboarding  # Import your models
+from src.db.schema import User, Chat, Message, Vote, Document, Suggestion, Onboarding, News, Market
 from werkzeug.security import generate_password_hash, check_password_hash
 from typing import Optional
+from datetime import date
+import uuid
 
 # Get User by Email
 def get_user_by_email(db: Session, email: str):
@@ -243,3 +245,105 @@ def create_onboarding(
         print("Error creating onboarding record:", e)
         db.rollback()
         raise e
+    
+def save_market_item(db: Session, snp500: float, date_value: date) -> Market:
+    """Insert a new record into the Market table."""
+    try:
+        new_market = Market(
+            id=uuid.uuid4(),
+            snp500=snp500,
+            date=date_value
+        )
+        db.add(new_market)
+        db.commit()
+        db.refresh(new_market)
+        return new_market
+    except Exception as e:
+        db.rollback()
+        print("Error saving market item:", e)
+        raise
+
+def get_recent_market_prices(db: Session, limit_count: int = 30):
+    """
+    Retrieve the most recent market prices (by date).
+    Defaults to the last 30 entries.
+    """
+    try:
+        stmt = (
+            select(Market)
+            .order_by(asc(Market.date))
+            .limit(limit_count)
+        )
+        return db.execute(stmt).scalars().all()
+    except Exception as e:
+        print("Error retrieving recent market prices:", e)
+        raise
+
+def get_market_item_by_id(db: Session, market_id: str) -> Market:
+    """Retrieve a Market record by its UUID."""
+    try:
+        stmt = select(Market).where(Market.id == market_id)
+        return db.execute(stmt).scalars().first()
+    except Exception as e:
+        print("Error retrieving market item by ID:", e)
+        raise
+
+def delete_market_item_by_id(db: Session, market_id: str):
+    """Delete a Market record by its UUID."""
+    try:
+        target = db.query(Market).filter(Market.id == market_id).first()
+        if target:
+            db.delete(target)
+            db.commit()
+    except Exception as e:
+        db.rollback()
+        print("Error deleting market item:", e)
+        raise
+
+def save_news_item(db: Session, title: str, subject: str, link: str) -> News:
+    """Insert a new record into the News table."""
+    try:
+        new_news = News(
+            id=uuid.uuid4(),
+            title=title,
+            subject=subject,
+            link=link
+        )
+        db.add(new_news)
+        db.commit()
+        db.refresh(new_news)
+        return new_news
+    except Exception as e:
+        db.rollback()
+        print("Error saving news item:", e)
+        raise
+
+def get_all_news(db: Session):
+    """Retrieve all records from the News table."""
+    try:
+        stmt = select(News)
+        return db.execute(stmt).scalars().all()
+    except Exception as e:
+        print("Error retrieving all news:", e)
+        raise
+
+def get_news_by_id(db: Session, news_id: str) -> News:
+    """Retrieve a single News record by its UUID."""
+    try:
+        stmt = select(News).where(News.id == news_id)
+        return db.execute(stmt).scalars().first()
+    except Exception as e:
+        print("Error retrieving news by ID:", e)
+        raise
+
+def delete_news_by_id(db: Session, news_id: str):
+    """Delete a News record by its UUID."""
+    try:
+        target = db.query(News).filter(News.id == news_id).first()
+        if target:
+            db.delete(target)
+            db.commit()
+    except Exception as e:
+        db.rollback()
+        print("Error deleting news item:", e)
+        raise

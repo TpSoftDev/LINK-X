@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Boolean, Enum, Text
+from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Boolean, Enum, Text, Numeric, Date
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -110,3 +110,18 @@ class Onboarding(Base):
 
     # relationships
     user = relationship("User", back_populates="onboarding")
+
+# Market model
+class Market(Base):
+    __tablename__ = 'Market'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    snp500 = Column(Numeric, nullable=False)
+    date = Column(Date, nullable=False)
+
+# News model
+class News(Base):
+    __tablename__ = 'News'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column(String(64), nullable=False)
+    subject = Column(String(64), nullable=False)
+    link = Column(String(120), nullable=False)
