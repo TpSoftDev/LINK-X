@@ -19,10 +19,11 @@ def get_user_by_email(db: Session, email: str):
 # Create a User
 def create_user(db: Session, email: str, password: str):
     try:
-        hashed_password = generate_password_hash(password)  # Hash the password
+        hashed_password = generate_password_hash(password)
         new_user = User(email=email, password=hashed_password)
         db.add(new_user)
         db.commit()
+        db.refresh(new_user)
         return new_user
     except Exception as e:
         print(f"Error creating user: {e}")

@@ -157,11 +157,15 @@ def create_user_route():
     password = data.get("password")
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
+
+    db_session = Session()
     try:
-        new_user = create_user(Session(), email, password)
+        new_user = create_user(db_session, email, password)
         return jsonify({"id": str(new_user.id), "email": new_user.email}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
 
 @app.route('/sessionLogout', methods=['POST'])
 def session_logout():
@@ -635,8 +639,8 @@ def get_recent_market_data():
         results = get_recent_market_prices(db_session, limit_count=limit_count)
         return jsonify([
             {
-                "price": float(item["price"]),
-                "date": item["date"].isoformat()
+                "price": float(item.snp500),
+                "date": item.date.isoformat()
             }
             for item in results
         ]), 200

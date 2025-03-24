@@ -30,9 +30,10 @@ async function fetchRecentMarketPricesDirectly() {
     }
     // Each market item is { id, snp500, date }
     const data = await res.json();
+    console.log("Market data from server:", data);
     // Convert them into the structure this component needs
-    const prices = data.map((item: { snp500: number; date: string }) => ({
-      price: item.snp500,
+    const prices = data.map((item: { price: number; date: string }) => ({
+      price: item.price,
       date: new Date(item.date),
     }));
     return { prices, status: "success" as const };
@@ -106,8 +107,8 @@ export default function Dashboard() {
     // Build the SVG path (M = move, L = line)
     const pathData = marketPrices
       .map((d, i) => {
-        const scaledX = ((d.date.getTime() - minDate) / (maxDate - minDate)) * 300; // width=300
-        const scaledY = ((d.price - minPrice) / (maxPrice - minPrice)) * 100;      // height=100
+        const scaledX = ((d.date.getTime() - minDate) / (maxDate - minDate)) * 300;
+        const scaledY = ((d.price - minPrice) / (maxPrice - minPrice)) * 100;
         return `${i === 0 ? "M" : "L"}${scaledX},${100 - scaledY}`;
       })
       .join(" ");

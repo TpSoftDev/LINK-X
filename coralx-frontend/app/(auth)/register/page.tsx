@@ -48,7 +48,7 @@ export default function Page() {
       );
   
       // 2. Create user record in Postgres via Flask
-      const postgresResponse = await fetch("https://your-backend-url/createUser", {
+      const postgresResponse = await fetch("http://localhost:8080/createUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
