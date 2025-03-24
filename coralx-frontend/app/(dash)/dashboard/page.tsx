@@ -1,12 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-//import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input"; 
-//import { populateMarket, type MarketActionState } from "./api/actions";
-//import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   BarChart3,
   BookOpen,
@@ -18,87 +15,113 @@ import {
   Plus,
 } from "lucide-react";
 import Header from "@/components/link-x/Header";
-import { fetchRecentMarketPrices } from "./api/actions";
-import { market } from "@/lib/db/schema";
+
+/**
+ * Fetch recent market prices from the Flask backend at localhost:8080.
+ * Returns an array of items: { price: number, date: Date } and a status.
+ */
+async function fetchRecentMarketPricesDirectly() {
+  try {
+    const res = await fetch("http://localhost:8080/market/recent", {
+      method: "GET",
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch market prices");
+    }
+    // Each market item is { id, snp500, date }
+    const data = await res.json();
+    console.log("Market data from server:", data);
+    // Convert them into the structure this component needs
+    const prices = data.map((item: { price: number; date: string }) => ({
+      price: item.price,
+      date: new Date(item.date),
+    }));
+    return { prices, status: "success" as const };
+  } catch (error) {
+    console.error("❌ Error fetching market prices:", error);
+    return { prices: [], status: "failed" as const };
+  }
+}
 
 export default function Dashboard() {
   const router = useRouter();
+
+  // Page state
   const [search, setSearch] = useState("");
   const [marketPrices, setMarketPrices] = useState<{ price: number; date: Date }[]>([]);
   const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
   const [sp500Change, setSp500Change] = useState<string>("");
+
+  /**
+   * On mount, fetch the recent market prices directly from the Flask backend.
+   */
   useEffect(() => {
     const getPrices = async () => {
-      try {
-        const response = await fetchRecentMarketPrices();
-        if (response.status === "success") {
-          setMarketPrices(response.prices); // Update state with the fetched data
-          if (response.prices.length > 1) {
-            const firstPrice = response.prices[0].price;
-            const lastPrice = response.prices[response.prices.length - 1].price;
+      setStatus("loading");
+      const response = await fetchRecentMarketPricesDirectly();
+      if (response.status === "success") {
+        setMarketPrices(response.prices);
 
-            const change = ((lastPrice - firstPrice) / firstPrice) * 100;
-            setSp500Change(`${change.toFixed(2)}%`);
-          }
-          console.log(marketPrices)
-          setStatus("success");
-        } else {
-          setStatus("failed");
+        // Optionally compute percentage change
+        if (response.prices.length > 1) {
+          const firstPrice = response.prices[0].price;
+          const lastPrice = response.prices[response.prices.length - 1].price;
+          const change = ((lastPrice - firstPrice) / firstPrice) * 100;
+          setSp500Change(`${change.toFixed(2)}%`);
         }
-      } catch (error) {
-        console.error("❌ Error fetching market prices:", error);
+        setStatus("success");
+      } else {
         setStatus("failed");
       }
     };
 
-    getPrices(); // Fetch data when the page loads
+    getPrices();
   }, []);
 
-  // Function to draw the chart
+  /**
+   * Render the S&P chart with SVG path, or show loading/errors.
+   */
   const renderChart = () => {
     if (status === "loading") {
       return <p className="text-gray-400">Loading chart...</p>;
     }
-  
     if (status === "failed") {
       return <p className="text-red-500">Failed to load data.</p>;
     }
-  
-    // Get the min and max prices to scale the Y-axis
-    const prices = marketPrices.map((data) => data.price);
-    const dates = marketPrices.map((data) => new Date(data.date));
-  
+
+    // Compute min & max for price/time scaling
+    const prices = marketPrices.map((d) => d.price);
+    const dates = marketPrices.map((d) => d.date.getTime());
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
-  
-    const minDate = Math.min(...dates.map((date) => date.getTime()));
-    const maxDate = Math.max(...dates.map((date) => date.getTime()));
-    const halfDate = new Date((minDate + maxDate) / 2);
+    const minDate = Math.min(...dates);
+    const maxDate = Math.max(...dates);
 
-    const minDateFormatted = new Date(minDate).toLocaleDateString();
-    const maxDateFormatted = new Date(maxDate).toLocaleDateString();
-    const halfDateFormatted = halfDate.toLocaleDateString();
-  
-  
-    // Create the path data by scaling the prices and dates
-    const pathData = marketPrices.map((data, index) => {
-      const scaledX = ((new Date(data.date).getTime() - minDate) / (maxDate - minDate)) * 300; // Scale X to fit the width (300)
-      const scaledY = ((data.price - minPrice) / (maxPrice - minPrice)) * 100; // Scale Y to fit the height (100)
-  
-      return `${index === 0 ? "M" : "L"}${scaledX},${100 - scaledY}`; // Move (M) to the first point and Line (L) to the others
-    }).join(" ");
-  
+    // Midpoint date for center label
+    const midDateValue = new Date((minDate + maxDate) / 2);
+
+    const minDateLabel = new Date(minDate).toLocaleDateString();
+    const midDateLabel = midDateValue.toLocaleDateString();
+    const maxDateLabel = new Date(maxDate).toLocaleDateString();
+
+    // Build the SVG path (M = move, L = line)
+    const pathData = marketPrices
+      .map((d, i) => {
+        const scaledX = ((d.date.getTime() - minDate) / (maxDate - minDate)) * 300;
+        const scaledY = ((d.price - minPrice) / (maxPrice - minPrice)) * 100;
+        return `${i === 0 ? "M" : "L"}${scaledX},${100 - scaledY}`;
+      })
+      .join(" ");
+
     return (
       <>
         <svg className="w-full h-24" viewBox="0 0 300 100" preserveAspectRatio="none">
           <path d={pathData} fill="none" stroke="#3b82f6" strokeWidth="2" />
         </svg>
-  
-        {/* Render the date range only when the data is available */}
         <div className="flex justify-between text-xs text-gray-400 mt-2">
-          <span>{minDateFormatted}</span>
-          <span>{halfDateFormatted}</span>
-          <span>{maxDateFormatted}</span>
+          <span>{minDateLabel}</span>
+          <span>{midDateLabel}</span>
+          <span>{maxDateLabel}</span>
         </div>
       </>
     );
@@ -112,40 +135,19 @@ export default function Dashboard() {
           Financial Learning Dashboard
         </h1>
         <h2 className="text-1xl font-bold mb-8 text-white">
-          Welcome back to Link-X! Here's an overview of your financial learning
-          journey.
+          Welcome back to Link-X! Here's an overview of your financial learning journey.
         </h2>
 
-        {/* Statistics Cards */}
+        {/* Some statistics cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
-            {
-              title: "Courses Completed",
-              value: "12",
-              icon: BookOpen,
-              progress: 60,
-            },
-            {
-              title: "Hours Studied",
-              value: "87",
-              icon: Clock,
-              subtext: "+2.5% from last week",
-            },
-            {
-              title: "Community Rank",
-              value: "#42",
-              icon: TrendingUp,
-              badge: "Top 10%",
-            },
-            {
-              title: "Next Milestone",
-              value: "15 courses",
-              icon: GraduationCap,
-              progress: 80,
-            },
-          ].map((item, index) => (
+            { title: "Courses Completed", value: "12", icon: BookOpen },
+            { title: "Hours Studied", value: "87", icon: Clock, subtext: "+2.5% from last week" },
+            { title: "Community Rank", value: "#42", icon: TrendingUp, badge: "Top 10%" },
+            { title: "Next Milestone", value: "15 courses", icon: GraduationCap },
+          ].map((item, idx) => (
             <Card
-              key={index}
+              key={idx}
               className="bg-gradient-to-br from-gray-900 to-gray-800 border-blue-500/20 shadow-lg"
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -158,21 +160,15 @@ export default function Dashboard() {
                 <div className="text-3xl font-bold text-white mb-2">
                   {item.value}
                 </div>
-                {/* {item.progress !== undefined && (
-                  <Progress value={item.progress} className="bg-black" />
-                )} */}
                 {item.subtext && (
                   <p className="text-xs text-blue-300 mt-1">{item.subtext}</p>
                 )}
-                {/* {item.badge && (
-                  <Badge className="mt-2 bg-blue-500/20 text-blue-300 border border-blue-500/50">{item.badge}</Badge>
-                )} */}
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Recommended Courses */}
+        {/* Courses and Topics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-blue-500/20 shadow-lg">
             <div className="mb-4">
@@ -185,7 +181,11 @@ export default function Dashboard() {
                     <Input
                       type="text"
                       placeholder="Search courses..."
-                      className="bg-gray-800/80 text-white border-blue-500/30 focus:border-blue-400/50 pl-10 h-10 rounded-lg shadow-inner shadow-blue-900/10 focus-visible:ring-blue-500/40 focus-visible:ring-offset-gray-900 w-full"
+                      className="bg-gray-800/80 text-white border-blue-500/30 
+                                 focus:border-blue-400/50 pl-10 h-10 rounded-lg 
+                                 shadow-inner shadow-blue-900/10 
+                                 focus-visible:ring-blue-500/40 
+                                 focus-visible:ring-offset-gray-900 w-full"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -216,8 +216,11 @@ export default function Dashboard() {
             <CardContent>
               <ul className="space-y-4">
                 {["Advanced Stock Trading", "Cryptocurrency Fundamentals", "Personal Finance Mastery"].map(
-                  (course, index) => (
-                    <li key={index} className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg">
+                  (course, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg"
+                    >
                       <span className="text-white">{course}</span>
                       <Button
                         size="sm"
@@ -246,15 +249,19 @@ export default function Dashboard() {
                   Today's Market Movement
                 </h3>
                 <div className="bg-gray-800/50 p-4 rounded-lg">
-        {renderChart()}
-
-      </div>
+                  {renderChart()}
+                </div>
               </div>
               <ul className="space-y-4">
                 <li className="flex items-start space-x-3 bg-gray-800/50 p-3 rounded-lg">
                   <BarChart3 className="h-5 w-5 text-blue-400 mt-0.5" />
                   <span className="text-white">
-                    S&P 500 {"The " + sp500Change && (parseFloat(sp500Change) >= 0 ? "has gained " : "has lost ")} {sp500Change + " over the last 30 days"} 
+                    S&amp;P 500{" "}
+                    {sp500Change
+                      ? parseFloat(sp500Change) >= 0
+                        ? `has gained ${sp500Change} over the last 30 days`
+                        : `has lost ${sp500Change} over the last 30 days`
+                      : "price change unavailable"}
                   </span>
                 </li>
                 {[
@@ -293,8 +300,8 @@ export default function Dashboard() {
                 "Introduction to Investing",
                 "Financial Statement Analysis",
                 "Risk Management Basics",
-              ].map((course, index) => (
-                <Card key={index} className="bg-gray-800/50 border-blue-500/20">
+              ].map((course, idx) => (
+                <Card key={idx} className="bg-gray-800/50 border-blue-500/20">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-white">
                       {course}
@@ -302,7 +309,6 @@ export default function Dashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      {/* <Badge className="bg-green-500/20 text-green-300 border border-green-500/50">Completed</Badge> */}
                       <span className="text-xs text-gray-400">2 days ago</span>
                     </div>
                   </CardContent>

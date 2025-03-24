@@ -33,9 +33,6 @@ streamlit>=1.31.0
 # Progress Bars
 tqdm>=4.66.1
 
-# Warning Management
-warnings>=0.1.0
-
 # Optional but recommended
 nvidia-cuda-runtime; platform_system != 'Darwin'  # For GPU support
 nvidia-cudnn; platform_system != 'Darwin'  # For GPU support 

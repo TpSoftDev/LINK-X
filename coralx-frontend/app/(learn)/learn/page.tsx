@@ -1,6 +1,6 @@
 import Sidebar from "./components/sidebar"
 import LessonContent from "./components/lesson-content"
-import AIChatbot from "./components/ai-chatbot.tsx"
+import AIChatbot from "./components/ai-chatbot"
 import Header from '@/components/link-x/Header';
 
 export default function Home() {

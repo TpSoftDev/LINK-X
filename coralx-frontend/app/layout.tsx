@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SessionProvider } from "next-auth/react"; // ✅ Import SessionProvider
+import { AuthProvider } from "./(auth)/AuthContext"; 
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -49,7 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <SessionProvider> {/* ✅ Wrap the entire app in SessionProvider */}
+        <AuthProvider> {/*Firebase*/}
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -57,9 +57,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster position="top-center" />
-            {children} {/* ✅ Now all pages have access to the session */}
+            {children} {/*Firebase*/}
           </ThemeProvider>
-        </SessionProvider>
+        </AuthProvider>
       </body>
     </html>
   );
