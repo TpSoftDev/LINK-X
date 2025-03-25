@@ -9,7 +9,7 @@ import LandingHeader from "@/components/landing/LandingHeader";
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col bg-black text-white min-h-screen w-full overflow-hidden">
+    <div className="flex flex-col bg-background text-foreground min-h-screen w-full overflow-hidden">
       <LandingHeader />
       <Hero />
       <Features />
