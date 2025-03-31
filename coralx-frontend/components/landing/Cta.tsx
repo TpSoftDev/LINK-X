@@ -1,12 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from 'next/link';
+import { auth } from "@/firebaseconfig";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 const Cta = () => {
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,7 +52,7 @@ const Cta = () => {
         <div className="relative p-8 md:p-12 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-sky-600 opacity-90"></div>
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAwIDEwMFYwaC0xMDBsMTAwIDEwMHptLTEwMC0xMDBMMCA1MHYyNWw1MC01MEg3NUwwIDEwMGgxMDBWNzVMMjUgMTAwaDI1TDEwMCAyMFYwTDUwIDUweiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=')] opacity-30 mix-blend-overlay"></div>
-          
+
           <div className="relative text-center">
             <h2 className="reveal text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to transform your financial education?
@@ -48,26 +60,53 @@ const Cta = () => {
             <p className="reveal text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
               Join thousands of learners who are already mastering finance with personalized AI learning.
             </p>
+
             <div className="reveal flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-blue-600 hover:bg-blue-50 border-0 text-base h-12 px-6"
-                asChild
-              >
-                <Link href="/register">
-                  Start Learning Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="text-white border-white/30 hover:bg-white/10 hover:border-white/50 text-base h-12 px-6"
-                asChild
-              >
-                <Link href="/contact">Schedule a Demo</Link>
-              </Button>
+              {user ? (
+                <>
+                <Button 
+                  size="lg" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 border-0 text-base h-12 px-6"
+                  asChild
+                >
+                  <Link href="/dashboard">
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="text-white border-white/30 hover:bg-white/10 hover:border-white/50 text-base h-12 px-6"
+                    asChild
+                  >
+                    <Link href="/contact">Schedule a Demo</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button 
+                    size="lg" 
+                    className="bg-white text-blue-600 hover:bg-blue-50 border-0 text-base h-12 px-6"
+                    asChild
+                  >
+                    <Link href="/register">
+                      Start Learning Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="text-white border-white/30 hover:bg-white/10 hover:border-white/50 text-base h-12 px-6"
+                    asChild
+                  >
+                    <Link href="/contact">Schedule a Demo</Link>
+                  </Button>
+                </>
+              )}
             </div>
+
             <p className="reveal text-sm text-blue-100/80 mt-6">
               No credit card required. Start with a free 14-day trial.
             </p>

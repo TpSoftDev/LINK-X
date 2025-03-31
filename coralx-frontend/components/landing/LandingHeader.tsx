@@ -1,24 +1,40 @@
-
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/firebaseconfig";
 
 const LandingHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user); // Set to true if user is logged in, otherwise false
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, [auth]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setIsLoggedIn(false);
+  };
 
   const navItems = [
     { name: "Features", href: "#features" },
@@ -31,13 +47,10 @@ const LandingHeader = () => {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out py-4 px-6",
-        isScrolled 
-          ? "bg-black/80 backdrop-blur shadow-sm" 
-          : "bg-transparent"
+        isScrolled ? "bg-black/80 backdrop-blur shadow-sm" : "bg-transparent"
       )}
     >
       <div className="w-full flex items-center justify-between px-6">
-
         <Link href="/" className="flex items-center">
           <Image
             src="/images/Logo-dark.png"
@@ -62,25 +75,36 @@ const LandingHeader = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            className="text-sm font-medium text-gray-300 hover:text-blue-400"
-            asChild
-          >
-            <Link href="/login">Log In</Link>
-          </Button>
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white border-0"
-            asChild
-          >
-            <Link href="/register">Get Started</Link>
-          </Button>
+          {isLoggedIn ? (
+            <>
+              <Button
+                variant="ghost"
+                className="text-sm font-medium text-gray-300 hover:text-blue-400"
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                className="text-sm font-medium text-gray-300 hover:text-blue-400"
+                asChild
+              >
+                <Link href="/login">Log In</Link>
+              </Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0" asChild>
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
 
-        <button 
-          className="md:hidden" 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
+        <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -106,19 +130,25 @@ const LandingHeader = () => {
             ))}
           </nav>
           <div className="flex flex-col space-y-4 pt-6 border-t border-gray-800">
-            <Button
-              variant="ghost"
-              className="justify-center text-gray-300"
-              asChild
-            >
-              <Link href="/login">Log In</Link>
-            </Button>
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white border-0 justify-center"
-              asChild
-            >
-              <Link href="/register">Get Started</Link>
-            </Button>
+            {isLoggedIn ? (
+              <>
+                <Button variant="ghost" className="justify-center text-gray-300" onClick={handleLogout}>
+                  Log Out
+                </Button>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0 justify-center" asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" className="justify-center text-gray-300" asChild>
+                  <Link href="/login">Log In</Link>
+                </Button>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0 justify-center" asChild>
+                  <Link href="/register">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

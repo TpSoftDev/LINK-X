@@ -1,12 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Award, Database } from "lucide-react";
 import Link from "next/link";
+import { auth } from "@/firebaseconfig";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -62,24 +74,49 @@ const Hero = () => {
           </p>
           
           <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mt-10">
-            <Button 
-              size="lg" 
-              className="bg-blue-600 hover:bg-blue-700 text-white border-0 text-base h-12 px-6"
-              asChild
-            >
-              <Link href="/register">
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="text-base h-12 px-6 border-gray-700 text-gray-300 hover:bg-gray-800"
-              asChild
-            >
-              <Link href="#how-it-works">How It Works</Link>
-            </Button>
+            {user ? (
+              <>
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700 text-white border-0 text-base h-12 px-6"
+                asChild
+              >
+                <Link href="/dashboard">
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="text-base h-12 px-6 border-gray-700 text-gray-300 hover:bg-gray-800"
+                  asChild
+                >
+                  <Link href="#how-it-works">How It Works</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  size="lg" 
+                  className="bg-blue-600 hover:bg-blue-700 text-white border-0 text-base h-12 px-6"
+                  asChild
+                >
+                  <Link href="/register">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="text-base h-12 px-6 border-gray-700 text-gray-300 hover:bg-gray-800"
+                  asChild
+                >
+                  <Link href="#how-it-works">How It Works</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
