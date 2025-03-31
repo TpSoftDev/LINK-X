@@ -46,29 +46,36 @@ export default function OnboardingPage() {
   };
 
   const handleSubmit = async () => {
-    // Construct the payload from formData
     const payload = {
-      ...formData,
-      // Optionally include userId if needed (e.g., from session)
+      name: formData.name,
+      answers: [
+        formData.job,
+        formData.traits,
+        formData.learningStyle,
+        formData.depth,
+        formData.topics,
+        formData.interests,
+        formData.schedule,
+      ],
+      quizzes: formData.quizzes,
     };
-
+  
     console.log("🚀 Submitting onboarding data:", payload);
-
+  
     try {
       const response = await fetch("http://localhost:8080/onboarding", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         console.error("❌ Failed to save onboarding data:", errorText);
         return;
       }
-
+  
       console.log("✅ Onboarding data saved successfully!");
       router.push("/dashboard");
     } catch (error) {

@@ -31,7 +31,7 @@ export default function Page() {
     } else if (state === "success") {
       toast.success("Account created successfully");
       setIsSuccessful(true);
-      router.push("/dashboard");
+      router.push("/onboarding");
     }
   }, [state, router]);
 
@@ -40,20 +40,22 @@ export default function Page() {
     setState("in_progress");
   
     try {
-      // 1. Create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.get("email") as string,
         formData.get("password") as string
       );
   
-      // 2. Create user record in Postgres via Flask
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem("token", token);
+  
       const postgresResponse = await fetch("http://localhost:8080/createUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: formData.get("email"),
-          password: formData.get("password")
+          password: formData.get("password"),
+          idToken: token,
         })
       });
   
@@ -64,16 +66,25 @@ export default function Page() {
         toast.error("Failed to create Postgres user record");
         return;
       }
-  
-      // 3. Continue with Firebase flow (get token, set state, redirect)
-      const token = await userCredential.user.getIdToken();
-      localStorage.setItem("token", token);
+      const loginResponse = await fetch("http://localhost:8080/sessionLogin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ idToken: token })
+      });
+      
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json();
+        console.error("Session login error:", errorData.error);
+        setState("failed");
+        toast.error("Failed to set session cookie.");
+        return;
+      }
   
       setState("success");
-      router.push("/dashboard");
+      router.push("/onboarding");
     } catch (error: any) {
       console.error("Registration Error:", error.message);
-  
       if (error.code === "auth/email-already-in-use") {
         setState("user_exists");
         toast.error("Email is already registered!");

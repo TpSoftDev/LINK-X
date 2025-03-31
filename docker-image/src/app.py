@@ -21,14 +21,14 @@ from src.db.queries import (
     get_votes_by_chat_id, save_document, get_documents_by_id, get_document_by_id,
     delete_documents_by_id_after_timestamp, save_suggestions, get_suggestions_by_document_id,
     get_message_by_id, delete_messages_by_chat_id_after_timestamp, update_chat_visibility_by_id, 
-    create_onboarding
+    create_onboarding, get_user_by_firebase_uid
 )
 
 load_dotenv()
 
 # Initialize Flask
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # Initialize Firebase Admin
 cred = credentials.Certificate("firebaseKey.json")
@@ -41,7 +41,7 @@ if not POSTGRES_URL:
 
 # Create engine, session, and tables
 engine = create_engine(POSTGRES_URL)
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, expire_on_commit=False)
 Base.metadata.create_all(engine)
 
 # FAISS and metadata paths
@@ -125,34 +125,53 @@ def migrate():
 
 @app.route('/onboarding', methods=['POST'])
 def create_onboarding_route():
+    user_claims = verify_session_cookie()
+    if isinstance(user_claims, dict) and "error" in user_claims:
+        return user_claims
+
+    firebase_uid = user_claims["uid"]
+
+    db_session = Session()
+    postgres_user = get_user_by_firebase_uid(db_session, firebase_uid)
+    if not postgres_user:
+        return jsonify({"error": "User not found in database"}), 404
+
     data = request.get_json()
-    required_fields = ["userId", "name", "quizzes"]
+    required_fields = ["name", "answers", "quizzes"]
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
 
     try:
-        db_session = Session()
         new_onboarding = create_onboarding(
             db=db_session,
-            user_id=data["userId"],
+            user_id=postgres_user.id,
             name=data["name"],
-            job=data.get("job"),
-            traits=data.get("traits"),
-            learningStyle=data.get("learningStyle"),
-            depth=data.get("depth"),
-            topics=data.get("topics"),
-            interests=data.get("interests"),
-            schedule=data.get("schedule"),
-            quizzes=data["quizzes"],
+            answers=data["answers"],
+            quizzes=data["quizzes"]
         )
-        return jsonify({"message": "Onboarding record created", "id": str(new_onboarding.id)}), 201
+        return jsonify({
+            "message": "Onboarding record created",
+            "id": str(new_onboarding.id)
+        }), 201
     except Exception as e:
         print("Error creating onboarding record:", e)
+        db_session.rollback()
         return jsonify({"error": str(e)}), 500
 
 @app.route('/createUser', methods=['POST'])
 def create_user_route():
     data = request.get_json()
+    
+    id_token = data.get("idToken")
+    if not id_token:
+        return jsonify({"error": "Missing ID token"}), 400
+
+    try:
+        decoded_claims = auth.verify_id_token(id_token)
+        firebase_uid = decoded_claims["uid"]
+    except Exception as e:
+        return jsonify({"error": "Invalid ID token: " + str(e)}), 401
+
     email = data.get("email")
     password = data.get("password")
     if not email or not password:
@@ -160,7 +179,7 @@ def create_user_route():
 
     db_session = Session()
     try:
-        new_user = create_user(db_session, email, password)
+        new_user = create_user(db_session, email, password, firebase_uid=firebase_uid)
         return jsonify({"id": str(new_user.id), "email": new_user.email}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -182,19 +201,16 @@ def session_login():
         return jsonify({'error': 'Missing ID token'}), 400
 
     try:
-
         expires_in = 60 * 60 * 24 * 5
         session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
-
         response = jsonify({'message': 'Session cookie set'})
-
         response.set_cookie(
             'session',
             session_cookie,
             max_age=expires_in, 
-            httponly=True,      
-            secure=True,        
-            samesite='Strict'  
+            httponly=True,
+            secure=False,
+            samesite='Strict'
         )
         return response
     except Exception as e:

@@ -2,7 +2,7 @@ from sqlalchemy import select, and_, desc, asc
 from sqlalchemy.orm import Session
 from src.db.schema import User, Chat, Message, Vote, Document, Suggestion, Onboarding, News, Market
 from werkzeug.security import generate_password_hash, check_password_hash
-from typing import Optional
+from typing import List, Optional
 from datetime import date
 import uuid
 
@@ -17,13 +17,13 @@ def get_user_by_email(db: Session, email: str):
         raise
 
 # Create a User
-def create_user(db: Session, email: str, password: str):
+def create_user(db: Session, email: str, password: str, firebase_uid: str):
     try:
         hashed_password = generate_password_hash(password)
-        new_user = User(email=email, password=hashed_password)
+        new_user = User(email=email, password=hashed_password, firebase_uid=firebase_uid)
         db.add(new_user)
         db.commit()
-        db.refresh(new_user)
+        db.refresh(new_user)  # refreshes in place
         return new_user
     except Exception as e:
         print(f"Error creating user: {e}")
@@ -215,27 +215,15 @@ def create_onboarding(
     db: Session,
     user_id: str,
     name: str,
-    job: Optional[str] = None,
-    traits: Optional[str] = None,
-    learningStyle: Optional[str] = None,
-    depth: Optional[str] = None,
-    topics: Optional[str] = None,
-    interests: Optional[str] = None,
-    schedule: Optional[str] = None,
+    answers: List[Optional[str]],
     quizzes: bool = False
 ) -> Onboarding:
-    """Create a new onboarding record."""
+    """Create a new onboarding record with answers stored as a dynamic list."""
     try:
         onboarding_record = Onboarding(
             userId=user_id,
             name=name,
-            job=job,
-            traits=traits,
-            learningStyle=learningStyle,
-            depth=depth,
-            topics=topics,
-            interests=interests,
-            schedule=schedule,
+            answers=answers,  # answers is now a list that can grow as needed
             quizzes=quizzes,
         )
         db.add(onboarding_record)
@@ -245,6 +233,16 @@ def create_onboarding(
     except Exception as e:
         print("Error creating onboarding record:", e)
         db.rollback()
+        raise e
+    
+def get_onboarding(db: Session, user_id: str) -> Optional[Onboarding]:
+    """Retrieve the onboarding record for a given user."""
+    try:
+        return db.execute(
+            select(Onboarding).filter_by(userId=user_id)
+        ).scalars().first()
+    except Exception as e:
+        print("Error retrieving onboarding record:", e)
         raise e
     
 def save_market_item(db: Session, snp500: float, date_value: date) -> Market:
@@ -347,4 +345,12 @@ def delete_news_by_id(db: Session, news_id: str):
     except Exception as e:
         db.rollback()
         print("Error deleting news item:", e)
+        raise
+
+def get_user_by_firebase_uid(db: Session, firebase_uid: str):
+    try:
+        result = db.execute(select(User).filter_by(firebase_uid=firebase_uid)).first()
+        return result[0] if result is not None else None
+    except Exception as e:
+        print("Error retrieving user by firebase_uid:", e)
         raise

@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Boolean, Enum, Text, Numeric, Date
 from sqlalchemy.orm import relationship, declarative_base
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
+
 import uuid
 from datetime import datetime
 
@@ -12,6 +13,7 @@ class User(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String(64), nullable=False, unique=True)
     password = Column(String(255))
+    firebase_uid = Column(String(128), nullable=True)  # New field
 
     # relationships
     chats = relationship("Chat", back_populates="user")
@@ -98,13 +100,8 @@ class Onboarding(Base):
         nullable=False
     )
     name = Column(Text, nullable=False)
-    job = Column(Text)          
-    traits = Column(Text)       
-    learningStyle = Column(Text)  
-    depth = Column(Text)       
-    topics = Column(Text)      
-    interests = Column(Text)    
-    schedule = Column(Text)     
+    # New column to store all quiz answers as a list in JSONB format.
+    answers = Column(JSONB, nullable=False)
     quizzes = Column(Boolean, nullable=False, default=False)
     createdAt = Column(DateTime, nullable=False, default=datetime.utcnow)
 
