@@ -1,50 +1,23 @@
 # streamlit run .\scripts\FAISS_scripts\item_05_streamlit_FAISS.py
 
-#%%
-import os
-
-# Get the current script's directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Navigate two levels up
-working_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
-
-#%%
-
 import base64
 import os
+import sys
 import streamlit as st
 from item_04_retriever_FAISS import answer_to_QA
 
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
-    return encoded_string
+working_dir = os.getenv("WORKING_DIR")
+# Validate existence of working directory
+if not os.path.isdir(working_dir):
+    print(f"The provided path is not a valid directory: {working_dir}")
+    sys.exit(1)
 
 def main():
-    st.set_page_config(page_title="Coral AI", layout="wide")
-
-    # Get the directory of the current script
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-   
-    # Construct the full path to the background image file
-    background_image_path = os.path.join(working_dir,"additional_files", "background.jpeg")
-
-    # Encode the background image
-    try:
-        encoded_background = encode_image(background_image_path)
-    except FileNotFoundError as e:
-        st.error(f"Background image not found: {str(e)}. Please check the file path.")
-        return
+    st.set_page_config(page_title="Link-X", layout="wide")
 
     # CSS
     st.markdown(f"""
         <style>
-        .stApp {{
-            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("data:image/jpeg;base64,{encoded_background}");
-            background-size: cover;
-            background-position: center;
-        }}
         .title {{
             color: #0052A5;
             font-size: 48px;
@@ -103,8 +76,8 @@ def main():
         """, unsafe_allow_html=True)
 
     # Title and subtitle
-    st.markdown('<h1 class="title">Coral AI</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">NLP-based tool to answer Coral-related questions</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="title">Link-X AI</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Tool to test queries using FAISS and RAG</p>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
@@ -123,14 +96,14 @@ def main():
             if st.session_state.user_query:
                 try:
                     with st.spinner("Thinking..."):
-                        response = answer_to_QA(st.session_state.user_query)
+                        response = answer_to_QA(st.session_state.user_query, working_dir)
                     st.session_state.answer = response
                 except Exception as e:
                     st.error(f"An error occurred: {str(e)}")
 
         # Text input using session state
         user_query = st.text_input("", 
-                                   placeholder="Ask a question about Coral...", 
+                                   placeholder="Ask a question about the PDF...", 
                                    key="user_query",
                                    on_change=handle_submit,
                                    label_visibility="collapsed")
@@ -150,7 +123,7 @@ def main():
         if submit_button and user_query:
             try:
                 with st.spinner("Thinking..."):
-                    response = answer_to_QA(user_query)
+                    response = answer_to_QA(user_query, working_dir)
                 
                 # Store the answer in session state
                 st.session_state.answer = response
