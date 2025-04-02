@@ -13,10 +13,10 @@ export default function AIChatbot() {
   const [isMinimized, setIsMinimized] = useState(false);
 
   return (
-    <div className="flex flex-col text-foreground bg-background border-l border-border shadow-lg min-h-full">
+    <div className="flex flex-col h-full text-foreground bg-background border-l border-border shadow-lg">
       {/* Chat Body */}
       <div
-        className={`flex flex-col transition-all duration-300 ease-in-out ${
+        className={`flex flex-col h-full transition-all duration-300 ease-in-out ${
           isMinimized ? "w-20" : "w-96"
         }`}
       >
