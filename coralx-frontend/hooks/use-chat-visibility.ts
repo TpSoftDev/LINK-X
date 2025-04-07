@@ -1,10 +1,7 @@
 'use client';
 
-import { updateChatVisibility } from '@/app/(chat)/actions';
+import { useState, useEffect } from 'react';
 import { VisibilityType } from '@/components/visibility-selector';
-import { Chat } from '@/lib/db/schema';
-import { useMemo } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
 
 export function useChatVisibility({
   chatId,
@@ -13,50 +10,40 @@ export function useChatVisibility({
   chatId: string;
   initialVisibility: VisibilityType;
 }) {
-  const { mutate, cache } = useSWRConfig();
-  const history: Array<Chat> = cache.get('/api/history')?.data;
+  const [visibilityType, setVisibilityType] = useState(initialVisibility);
 
-  const { data: localVisibility, mutate: setLocalVisibility } = useSWR(
-    `${chatId}-visibility`,
-    null,
-    {
-      fallbackData: initialVisibility,
-    },
-  );
+  useEffect(() => {
+    // Fetch the chat data from the backend to get the visibility status
+    async function fetchVisibility() {
+      const response = await fetch(`http://localhost:8080/chat/${chatId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setVisibilityType(data.visibility); // assuming the response includes visibility
+      } else {
+        console.error('Failed to fetch chat visibility');
+      }
+    }
 
-  const visibilityType = useMemo(() => {
-    if (!history) return localVisibility;
-    const chat = history.find((chat) => chat.id === chatId);
-    if (!chat) return 'private';
-    return chat.visibility;
-  }, [history, chatId, localVisibility]);
+    fetchVisibility();
+  }, [chatId]);
 
-  const setVisibilityType = (updatedVisibilityType: VisibilityType) => {
-    setLocalVisibility(updatedVisibilityType);
+  const updateVisibility = async (newVisibility: VisibilityType) => {
+    // Update the visibility both locally and on the backend
+    setVisibilityType(newVisibility);
 
-    mutate<Array<Chat>>(
-      '/api/history',
-      (history) => {
-        return history
-          ? history.map((chat) => {
-              if (chat.id === chatId) {
-                return {
-                  ...chat,
-                  visibility: updatedVisibilityType,
-                };
-              }
-              return chat;
-            })
-          : [];
-      },
-      { revalidate: false },
-    );
-
-    updateChatVisibility({
-      chatId: chatId,
-      visibility: updatedVisibilityType,
+    const response = await fetch('http://localhost:8080/update-chat-visibility', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chatId,
+        visibility: newVisibility,
+      }),
     });
+
+    if (!response.ok) {
+      console.error('Failed to update visibility');
+    }
   };
 
-  return { visibilityType, setVisibilityType };
+  return { visibilityType, setVisibilityType: updateVisibility };
 }

@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 50% 20%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 210 50% 20%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 210 100% 50%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-lg bg-white/5 border border-white/10;
+  }
+
+  .section {
+    @apply py-16 md:py-24 px-6;
+  }
+
+  .section-inner {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .reveal {
+    @apply opacity-0 transition-all duration-1000 ease-out;
+  }
+
+  .reveal.active {
+    @apply opacity-100 transform-none;
+  }
+
+  .reveal[data-delay="1"] {
+    transition-delay: 0.1s;
+  }
+
+  .reveal[data-delay="2"] {
+    transition-delay: 0.2s;
+  }
+
+  .reveal[data-delay="3"] {
+    transition-delay: 0.3s;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-shadow {
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .backdrop-blur {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .purple-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-sky-400;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent purple-gradient;
+  }
+}

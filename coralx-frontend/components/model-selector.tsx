@@ -2,7 +2,6 @@
 
 import { startTransition, useMemo, useOptimistic, useState } from 'react';
 
-import { saveModelId } from '@/app/(chat)/actions';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -53,7 +52,6 @@ export function ModelSelector({
 
               startTransition(() => {
                 setOptimisticModelId(model.id);
-                saveModelId(model.id);
               });
             }}
             className="gap-4 group/item flex flex-row justify-between items-center"
