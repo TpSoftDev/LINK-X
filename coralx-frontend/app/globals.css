@@ -25,26 +25,7 @@
     --blue-accent-hover: 210 100% 50%;       /* ~hover:bg-blue-700 */
     --blue-shadow: 210 100% 10%;             /* ~shadow-blue-900/10 */
     }
-
-  .light {
-    --background: 0 0% 100%; /* white */
-    --foreground: 0 0% 0%; /* black */
-    --card: 0 0% 96%;
-    --card-foreground: 0 0% 0%;
-    --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 40%;
-    --primary: 210 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --border: 0 0% 85%;
-    --ring: 210 100% 50%;
-    --blue-foreground: 210 100% 40%;
-    --blue-muted: 210 100% 30%;
-    --blue-border: 210 100% 30%;
-    --blue-accent: 210 100% 60%;
-    --blue-accent-hover: 210 100% 50%;
-    --blue-shadow: 210 100% 90%;
-  }
-
+    
   * {
     @apply border-border;
     box-sizing: border-box;

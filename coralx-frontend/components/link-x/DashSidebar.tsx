@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-
 // Avatar placeholder - replace with actual avatar component as needed
 const Avatar = () => (
   <div className="h-10 w-10 rounded-full bg-sidebar-primary/20 border border-sidebar-primary/30 flex items-center justify-center overflow-hidden">
@@ -146,9 +145,9 @@ const Sidebar = ({ className, onCollapseChange }: SidebarProps) => {
         )}
       >
         {/* Sidebar Header */}
-        <div className="h-[10vh] px-3 flex items-center justify-between border-b border-sidebar-border/30 relative">
+        <div className="h-[10vh] px-4 flex items-center border-b border-sidebar-border/30">
           {!collapsed && (
-            <Link href="/" className="flex items-center h-full relative pl-1">
+            <Link href="/" className="flex items-center h-full">
               <Image
                 src={"/images/Logo-dark.png"}
                 alt="Link-X Logo"
@@ -160,16 +159,12 @@ const Sidebar = ({ className, onCollapseChange }: SidebarProps) => {
             </Link>
           )}
 
-          <div
-            className={cn("absolute right-3", collapsed && "static mx-auto")}
-          >
+          <div className={cn("ml-auto", collapsed && "mx-auto")}>
             <Button
               variant="outline"
               size="icon"
               onClick={toggleSidebar}
-              className={cn(
-                "rounded-full h-8 w-8 min-w-[2rem] flex items-center justify-center bg-sidebar-accent border-sidebar-border/50 hover:bg-sidebar-primary/20 hover:text-sidebar-primary transition-all"
-              )}
+              className="rounded-full h-8 w-8 min-w-[2rem] bg-sidebar-accent border-sidebar-border/50 hover:bg-sidebar-primary/20 hover:text-sidebar-primary transition-all"
             >
               {collapsed ? (
                 <ChevronRight className="h-4 w-4" />

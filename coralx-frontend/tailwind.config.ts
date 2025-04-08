@@ -55,7 +55,15 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
-				}
+				}, 
+				blue: {
+					foreground: 'hsl(var(--blue-foreground))',
+					muted: 'hsl(var(--blue-muted))',
+					border: 'hsl(var(--blue-border))',
+					accent: 'hsl(var(--blue-accent))',
+					'accent-hover': 'hsl(var(--blue-accent-hover))',
+					shadow: 'hsl(var(--blue-shadow))',
+				  }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
