@@ -11,29 +11,29 @@ const courses = ["Advanced Stock Trading", "Cryptocurrency Fundamentals", "Perso
 const CoursesList = ({ search, setSearch }: { search: string; setSearch: (value: string) => void }) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  //const [file, setFile] = useState<File | null>(null);
+  //const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
-    }
-  };
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files) {
+  //     setFile(event.target.files[0]);
+  //   }
+  // };
 
-  const handleUpload = async () => {
-    if (!file) return;
+  // const handleUpload = async () => {
+  //   if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
+  //   const formData = new FormData();
+  //   formData.append("file", file);
 
-    // const response = await fetch("/api/upload", {
-    //   method: "POST",
-    //   body: formData,
-    // });
+  //   // const response = await fetch("/api/upload", {
+  //   //   method: "POST",
+  //   //   body: formData,
+  //   // });
 
-    // const data = await response.json();
-    // console.log("Uploaded:", data);
-  };
+  //   // const data = await response.json();
+  //   // console.log("Uploaded:", data);
+  // };
 
   return (
     <div
@@ -74,26 +74,23 @@ const CoursesList = ({ search, setSearch }: { search: string; setSearch: (value:
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <input
+            {/* <input
               type="file"
               accept="application/pdf"
               ref={fileInputRef}
               onChange={handleFileChange}
               style={{ display: "none" }}
-            />
-            <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={() => fileInputRef.current?.click()}>
-              <Plus className="h-5 w-5 mr-2" />
-              Upload Course
-            </Button>
+            /> */}
+            
           </div>
-          {file && (
+          {/* {file && (
             <div className="mt-3 flex items-center gap-3">
               <span className="text-white">{file.name}</span>
               <Button onClick={handleUpload} className="bg-green-600 hover:bg-green-700 text-white">
                 Confirm Upload
               </Button>
             </div>
-          )}
+          )} */}
           <ul className="space-y-4 mt-4">
             {courses.map((course, index) => (
               <li key={index} className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg">

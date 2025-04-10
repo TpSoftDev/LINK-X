@@ -122,3 +122,16 @@ class News(Base):
     title = Column(String(64), nullable=False)
     subject = Column(String(64), nullable=False)
     link = Column(String(120), nullable=False)
+
+# Course model
+class Course(Base):
+    __tablename__ = 'courses'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    course_name = Column(Text, nullable=False)
+    course_description = Column(Text)
+    author = Column(Text)
+    pdf = Column(Text)
+    expertise = Column(Text)
+    est_time = Column(Text)
+    user = Column(String(120))

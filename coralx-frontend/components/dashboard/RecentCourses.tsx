@@ -10,7 +10,7 @@ const RecentlyCompletedCourses: React.FC = () => {
 
   return (
     <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-blue-500/20 shadow-lg">
-      <CardHeader>
+      <CardHeader className="relative flex justify-between items-center">
         <CardTitle className="text-xl text-blue-400">
           Recently Completed Courses
         </CardTitle>
