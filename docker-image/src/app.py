@@ -717,6 +717,71 @@ def ai_chat():
         print("Error in /ai-chat:", str(e))
         return jsonify({"error": "Server error: " + str(e)}), 500
 
+@app.route('/create-course', methods=['POST'])
+def learn_from_question():
+    try:
+        user = get_user_from_session()
+        if "error" in user:
+            return jsonify(user), 401
+
+        # Parse JSON data
+        data = request.form or request.get_json()
+        question = data.get("question")
+
+        if not question:
+            return jsonify({"error": "Missing question"}), 400
+
+        # 🧠 Send prompt to ChatGPT
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are an education assistant. Extract a topic and the user's level of expertise from the question. Reply ONLY with a JSON object containing 'topic' and 'expertise' (one of: beginner, intermediate, advanced)."},
+                {"role": "user", "content": question}
+            ]
+        )
+
+        # 👀 Extract JSON from response
+        content = response.choices[0].message.content
+        print("GPT response:", content)
+
+        import json
+        parsed = json.loads(content)
+        topic = parsed.get("topic")
+        expertise = parsed.get("expertise")
+
+        if not topic or not expertise:
+            return jsonify({"error": "Invalid GPT response"}), 400
+
+        # ✅ Save to database
+        db_session = Session()
+        postgres_user = get_user_by_firebase_uid(db_session, user["uid"])
+        if not postgres_user:
+            return jsonify({"error": "User not found"}), 404
+
+        new_course = Course(
+            id=str(uuid.uuid4()),
+            user_id=postgres_user.id,
+            title=topic,
+            expertise=expertise,
+            created_at=datetime.utcnow()
+        )
+        db_session.add(new_course)
+        db_session.commit()
+
+        return jsonify({
+            "message": "Course created",
+            "course": {
+                "id": new_course.id,
+                "title": new_course.title,
+                "expertise": new_course.expertise
+            }
+        }), 200
+
+    except Exception as e:
+        print("Error in /learn:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)

@@ -23,6 +23,7 @@ import {
   ChevronRight,
   Plus,
 } from "lucide-react";
+import LearnPrompt from "@/components/dashboard/LearnPromt";
 
 async function fetchRecentMarketPricesDirectly() {
   try {
@@ -90,7 +91,8 @@ export default function Dashboard() {
           <StatisticsCard title="Next Milestone" value="15 courses" icon={GraduationCap} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+          <LearnPrompt />
           <CoursesList search={search} setSearch={setSearch} />
           <MarketTrends sp500Change={sp500Change} renderChart={() => <p>Chart here</p>} />
         </div>
