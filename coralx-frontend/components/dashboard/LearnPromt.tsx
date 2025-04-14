@@ -27,14 +27,15 @@ const LearnPrompt = () => {
         formData.append("file", file); // Optional: pass file to backend if needed later
       }
   
-      const res = await fetch("http://localhost:8080/create-course", {
-        method: "POST",
-        body: formData,
-      });
+      // const res = await fetch("http://localhost:8080/create-course", {
+      //   method: "POST",
+      //   body: formData,
+      //   credentials: "include", 
+      // });
   
-      const data = await res.json();
-      console.log("Created course:", data);
-      router.push("/learn")
+      //const data = await res.json();
+      //console.log("Created course:", data);
+      //router.push("/learn")
     } catch (err) {
       console.error("Failed to learn:", err);
     }
