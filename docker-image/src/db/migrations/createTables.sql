@@ -96,7 +96,8 @@ CREATE TABLE IF NOT EXISTS "Course" (
     "index" bytea,
     "content" jsonb,
     "userId" uuid NOT NULL,
-    "fileId" uuid
+    "fileId" uuid,
+    "embedding" vector(1536)
 );
 
 CREATE TABLE IF NOT EXISTS "Transcript" (

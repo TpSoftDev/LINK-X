@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Boolean, Enum, Text, Numeric, Date, LargeBinary
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.dialects.postgresql import UUID, JSONB
+from pgvector.sqlalchemy import Vector
 
 import uuid
 from datetime import datetime
@@ -147,6 +148,7 @@ class Course(Base):
     content = Column(JSONB)        # detailed course content as JSON
     userId = Column(UUID(as_uuid=True), ForeignKey('User.id'), nullable=False)
     fileId = Column(UUID(as_uuid=True), ForeignKey('File.id'), nullable=True)  # optional file reference
+    embedding = Column(Vector(1536)) 
 
     # relationships
     user = relationship("User", back_populates="courses")
