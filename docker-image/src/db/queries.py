@@ -13,6 +13,7 @@ from src.db.schema import (
     Course,
     Module,
     File,
+    FileChunk,
     AccessCode,
     Enrollment,
     PersonalizedFile,
@@ -338,6 +339,28 @@ def delete_file(db: Session, file_id: str):
     if f:
         db.delete(f)
         db.commit()
+
+# --- FileChunk CRUD ---
+
+def insert_file_chunks(db, file_id: str, course_id: str, chunks: list[str], vectors) -> int:
+    """
+    Inserts chunked text and their embeddings into the FileChunk table.
+    Returns the number of inserted chunks.
+    """
+    rows = [
+        FileChunk(
+            file_id=file_id,
+            course_id=course_id,
+            chunk_index=i,
+            content=chunk,
+            embedding=vec
+        )
+        for i, (chunk, vec) in enumerate(zip(chunks, vectors))
+    ]
+
+    db.bulk_save_objects(rows)
+    db.commit()
+    return len(rows)
 
 # --- AccessCode CRUD ---
 

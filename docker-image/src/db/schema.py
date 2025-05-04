@@ -87,7 +87,6 @@ class Course(Base):
     instructor_id = Column(UUID(as_uuid=True),
                            ForeignKey('InstructorProfile.user_id', ondelete='CASCADE'),
                            nullable=False)
-    embedding = Column(Vector(1536)) 
 
     instructor_profile = relationship('InstructorProfile', back_populates='courses')
     modules = relationship('Module', back_populates='course')
@@ -123,6 +122,26 @@ class File(Base):
     module = relationship('Module', back_populates='files')
     chats = relationship('Chat', back_populates='file')
     personalized_files = relationship('PersonalizedFile', back_populates='original_file')
+
+class FileChunk(Base):
+    __tablename__ = 'FileChunk'
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    content = Column(Text, nullable=False)
+    embedding = Column(Vector(1536), nullable=False)
+    file_id = Column(UUID(as_uuid=True),
+                     ForeignKey('File.id', ondelete='CASCADE'),
+                     nullable=False)
+    course_id = Column(UUID(as_uuid=True),
+                       ForeignKey('Course.id', ondelete='CASCADE'),
+                       nullable=False)
+    chunk_index = Column(Integer, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('file_id', 'chunk_index', name='uq_filechunk_file_index'),
+    )
+
+    file = relationship('File')
+    course = relationship('Course')
 
 class AccessCode(Base):
     __tablename__ = 'AccessCode'

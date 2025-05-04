@@ -1,10 +1,11 @@
 import io
-from typing import List
 
 import tiktoken
 from PyPDF2 import PdfReader
 import textract
+from typing import Sequence, List
 from openai import OpenAI
+import numpy as np
 import os
 
 _embed_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -49,3 +50,31 @@ def embed_text(text: str) -> List[float]:
         input=text
     )
     return response.data[0].embedding
+
+#Batch embed a list of texts
+def openai_embed_text(texts: Sequence[str]) -> np.ndarray:
+    """
+    Batch-embed a list of text chunks with OpenAI `text-embedding-3-small`
+    Returns: np.ndarray shape (len(texts), 1536)  dtype float32  (unit-norm)
+    """
+    if not texts:
+        return np.empty((0, 1536), dtype=np.float32)
+
+    # OpenAI lets up to 2048 inputs per request; keep batches small for latency
+    CHUNK = 512
+    out: List[np.ndarray] = []
+
+    for i in range(0, len(texts), CHUNK):
+        batch = texts[i : i + CHUNK]
+
+        resp = _embed_client.embeddings.create(
+            model="text-embedding-3-small",
+            input=batch,
+            encoding_format="float"   # returns list[float] not base64
+        )
+
+        # order is preserved; convert to float32 for pgvector / FAISS
+        arr = np.asarray([d.embedding for d in resp.data], dtype=np.float32)
+        out.append(arr)
+
+    return np.vstack(out)

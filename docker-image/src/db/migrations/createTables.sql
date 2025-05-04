@@ -47,7 +47,6 @@ CREATE TABLE IF NOT EXISTS "Course" (
   "index_pkl" BYTEA,
   "index_faiss" BYTEA,
   "instructor_id" UUID NOT NULL,
-  "embedding" vector(1536),
   CONSTRAINT fk_course_instructor FOREIGN KEY("instructor_id") REFERENCES "InstructorProfile"("user_id") ON DELETE CASCADE
 );
 
@@ -69,6 +68,18 @@ CREATE TABLE IF NOT EXISTS "File" (
   "transcription" TEXT,
   "created_at" TIMESTAMP NOT NULL DEFAULT now(),
   CONSTRAINT fk_file_module FOREIGN KEY("module_id") REFERENCES "Module"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "FileChunk" (
+  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "content" TEXT NOT NULL,
+  "embedding" vector(1536) NOT NULL,
+  "file_id" UUID NOT NULL,
+  "course_id" UUID NOT NULL,
+  "chunk_index" INTEGER NOT NULL,
+  CONSTRAINT fk_filechunk_file FOREIGN KEY("file_id") REFERENCES "File"("id") ON DELETE CASCADE,
+  CONSTRAINT fk_filechunk_course FOREIGN KEY("course_id") REFERENCES "Course"("id") ON DELETE CASCADE,
+  CONSTRAINT uq_filechunk_file_index UNIQUE("file_id", "chunk_index")
 );
 
 CREATE TABLE IF NOT EXISTS "AccessCode" (
