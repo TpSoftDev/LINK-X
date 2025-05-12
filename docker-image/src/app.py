@@ -619,12 +619,14 @@ def instructor_files(module_id):
             db.close()
             return jsonify({'error': 'Missing file'}), 400
         transcription = None
-        if fobj.mimetype.startswith('audio/'):
-            try:
-                transcription = transcribe_audio(fobj)
-                fobj.stream.seek(0)
-            except Exception as e:
-                app.logger.error(f"Transcription failed: {e}")
+        mimetype = fobj.mimetype or ""
+        print(f"📎 Uploaded file mimetype: {mimetype}")
+
+        if mimetype.startswith("audio/") or mimetype in ["application/octet-stream", "video/mp4"]:
+            print("🧠 Attempting transcription...")
+            transcription = transcribe_audio(fobj)
+            fobj.stream.seek(0)
+
         data = fobj.read()
         new_file = create_file(
             db,

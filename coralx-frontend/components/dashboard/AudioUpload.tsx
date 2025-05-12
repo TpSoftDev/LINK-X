@@ -1,49 +1,114 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import { Plus } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
-export default function AudioUpload() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+interface UploadAudioProps {
+  onUpload: (file: File) => Promise<void>;
+  uploading: boolean;
+  moduleId: string;
+}
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+export default function UploadAudio({
+  onUpload,
+  uploading,
+  moduleId,
+}: UploadAudioProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [previewAudioUrl, setPreviewAudioUrl] = useState<string | null>(null);
+  const [audioToUpload, setAudioToUpload] = useState<File | null>(null);
 
-    const formData = new FormData();
-    formData.append('audio', file);
+  useEffect(() => {
+    if (!uploading) {
+      setPreviewAudioUrl(null);
+      setAudioToUpload(null);
+    }
+  }, [uploading]);
+  
 
-    try {
-      const response = await fetch('http://localhost:8080/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      console.log('Transcription:', data);
-      alert(`Transcription:\n\n${data.text || JSON.stringify(data)}`);
-    } catch (err) {
-      console.error('Upload error:', err);
-      alert('Something went wrong uploading the file');
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAudioToUpload(file);
+      setPreviewAudioUrl(URL.createObjectURL(file));
     }
   };
 
+  const handleCancelPreview = () => {
+    setPreviewAudioUrl(null);
+    setAudioToUpload(null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+  
+
+  const handleConfirmUpload = async () => {
+    if (audioToUpload) {
+      await onUpload(audioToUpload);
+      setPreviewAudioUrl(null);
+      setAudioToUpload(null);  
+    }
+  };
+  
+
   return (
-    <div>
+    <div className="border p-4 rounded shadow space-y-4">
+      <h3 className="text-sm font-medium text-gray-700">Upload Audio</h3>
+
       <input
-        ref={fileInputRef}
+        ref={inputRef}
         type="file"
         accept="audio/*,video/*"
-        onChange={handleFileChange}
+        onChange={handleFileSelect}
         className="hidden"
       />
-      <button
-        onClick={() => fileInputRef.current?.click()}
-        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center"
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Upload Audio
-      </button>
+
+      {!previewAudioUrl && (
+        <Button onClick={() => inputRef.current?.click()} disabled={uploading}>
+          {uploading ? (
+            <>
+              <Loader2 className="animate-spin h-4 w-4 mr-2" />
+              Uploading…
+            </>
+          ) : (
+            "Choose Audio"
+          )}
+        </Button>
+      )}
+
+      {previewAudioUrl && (
+        <div className="space-y-4">
+          <audio
+            controls
+            src={previewAudioUrl}
+            className="w-full rounded"
+          >
+            Your browser does not support the audio element.
+          </audio>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={handleCancelPreview}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmUpload}
+              disabled={uploading}
+              className="bg-blue-600 text-white hover:bg-blue-500 flex items-center gap-2"
+            >
+              {uploading && <Loader2 className="animate-spin h-4 w-4" />}
+              {uploading ? "Uploading…" : "Confirm Upload"}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {uploading && !previewAudioUrl && (
+        <div className="flex items-center gap-2 text-sm text-blue-600">
+          <Loader2 className="animate-spin h-4 w-4" />
+          Uploading and processing…
+        </div>
+      )}
     </div>
   );
 }
