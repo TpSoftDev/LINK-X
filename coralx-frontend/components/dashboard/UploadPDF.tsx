@@ -43,10 +43,17 @@ export default function UploadPdf({
 
   const handleConfirmUpload = async () => {
     if (pdfToUpload) {
-      await onUpload(pdfToUpload); // reset handled by useEffect
+      console.log("[DEBUG] Uploading PDF:", pdfToUpload.name);
+      try {
+        await onUpload(pdfToUpload);
+        console.log("[DEBUG] Upload finished");
+      } catch (err) {
+        console.error("[DEBUG] Upload failed:", err);
+      }
     }
   };
-
+  
+  
   return (
     <div className="border p-4 rounded shadow space-y-4">
       <h3 className="text-sm font-medium text-gray-700">Upload a PDF</h3>

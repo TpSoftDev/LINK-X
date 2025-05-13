@@ -654,8 +654,8 @@ def instructor_files(module_id):
             index_faiss=idx_bytes,
             index_pkl=pkl_bytes
         )
-        db.close()
         store_file_embeddings(db, str(new_file.id))
+        db.close()
         return jsonify({
             'id':            str(new_file.id),
             'filename':      new_file.filename,
@@ -1454,7 +1454,7 @@ def ai_chat():
         assistant_reply = resp.choices[0].message.content.strip()
 
         # 7. Save assistant reply (optional)
-        # create_message(db, chat_id, role="assistant", content=assistant_reply)
+        create_message(db, chat_id, role="assistant", content=assistant_reply)
 
         db.close()
 

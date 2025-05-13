@@ -49,37 +49,61 @@ export default function AIChatbot({ fileId }: { fileId: string }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+      if (!user) {
+        console.log("[DEBUG] No authenticated user found.");
+        return;
+      }
+  
       const firebaseUid = user.uid;
       const localStorageKey = `chatId_${firebaseUid}`;
       const savedChatId = localStorage.getItem(localStorageKey);
-
+  
+      console.log(`[DEBUG] Firebase UID: ${firebaseUid}`);
+      console.log(`[DEBUG] LocalStorage chatId: ${savedChatId}`);
+  
       if (savedChatId) {
         setChatId(savedChatId);
-        fetch(`http://localhost:8080/messages/${savedChatId}`, {
+        const messagesEndpoint = `http://localhost:8080/${savedChatId}/messages`;
+        console.log(`[DEBUG] Fetching messages from: ${messagesEndpoint}`);
+  
+        fetch(messagesEndpoint, {
           method: "GET",
           credentials: "include",
         })
-          .then((res) => res.json())
+          .then((res) => {
+            console.log("[DEBUG] Response status:", res.status);
+            return res.json();
+          })
           .then((data) => {
+            console.log("[DEBUG] Response data from /messages:", data);
+  
             if (data.error) {
+              console.warn("[DEBUG] Error in response:", data.error);
               localStorage.removeItem(localStorageKey);
               setChatId(null);
               setMessages([]);
-            } else {
+            } else if (Array.isArray(data)) {
               const formattedMessages = data.map((msg: any) => ({
                 role: msg.role,
                 content: msg.content,
               }));
+              console.log("[DEBUG] Formatted messages:", formattedMessages);
               setMessages(formattedMessages);
+            } else {
+              console.warn("[DEBUG] Unexpected data format:", data);
             }
           })
-          .catch((err) => console.error("Error fetching messages:", err));
+          .catch((err) => {
+            console.error("[DEBUG] Fetch error:", err);
+          });
+      } else {
+        console.log("[DEBUG] No chatId found in localStorage.");
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

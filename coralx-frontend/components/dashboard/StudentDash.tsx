@@ -35,6 +35,7 @@ export default function StudentDashboard() {
     id: string;
     title: string;
     filename: string;
+    file_type: string;
   };
 
   interface OnboardingData {
@@ -80,7 +81,20 @@ export default function StudentDashboard() {
   const [previewingFile, setPreviewingFile] = useState<{
     id: string;
     title: string;
+    filename: string;
   } | null>(null);
+
+  const isMedia =
+  previewingFile?.title?.toLowerCase().endsWith(".mp3") ||
+  previewingFile?.title?.toLowerCase().endsWith(".mp4") ||
+  previewingFile?.title?.toLowerCase().endsWith(".wav") ||
+  previewingFile?.title?.toLowerCase().endsWith(".m4a") ||
+  previewingFile?.title?.toLowerCase().endsWith(".aac") ||
+  previewingFile?.title?.toLowerCase().endsWith(".ogg") ||
+  previewingFile?.title?.toLowerCase().endsWith(".flac") ||
+  previewingFile?.title?.toLowerCase().endsWith(".wma") ||
+  previewingFile?.title?.toLowerCase().endsWith(".aiff");
+
 
   const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(
     null
@@ -93,7 +107,7 @@ export default function StudentDashboard() {
         const res = await fetch("http://localhost:8080/student/courses", {
           credentials: "include",
         });
-        if (!res.ok) throw new Error("Failed to fetch courses");
+        //if (!res.ok) throw new Error("Failed to fetch courses");
         const data = await res.json();
         setCourses(data);
       } catch (err) {
@@ -141,7 +155,7 @@ export default function StudentDashboard() {
           `http://localhost:8080/student/courses/${selectedCourse.id}/classmates`,
           { credentials: "include" }
         );
-        if (!res.ok) throw new Error("Failed to fetch classmates");
+        
         const classmates = await res.json();
         const formatted = classmates.map((s: any, index: number) => ({
           id: index.toString(),
@@ -165,7 +179,7 @@ export default function StudentDashboard() {
       credentials: "include",
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error("Failed to fetch onboarding");
+        
         const data = await res.json();
 
         setOnboardingData({
@@ -223,7 +237,7 @@ export default function StudentDashboard() {
         }
       );
 
-      if (!checkRes.ok) throw new Error("Failed to check personalized files");
+      //if (!checkRes.ok) throw new Error("Failed to check personalized files");
 
       const existingFiles = await checkRes.json();
       const match = existingFiles.find(
@@ -265,7 +279,7 @@ export default function StudentDashboard() {
       );
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Personalization failed");
+     // if (!res.ok) throw new Error(data.error || "Personalization failed");
 
       toast.success("Personalized content generated!");
       router.push(`/learn/${data.id}`);
@@ -297,7 +311,7 @@ export default function StudentDashboard() {
             { credentials: "include" }
           );
 
-          if (!res.ok) throw new Error("Failed to fetch files");
+          //if (!res.ok) throw new Error("Failed to fetch files");
           const data = await res.json();
 
           setModuleFiles((prev) => ({
@@ -418,9 +432,11 @@ export default function StudentDashboard() {
                           >
                             ← Back to Modules
                           </Button>
-                          <Button onClick={handlePersonalize}>
-                            Personalize
-                          </Button>
+                          {!isMedia && (
+                            <Button onClick={handlePersonalize}>
+                              Personalize
+                            </Button>
+                          )}
                         </div>
 
                         <h2 className="text-2xl font-bold text-gray-900">
@@ -475,7 +491,11 @@ export default function StudentDashboard() {
                                         <div
                                           key={file.id}
                                           onClick={() =>
-                                            setPreviewingFile(file)
+                                            setPreviewingFile({
+                                              id: file.id,
+                                              title: file.title,
+                                              filename: file.filename,
+                                            })
                                           }
                                           className="cursor-pointer text-blue-600 hover:underline"
                                         >

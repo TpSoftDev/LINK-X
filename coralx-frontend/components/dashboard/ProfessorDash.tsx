@@ -220,11 +220,11 @@ export default function ProfessorDashboard() {
     console.log("⏳ Starting audio upload for:", moduleId);
     try {
       setUploadingAudioModuleId(moduleId);
-  
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("title", file.name);
-  
+
       const res = await fetch(
         `http://localhost:8080/instructor/modules/${moduleId}/files`,
         {
@@ -233,31 +233,34 @@ export default function ProfessorDashboard() {
           credentials: "include",
         }
       );
-  
+
       if (!res.ok) {
         toast.error("Audio upload failed");
         console.error("❌ Upload failed:", await res.text());
         return;
       }
-  
+
       toast.success("Audio uploaded!");
       console.log("✅ Upload successful. Fetching updated files...");
-  
+
       const updatedFilesRes = await fetch(
         `http://localhost:8080/instructor/modules/${moduleId}/files`,
         {
           credentials: "include",
         }
       );
-  
+
       if (!updatedFilesRes.ok) {
-        console.error("❌ Failed to fetch updated files:", await updatedFilesRes.text());
+        console.error(
+          "❌ Failed to fetch updated files:",
+          await updatedFilesRes.text()
+        );
         return;
       }
-  
+
       const updatedFiles = await updatedFilesRes.json();
       console.log("📁 Updated files:", updatedFiles);
-  
+
       setModuleFiles((prev) => ({
         ...prev,
         [moduleId]: updatedFiles,
@@ -270,7 +273,6 @@ export default function ProfessorDashboard() {
       setUploadingAudioModuleId(null);
     }
   };
-  
 
   const handleUploadPdf = async (
     courseId: string,
@@ -917,7 +919,6 @@ export default function ProfessorDashboard() {
                                       }
                                       moduleId={mod.id}
                                     />
-
                                     <UploadAudio
                                       onUpload={(file) =>
                                         handleUploadAudio(
