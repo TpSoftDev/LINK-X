@@ -5,10 +5,12 @@ import { Plus, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
 import Sidebar from "@/components/dashboard/DashSidebar";
-import AudioUpload from "@/components/dashboard/AudioUpload";
+import UploadAudio from "@/components/dashboard/AudioUpload";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/landing/Footer";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -72,6 +74,10 @@ export default function ProfessorDashboard() {
   const [uploadingModuleId, setUploadingModuleId] = useState<string | null>(
     null
   );
+  const [uploadingAudioModuleId, setUploadingAudioModuleId] = useState<
+    string | null
+  >(null);
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<{ content: string }[]>([]);
   const [modules, setModules] = useState<
@@ -130,16 +136,16 @@ export default function ProfessorDashboard() {
   useEffect(() => {
     const fetchEnrolledStudents = async () => {
       if (activeTab !== "people" || !selectedCourse?.id) return;
-  
+
       setLoadingStudents(true);
-  
+
       try {
         const res = await fetch(
           `http://localhost:8080/instructor/courses/${selectedCourse.id}/students`,
           { credentials: "include" }
         );
         if (!res.ok) throw new Error("Failed to fetch students");
-  
+
         const students = await res.json();
         const formatted = students.map((s: any) => ({
           id: s.userId,
@@ -148,7 +154,7 @@ export default function ProfessorDashboard() {
           enrolledAt: s.enrolledAt,
           enrollmentId: s.enrollmentId,
         }));
-  
+
         setEnrolledStudents(formatted);
       } catch (err) {
         console.error("Error fetching enrolled students:", err);
@@ -157,10 +163,9 @@ export default function ProfessorDashboard() {
         setLoadingStudents(false);
       }
     };
-  
+
     fetchEnrolledStudents();
   }, [activeTab, selectedCourse]);
-  
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -262,58 +267,112 @@ export default function ProfessorDashboard() {
     }
   };
 
-  const fetchModulesWithFiles = async () => {
-    if (!selectedCourse) return;
-
+  const handleUploadAudio = async (
+    courseId: string,
+    file: File,
+    moduleId: string
+  ) => {
     try {
+      setUploadingAudioModuleId(moduleId);
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("title", file.name);
+
       const res = await fetch(
-        `http://localhost:8080/courses/${selectedCourse.id}/moduleswithfiles`
-      );
-      if (!res.ok) throw new Error("Failed to fetch");
-
-      const data = await res.json();
-      setModules(data);
-    } catch (err) {
-      toast.error("Failed to fetch modules with files");
-      console.error(err);
-    }
-  };
-
-  const handleSearch = async () => {
-    if (!query || !selectedCourse) return;
-
-    try {
-      const res = await fetch(
-        `http://localhost:8080/courses/${selectedCourse.id}/search`,
+        `http://localhost:8080/instructor/modules/${moduleId}/files`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
+          body: formData,
+          credentials: "include",
         }
       );
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Search failed");
+      // if (!res.ok) {
+      //   toast.error("Audio upload failed");
+      //   return;
+      // }
 
-      setResults(data.results);
+      toast.success("Audio uploaded!");
+
+      const updatedFilesRes = await fetch(
+        `http://localhost:8080/instructor/modules/${moduleId}/files`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (!updatedFilesRes.ok) return;
+
+      const updatedFiles = await updatedFilesRes.json();
+
+      setModuleFiles((prev) => ({
+        ...prev,
+        [moduleId]: updatedFiles,
+      }));
+    } catch (error) {
+      console.error("Audio upload error:", error);
+      toast.error("Audio upload error");
+    } finally {
+      setUploadingAudioModuleId(null);
+    }
+  };
+
+  const handleDeleteModule = async (moduleId: string) => {
+    if (!window.confirm("Are you sure you want to delete this module?")) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/instructor/modules/${moduleId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete module");
+      setModules((prev) => prev.filter((mod) => mod.id !== moduleId));
     } catch (err) {
-      console.error("Search error:", err);
-      alert("Error searching content");
+      console.error("Error deleting module:", err);
+      toast.error("Could not delete module");
+    }
+  };
+
+  const handleDeleteFile = async (fileId: string, moduleId: string) => {
+    if (!window.confirm("Are you sure you want to delete this file?")) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/instructor/files/${fileId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete file");
+      setModuleFiles((prev) => ({
+        ...prev,
+        [moduleId]: prev[moduleId].filter((file) => file.id !== fileId),
+      }));
+    } catch (err) {
+      console.error("Error deleting file:", err);
+      toast.error("Could not delete file");
     }
   };
 
   const filteredCourses = courses
-    .filter(
-      (course): course is Course =>
-        !!course &&
-        typeof course.title === "string" &&
-        typeof course.code === "string"
-    )
-    .filter(
-      (course) =>
-        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.code.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  .filter(
+    (course): course is Course =>
+      !!course &&
+      typeof course.title === "string" &&
+      typeof course.code === "string"
+  )
+  .filter(
+    (course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleCreateCourse = async (newCourse: any) => {
     try {
@@ -551,7 +610,10 @@ export default function ProfessorDashboard() {
   return (
     <div className="min-h-screen bg-white text-gray-900 flex">
       {/* Sidebar */}
-      <Sidebar onCollapseChange={(value) => setIsCollapsed(value)} userRole = "instructor" />
+      <Sidebar
+        onCollapseChange={(value) => setIsCollapsed(value)}
+        userRole="instructor"
+      />
 
       {/* Main Content */}
       <div
@@ -765,22 +827,33 @@ export default function ProfessorDashboard() {
                                   }`}
                                   onClick={() => handleToggleModule(mod.id)}
                                 >
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-black">
-                                      {selectedModuleId === mod.id ? "▼" : "▶"}
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                      {mod.title}
-                                    </span>
+                                  <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-black">
+                                        {selectedModuleId === mod.id
+                                          ? "▼"
+                                          : "▶"}
+                                      </span>
+                                      <span className="font-medium text-gray-900">
+                                        {mod.title}
+                                      </span>
+                                    </div>
+                                    <button
+                                      className="text-red-500 hover:text-red-700"
+                                      onClick={(e) => {
+                                        e.stopPropagation(); // Prevent expanding/collapsing
+                                        handleDeleteModule(mod.id);
+                                      }}
+                                      title="Delete module"
+                                    >
+                                      <Trash2 size={16} />
+                                    </button>
                                   </div>
                                 </div>
 
                                 {/* Expanded Module Section */}
                                 {selectedModuleId === mod.id && (
                                   <div className="mt-3 border border-gray-300 rounded-lg bg-gray-50 shadow-sm p-4 space-y-4">
-                                    <h4 className="text-md font-semibold text-gray-800">
-                                      Upload a PDF
-                                    </h4>
                                     <UploadPdf
                                       onUpload={(file) =>
                                         handleUploadPdf(
@@ -789,7 +862,23 @@ export default function ProfessorDashboard() {
                                           mod.id
                                         )
                                       }
-                                      uploading={uploadingModuleId === mod.id}
+                                      uploading={
+                                        uploadingModuleId === mod.id
+                                      }
+                                      moduleId={mod.id}
+                                    />
+
+                                    <UploadAudio
+                                      onUpload={(file) =>
+                                        handleUploadAudio(
+                                          selectedCourse.id,
+                                          file,
+                                          mod.id
+                                        )
+                                      }
+                                      uploading={
+                                        uploadingAudioModuleId === mod.id
+                                      }
                                       moduleId={mod.id}
                                     />
 
@@ -806,12 +895,28 @@ export default function ProfessorDashboard() {
                                         moduleFiles[mod.id].map((file) => (
                                           <div
                                             key={file.id}
-                                            onClick={() =>
-                                              setPreviewingFile(file)
-                                            }
-                                            className="cursor-pointer text-blue-600 hover:underline"
+                                            className="flex justify-between items-center cursor-pointer text-blue-600 hover:underline"
                                           >
-                                            📄 {file.title}
+                                            <span
+                                              onClick={() =>
+                                                setPreviewingFile(file)
+                                              }
+                                            >
+                                              📄 {file.title}
+                                            </span>
+                                            <button
+                                              className="text-red-500 hover:text-red-700 ml-2"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteFile(
+                                                  file.id,
+                                                  mod.id
+                                                );
+                                              }}
+                                              title="Delete file"
+                                            >
+                                              <Trash2 size={16} />
+                                            </button>
                                           </div>
                                         ))
                                       ) : (
@@ -863,70 +968,77 @@ export default function ProfessorDashboard() {
                   <section>
                     <h2 className="text-2xl font-bold mb-4">People</h2>
                     {loadingStudents ? (
-  <p className="text-sm text-blue-600 italic">Loading students…</p>
-) : (
-  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {enrolledStudents.map((student) => (
-      <Card key={student.enrollmentId} className="p-4 flex flex-col justify-between">
-                          <div>
-                            <h3 className="text-lg font-semibold">
-                              {student.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {student.email}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Enrolled:{" "}
-                              {new Date(
-                                student.enrolledAt
-                              ).toLocaleDateString()}
-                            </p>
-                          </div>
+                      <p className="text-sm text-blue-600 italic">
+                        Loading students…
+                      </p>
+                    ) : (
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {enrolledStudents.map((student) => (
+                          <Card
+                            key={student.enrollmentId}
+                            className="p-4 flex flex-col justify-between"
+                          >
+                            <div>
+                              <h3 className="text-lg font-semibold">
+                                {student.name}
+                              </h3>
+                              <p className="text-sm text-muted-foreground">
+                                {student.email}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                Enrolled:{" "}
+                                {new Date(
+                                  student.enrolledAt
+                                ).toLocaleDateString()}
+                              </p>
+                            </div>
 
-                          <div className="mt-4">
-                            {confirmingDeleteStudentId !==
-                            student.enrollmentId ? (
-                              <Button
-                                variant="destructive"
-                                className="w-full bg-red-600 hover:bg-red-700 text-white"
-                                onClick={() =>
-                                  setConfirmingDeleteStudentId(
-                                    student.enrollmentId
-                                  )
-                                }
-                              >
-                                Remove Student
-                              </Button>
-                            ) : (
-                              <div className="flex flex-col gap-2">
-                                <p className="text-sm text-red-600 font-medium">
-                                  Confirm removal of this student?
-                                </p>
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant="destructive"
-                                    className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-                                    onClick={() =>
-                                      handleDeleteStudent(student.enrollmentId)
-                                    }
-                                  >
-                                    Confirm
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    className="flex-1"
-                                    onClick={() =>
-                                      setConfirmingDeleteStudentId(null)
-                                    }
-                                  >
-                                    Cancel
-                                  </Button>
+                            <div className="mt-4">
+                              {confirmingDeleteStudentId !==
+                              student.enrollmentId ? (
+                                <Button
+                                  variant="destructive"
+                                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                                  onClick={() =>
+                                    setConfirmingDeleteStudentId(
+                                      student.enrollmentId
+                                    )
+                                  }
+                                >
+                                  Remove Student
+                                </Button>
+                              ) : (
+                                <div className="flex flex-col gap-2">
+                                  <p className="text-sm text-red-600 font-medium">
+                                    Confirm removal of this student?
+                                  </p>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      variant="destructive"
+                                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                                      onClick={() =>
+                                        handleDeleteStudent(
+                                          student.enrollmentId
+                                        )
+                                      }
+                                    >
+                                      Confirm
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      className="flex-1"
+                                      onClick={() =>
+                                        setConfirmingDeleteStudentId(null)
+                                      }
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        </Card>
-                      ))}
+                              )}
+                            </div>
+                          </Card>
+                        ))}
                       </div>
                     )}
                   </section>
@@ -1183,11 +1295,10 @@ export default function ProfessorDashboard() {
               </TabsContent>
             </Tabs>
           )}
-          
         </main>
         <div className="h-1/4">
           <Footer />
-          </div>
+        </div>
       </div>
 
       {/* Edit Course Dialog */}

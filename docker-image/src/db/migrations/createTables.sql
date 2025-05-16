@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
 CREATE TYPE role_enum AS ENUM (
   'admin',
   'instructor',

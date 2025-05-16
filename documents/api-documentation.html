@@ -1,0 +1,1648 @@
+<h1>API Documentation – Endpoints</h1>
+
+<hr />
+
+<h2>GET /me</h2>
+<p>
+  <strong>Description:</strong> Returns the authenticated user's account and
+  profile information.
+</p>
+<p><strong>Authentication:</strong> Requires session cookie.</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "user-uuid",
+  "email": "user@example.com",
+  "role": "student",
+  "profile": {
+    "user_id": "user-uuid",
+    "name": "Jane Doe",
+    "onboard_answers": {},
+    "want_quizzes": true,
+    "model_preference": "gpt-4"
+  }
+}</code></pre>
+
+<p><strong>Status Codes:</strong></p>
+<ul>
+  <li>200 OK – User data returned</li>
+  <li>401 Unauthorized – Invalid session</li>
+</ul>
+
+<hr />
+
+<h2>PATCH /me</h2>
+<p>
+  <strong>Description:</strong> Updates the current user's account and profile
+  information based on role.
+</p>
+<p><strong>Authentication:</strong> Requires session cookie.</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "email": "new@example.com",
+  "password": "newpass123",
+  "name": "Jane Updated",
+  "onboard_answers": {},
+  "want_quizzes": false,
+  "model_preference": "gpt-3.5",
+  "university": "New U"
+}</code></pre>
+
+<p><strong>Status Codes:</strong></p>
+<ul>
+  <li>200 OK – Profile updated</li>
+  <li>401 Unauthorized – Invalid session</li>
+  <li>404 Not Found – User does not exist</li>
+</ul>
+
+<hr />
+
+<h2>DELETE /me</h2>
+<p>
+  <strong>Description:</strong> Deletes the current user account and logs them
+  out.
+</p>
+<p><strong>Authentication:</strong> Requires session cookie.</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Account deleted"
+}</code></pre>
+
+<p><strong>Status Codes:</strong></p>
+<ul>
+  <li>200 OK – Account deleted</li>
+  <li>401 Unauthorized – Invalid session</li>
+  <li>404 Not Found – User does not exist</li>
+</ul>
+
+<hr />
+
+<h2>POST /register/instructor</h2>
+<p>
+  <strong>Description:</strong> Register a new instructor using a Firebase ID
+  token and user details.
+</p>
+<p>
+  <strong>Authentication:</strong> Firebase ID token required in request body.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "idToken": "firebase_token",
+  "email": "instructor@example.com",
+  "password": "securepass123",
+  "name": "Jane Instructor",
+  "university": "Example University"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "instructor-uuid",
+  "email": "instructor@example.com"
+}</code></pre>
+
+<p><strong>Status Codes:</strong></p>
+<ul>
+  <li>201 Created – Instructor account created</li>
+  <li>400 Bad Request – Missing fields</li>
+  <li>401 Unauthorized – Invalid Firebase token</li>
+</ul>
+
+<hr />
+
+<h2>POST /register/student</h2>
+<p>
+  <strong>Description:</strong> Register a new student using a Firebase ID token
+  and basic details.
+</p>
+<p>
+  <strong>Authentication:</strong> Firebase ID token required in request body.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "idToken": "firebase_token",
+  "email": "student@example.com",
+  "password": "securepass123"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "student-uuid",
+  "email": "student@example.com"
+}</code></pre>
+
+<p><strong>Status Codes:</strong></p>
+<ul>
+  <li>201 Created – Student account created</li>
+  <li>400 Bad Request – Missing fields</li>
+  <li>401 Unauthorized – Invalid Firebase token</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/profile</h2>
+<p><strong>Methods:</strong> GET, POST, PATCH, DELETE</p>
+<p><strong>Authentication:</strong> Must be logged in as instructor</p>
+
+<h3>GET</h3>
+<p><strong>Description:</strong> Retrieve the instructor's profile.</p>
+<pre><code>{
+  "user_id": "instructor-uuid",
+  "name": "Jane Instructor",
+  "university": "Example University"
+}</code></pre>
+<ul>
+  <li>200 OK – Profile retrieved</li>
+  <li>404 Not Found – No profile exists</li>
+</ul>
+
+<h3>POST</h3>
+<p><strong>Description:</strong> Create a new instructor profile.</p>
+<pre><code>{
+  "name": "Jane Instructor",
+  "university": "Example University"
+}</code></pre>
+<ul>
+  <li>201 Created – Profile created</li>
+  <li>400 Bad Request – Name missing</li>
+</ul>
+
+<h3>PATCH</h3>
+<p><strong>Description:</strong> Update the instructor profile.</p>
+<pre><code>{
+  "name": "Updated Name",
+  "university": "Updated University"
+}</code></pre>
+<ul>
+  <li>200 OK – Profile updated</li>
+</ul>
+
+<h3>DELETE</h3>
+<p>
+  <strong>Description:</strong> Deletes instructor profile and associated user
+  account. Logs out the session.
+</p>
+<ul>
+  <li>200 OK – Account deleted</li>
+</ul>
+
+<hr />
+
+<h2>GET /student/courses</h2>
+<p>
+  <strong>Description:</strong> Retrieve all courses the student is enrolled in.
+</p>
+<p><strong>Authentication:</strong> Must be logged in as student</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  {
+    "id": "course-id",
+    "title": "Intro to AI",
+    "description": "A beginner course in AI",
+    "code": "AI101",
+    "term": "Spring 2025",
+    "published": true,
+    "last_updated": "2025-03-01T14:23:00"
+  }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Courses returned</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p><strong>Authentication:</strong> Must be logged in as instructor</p>
+
+<h3>GET</h3>
+<p>
+  <strong>Description:</strong> Retrieve all courses the instructor created.
+</p>
+<pre><code>[
+  {
+    "id": "course-id",
+    "title": "Intro to AI",
+    "description": "A beginner course in AI",
+    "code": "AI101",
+    "term": "Spring 2025",
+    "published": true,
+    "last_updated": "2025-03-01T14:23:00"
+  }
+]</code></pre>
+<ul>
+  <li>200 OK – Courses returned</li>
+</ul>
+
+<h3>POST</h3>
+<p>
+  <strong>Description:</strong> Create a new course and generate an access code.
+</p>
+<pre><code>{
+  "title": "Intro to AI",
+  "description": "A beginner course in AI",
+  "code": "AI101",
+  "term": "Spring 2025",
+  "published": true
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "course-id",
+  "accessCode": "8charcode"
+}</code></pre>
+
+<ul>
+  <li>201 Created – Course created and access code generated</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Authentication:</strong> Must be logged in as instructor</p>
+
+<h3>GET</h3>
+<p><strong>Description:</strong> Retrieve a course's basic information.</p>
+<pre><code>{
+  "id": "course-id",
+  "title": "Course Title",
+  "description": "Course description",
+  "created_at": "2025-03-01T10:00:00"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Description:</strong> Update a course's title or description.</p>
+<pre><code>{
+  "title": "New Title",
+  "description": "Updated course description"
+}</code></pre>
+
+<h3>DELETE</h3>
+<p><strong>Description:</strong> Permanently delete the course.</p>
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Success</li>
+  <li>403 Forbidden – Unauthorized access</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/accesscodes</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p><strong>Authentication:</strong> Must be logged in as instructor</p>
+
+<h3>GET</h3>
+<p>
+  <strong>Description:</strong> Retrieve the access code associated with a
+  course.
+</p>
+<pre><code>[
+  { "id": "code-id", "code": "8charcode" }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Description:</strong> Create a new access code for the course.</p>
+<pre><code>{
+  "id": "code-id",
+  "code": "generatedcode"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Codes retrieved</li>
+  <li>201 Created – New code created</li>
+  <li>403 Forbidden – Unauthorized access</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/accesscodes/&lt;code_id&gt;</h2>
+<p><strong>Method:</strong> DELETE</p>
+<p>
+  <strong>Description:</strong> Deletes a specific access code if the user is
+  the course instructor.
+</p>
+
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Deleted</li>
+  <li>403 Forbidden – Unauthorized access</li>
+  <li>404 Not Found – Code not found</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/details</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Returns course metadata and metrics, including
+  access code and number of enrolled students.
+</p>
+
+<pre><code>{
+  "id": "course-id",
+  "title": "Course Title",
+  "description": "Description",
+  "code": "AI101",
+  "term": "Spring 2025",
+  "published": true,
+  "lastUpdated": "2025-03-01T10:00:00",
+  "accessCode": "8charcode",
+  "students": 18
+}</code></pre>
+
+<ul>
+  <li>200 OK – Details returned</li>
+  <li>403 Forbidden – Unauthorized access</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/enrollments/&lt;enrollment_id&gt;</h2>
+<p><strong>Method:</strong> DELETE</p>
+<p>
+  <strong>Description:</strong> Unenroll a student from a course. Only the
+  course instructor may perform this action.
+</p>
+
+<pre><code>{
+  "message": "Student unenrolled"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Student successfully unenrolled</li>
+  <li>403 Forbidden – Unauthorized access</li>
+  <li>404 Not Found – Enrollment not found</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/students</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Returns a list of all students currently
+  enrolled in a course.
+</p>
+
+<pre><code>[
+  {
+    "id": "student-id",
+    "email": "student@example.com",
+    "name": "Student Name",
+    "enrolledAt": "2025-03-01T10:00:00",
+    "enrollmentId": "enrollment-id"
+  }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Student list returned</li>
+  <li>403 Forbidden – Unauthorized access</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/modules</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p><strong>Description:</strong> Manage course modules.</p>
+
+<h3>GET</h3>
+<p>
+  <strong>Description:</strong> Get a list of modules associated with a course.
+</p>
+
+<pre><code>[
+  {
+    "id": "module-id",
+    "title": "Module 1"
+  }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Description:</strong> Create a new module under the course.</p>
+
+<pre><code>{
+  "title": "New Module"
+}</code></pre>
+
+<pre><code>{
+  "id": "module-id",
+  "title": "New Module"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Modules retrieved</li>
+  <li>201 Created – New module created</li>
+  <li>403 Forbidden – Unauthorized access</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/modules/&lt;module_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Description:</strong> Manage a specific module.</p>
+
+<h3>GET</h3>
+<p><strong>Description:</strong> Retrieve module details.</p>
+<pre><code>{
+  "id": "module-id",
+  "title": "Module Title"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Description:</strong> Update module details.</p>
+<pre><code>{
+  "title": "Updated Title"
+}</code></pre>
+
+<h3>DELETE</h3>
+<p><strong>Description:</strong> Delete the module.</p>
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Success</li>
+  <li>403 Forbidden – Unauthorized access</li>
+  <li>404 Not Found – Module not found</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/modules/&lt;module_id&gt;/files</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p>
+  <strong>Description:</strong> Upload and list files within a specific module.
+  Uploaded audio/video files may be transcribed and indexed using FAISS for
+  later semantic search.
+</p>
+<p><strong>Authentication:</strong> Must be logged in as instructor</p>
+
+<hr />
+
+<h3>POST</h3>
+<p>
+  <strong>Description:</strong> Uploads a file to the specified module.
+  Automatically handles:
+</p>
+<ul>
+  <li>Transcribing audio/video files (e.g. .mp4, .mp3)</li>
+  <li>Creating and storing FAISS vector index from text or transcription</li>
+  <li>Updating the course-level index</li>
+</ul>
+
+<h4>Form Data (multipart/form-data):</h4>
+<ul>
+  <li><code>file</code> (required): The file to upload</li>
+  <li>
+    <code>title</code> (optional): A custom title for the file; defaults to
+    filename
+  </li>
+</ul>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "file-id",
+  "filename": "lecture1.mp4",
+  "transcription": "Text of the transcription if available"
+}</code></pre>
+
+<ul>
+  <li>201 Created – File uploaded and indexed</li>
+  <li>400 Bad Request – Missing file</li>
+  <li>403 Forbidden – Not your course</li>
+  <li>404 Not Found – Module not found</li>
+  <li>500 Internal Server Error – Index generation failed</li>
+</ul>
+
+<hr />
+
+<h3>GET</h3>
+<p>
+  <strong>Description:</strong> Lists all files associated with the given
+  module.
+</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  {
+    "id": "file-id",
+    "title": "Lecture Notes",
+    "filename": "lecture_notes.pdf"
+  },
+  {
+    "id": "file-id-2",
+    "title": "Video Lecture",
+    "filename": "lecture.mp4"
+  }
+]</code></pre>
+
+<ul>
+  <li>200 OK – File list returned</li>
+  <li>403 Forbidden – Not your course</li>
+  <li>404 Not Found – Module not found</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/modules/&lt;module_id&gt;/files/upload</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Uploads a file to the module and immediately
+  stores its vector embeddings for semantic search.
+</p>
+
+<h4>Form Data (multipart/form-data):</h4>
+<ul>
+  <li><code>file</code> (required): The file to upload</li>
+  <li><code>title</code> (optional): Custom title (defaults to filename)</li>
+</ul>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "File added and embedded into course. 12 chunks."
+}</code></pre>
+
+<ul>
+  <li>200 OK – File uploaded and embedded</li>
+  <li>400 Bad Request – No file uploaded</li>
+  <li>500 Internal Server Error – Upload or embedding failed</li>
+</ul>
+
+<hr />
+
+<h2>/courses/&lt;course_id&gt;/search</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Performs a vector similarity search over all
+  embedded file content in the course. Returns the 5 most relevant content
+  chunks.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "query": "What is a neural network?"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "results": [
+    { "content": "A neural network is a model inspired by the human brain..." },
+    { "content": "Neural networks are composed of layers..." }
+  ]
+}</code></pre>
+
+<ul>
+  <li>200 OK – Search results returned</li>
+  <li>400 Bad Request – Missing query</li>
+  <li>500 Internal Server Error – Search failed</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/files/&lt;file_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Description:</strong> Manage an individual uploaded file.</p>
+
+<h3>GET</h3>
+<pre><code>{
+  "id": "file-id",
+  "title": "Lecture Notes",
+  "filename": "notes.pdf",
+  "fileType": "application/pdf",
+  "fileSize": 15837
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Description:</strong> Update file metadata (e.g., title).</p>
+
+<h4>Request:</h4>
+<pre><code>{
+  "title": "Updated Title"
+}</code></pre>
+
+<h3>DELETE</h3>
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Operation successful</li>
+  <li>403 Forbidden – Not your file</li>
+  <li>404 Not Found – File doesn't exist</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/files/&lt;file_id&gt;/content</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Serves the raw file content inline (PDF, video,
+  etc.).
+</p>
+
+<h4>Response:</h4>
+<p>
+  Binary file data with appropriate <code>Content-Type</code> and
+  <code>Content-Disposition</code> headers
+</p>
+
+<ul>
+  <li>200 OK – File content streamed</li>
+  <li>403 Forbidden – Not your file</li>
+  <li>404 Not Found – File doesn't exist</li>
+</ul>
+
+<hr />
+
+<h2>/student/profile</h2>
+<p><strong>Methods:</strong> GET, POST, PATCH, DELETE</p>
+<p>
+  <strong>Description:</strong> Create, view, update, or delete a student
+  profile.
+</p>
+
+<h3>POST</h3>
+<p><strong>Create a new student profile:</strong></p>
+<pre><code>{
+  "name": "Jane Student",
+  "onboard_answers": {
+    "favorite_topic": "AI"
+  },
+  "want_quizzes": true
+}</code></pre>
+
+<h3>GET</h3>
+<p><strong>Retrieve your student profile:</strong></p>
+<pre><code>{
+  "user_id": "user-id",
+  "name": "Jane Student",
+  "onboard_answers": {
+    "favorite_topic": "AI"
+  },
+  "want_quizzes": true,
+  "model_preference": "gpt-4"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Update your student profile:</strong></p>
+<pre><code>{
+  "want_quizzes": false
+}</code></pre>
+
+<h3>DELETE</h3>
+<p><strong>Deletes both student profile and account:</strong></p>
+<pre><code>{
+  "message": "Student deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Operation successful</li>
+  <li>201 Created – Profile created</li>
+  <li>400 Bad Request – Missing required field (name)</li>
+  <li>404 Not Found – Profile does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/student/enrollments</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p>
+  <strong>Description:</strong> View all current course enrollments or enroll in
+  a course using an access code.
+</p>
+
+<h3>GET</h3>
+<p><strong>Returns a list of all active enrollments:</strong></p>
+<pre><code>[
+  {
+    "id": "enrollment-id",
+    "courseId": "course-id",
+    "enrolledAt": "2025-03-02T10:00:00"
+  }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Enroll in a course by providing an access code:</strong></p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "accessCode": "abc123xy"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "new-enrollment-id"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Already enrolled</li>
+  <li>201 Created – Successfully enrolled</li>
+  <li>400 Bad Request – Invalid code</li>
+</ul>
+
+<hr />
+
+<h2>/student/files/&lt;file_id&gt;/content</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Returns the actual content of a file if the
+  student is enrolled in the corresponding course.
+</p>
+
+<h4>Response:</h4>
+<p>
+  Serves the binary content of the file (e.g., PDF, video, audio) with
+  appropriate headers.
+</p>
+
+<ul>
+  <li>200 OK – File content streamed</li>
+  <li>403 Forbidden – Not enrolled in the course</li>
+  <li>404 Not Found – File does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/student/enrollments/&lt;enrollment_id&gt;</h2>
+<p><strong>Method:</strong> DELETE</p>
+<p>
+  <strong>Description:</strong> Unenroll from a course using the enrollment ID.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Unenrolled"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Unenrolled</li>
+  <li>403 Forbidden – Invalid user or enrollment ID</li>
+</ul>
+
+<hr />
+
+<h2>/courses/&lt;course_id&gt;/moduleswithfiles</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Returns all modules in a course, along with the
+  file metadata within each module.
+</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  {
+    "id": "module-id",
+    "title": "Module 1",
+    "ordering": 1,
+    "files": [
+      {
+        "id": "file-id-1",
+        "title": "Lecture 1",
+        "ordering": 1
+      },
+      {
+        "id": "file-id-2",
+        "title": "Reading Material",
+        "ordering": 2
+      }
+    ]
+  }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Module and file structure returned</li>
+  <li>401 Unauthorized – Not logged in</li>
+  <li>403 Forbidden – Not enrolled or not authorized</li>
+</ul>
+
+<hr />
+
+<h2>/student/courses/&lt;course_id&gt;/modules</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Retrieves a list of modules within a course the
+  student is enrolled in.
+</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  { "id": "module-id", "title": "Module 1" },
+  { "id": "module-id-2", "title": "Module 2" }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Modules retrieved</li>
+  <li>403 Forbidden – Student not enrolled in course</li>
+</ul>
+
+<hr />
+
+<h2>/student/modules/&lt;module_id&gt;/files</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Lists all files available in a module, if the
+  student is enrolled in the course.
+</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  { "id": "file-id-1", "title": "Lecture Notes" },
+  { "id": "file-id-2", "title": "Assignment PDF" }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Files retrieved</li>
+  <li>403 Forbidden – Student not enrolled or module not found</li>
+</ul>
+
+<hr />
+
+<h2>/student/personalized-files</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Returns a list of personalized files generated
+  for the logged-in student.
+</p>
+
+<h4>Response:</h4>
+<pre><code>[
+  {
+    "id": "personalized-file-id",
+    "originalFileId": "original-file-id",
+    "createdAt": "2025-05-01T14:23:00"
+  }
+]</code></pre>
+
+<ul>
+  <li>200 OK – Personalized files listed</li>
+</ul>
+
+<hr />
+
+<h2>/generatepersonalizedfilecontent</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Generates a personalized version of a file based
+  on the student’s profile and stores it for later access.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "name": "Jane Student",
+  "userProfile": {
+    "role": "student",
+    "traits": "friendly and concise",
+    "learningStyle": "visual",
+    "depth": "intermediate",
+    "interests": "neural networks",
+    "personalization": "using real-world examples",
+    "schedule": "in the evenings"
+  },
+  "fileId": "file-id"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "personalized-file-id",
+  "content": {
+    "sections": [
+      { "title": "Intro", "summary": "..." },
+      ...
+    ]
+  }
+}</code></pre>
+
+<ul>
+  <li>200 OK – Personalized file created</li>
+  <li>400 Bad Request – Invalid AI response</li>
+  <li>500 Internal Server Error – Failed to generate or store file</li>
+</ul>
+
+<hr />
+
+<h2>/student/personalized-files/&lt;pf_id&gt;</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Retrieve the full content of a personalized file
+  created by the student.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "personalized-file-id",
+  "originalFileId": "original-file-id",
+  "createdAt": "2025-05-01T10:00:00",
+  "content": {
+    "sections": [
+      { "title": "Section 1", "summary": "..." }
+    ]
+  }
+}</code></pre>
+
+<ul>
+  <li>200 OK – File retrieved</li>
+  <li>404 Not Found – File does not exist or unauthorized</li>
+</ul>
+
+<hr />
+
+<h2>/student/chats</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p>
+  <strong>Description:</strong> View all chats or start a new one tied to a
+  file.
+</p>
+
+<h3>GET</h3>
+<p><strong>List all student chat sessions:</strong></p>
+<pre><code>[
+  { "id": "chat-id-1", "title": "Chapter 1 Q&A" },
+  { "id": "chat-id-2", "title": "Lecture Review" }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Create a new chat session:</strong></p>
+<pre><code>{
+  "fileId": "file-id",
+  "title": "Custom Chat Title"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "new-chat-id"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Chats retrieved</li>
+  <li>201 Created – Chat created</li>
+</ul>
+
+<hr />
+
+<h2>/student/chats/&lt;chat_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Description:</strong> Manage a specific chat session.</p>
+
+<h3>GET</h3>
+<p><strong>Retrieve chat metadata:</strong></p>
+<pre><code>{
+  "id": "chat-id",
+  "title": "Intro to AI Discussion"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Update chat title:</strong></p>
+<pre><code>{
+  "title": "Updated Chat Title"
+}</code></pre>
+
+<h3>DELETE</h3>
+<p><strong>Delete the chat session entirely:</strong></p>
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Chat retrieved, updated, or deleted</li>
+  <li>403 Forbidden – Unauthorized</li>
+</ul>
+
+<hr />
+
+<h2>/student/chats/&lt;chat_id&gt;/messages</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p>
+  <strong>Description:</strong> List or add messages within a specific chat.
+</p>
+
+<h3>GET</h3>
+<p><strong>Retrieve all messages for a chat session:</strong></p>
+<pre><code>[
+  { "id": "msg-id-1", "role": "user", "content": "What is overfitting?" },
+  { "id": "msg-id-2", "role": "assistant", "content": "Overfitting is when a model..." }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Send a new message to the chat:</strong></p>
+<pre><code>{
+  "role": "user",
+  "content": "Can you explain gradient descent?"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "new-message-id"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Messages retrieved</li>
+  <li>201 Created – Message added</li>
+</ul>
+
+<hr />
+
+<h2>/delete-trailing-messages</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Deletes all chat messages in the same chat that
+  were created after the specified message.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "id": "message-id"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Deleted trailing messages"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Messages deleted</li>
+  <li>400 Bad Request – Message ID missing</li>
+  <li>403 Forbidden – Message doesn't belong to student</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/reports</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Retrieves the report for a specific course if
+  the instructor owns it.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "report-id",
+  "summary": {
+    "fileMetrics": [...],
+    "moduleMetrics": [...],
+    "faqs": [...]
+  }
+}</code></pre>
+
+<ul>
+  <li>200 OK – Report found and returned</li>
+  <li>403 Forbidden – Not the instructor of the course</li>
+  <li>404 Not Found – No report exists for this course</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/reports</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Generates or updates a report for a specific
+  course. Includes file metrics, module metrics, and FAQs derived from student
+  questions.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "report-id",
+  "summary": {
+    "fileMetrics": [...],
+    "moduleMetrics": [...],
+    "faqs": [...]
+  }
+}</code></pre>
+
+<ul>
+  <li>201 Created – New report created</li>
+  <li>200 OK – Existing report updated</li>
+  <li>403 Forbidden – Not the instructor of the course</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/reports/&lt;report_id&gt;</h2>
+<p><strong>Method:</strong> PATCH</p>
+<p>
+  <strong>Description:</strong> Updates the summary content of an existing
+  report.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "summary": {
+    "fileMetrics": [...],
+    "moduleMetrics": [...],
+    "faqs": [...]
+  }
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "report-id",
+  "summary": {
+    ...
+  }
+}</code></pre>
+
+<ul>
+  <li>200 OK – Report updated</li>
+  <li>400 Bad Request – Summary not provided</li>
+  <li>403 Forbidden – Not your report</li>
+  <li>404 Not Found – Report does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/reports/&lt;report_id&gt;</h2>
+<p><strong>Method:</strong> DELETE</p>
+<p>
+  <strong>Description:</strong> Deletes a course report if owned by the
+  instructor.
+</p>
+
+<ul>
+  <li>204 No Content – Report deleted successfully</li>
+  <li>403 Forbidden – Not your report</li>
+  <li>404 Not Found – Report does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/ai-chat</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Handles AI-powered tutoring chats. Accepts a
+  user question, optionally with an existing chat ID or associated file, and
+  responds with a personalized, context-aware answer. Responses are grounded in
+  course content when available.
+</p>
+
+<hr />
+
+<h3>Request Body:</h3>
+<pre><code>{
+  "id": "chat-id (optional)",
+  "fileId": "original-file-id",
+  "userMessage": "How does backpropagation work?",
+  "messages": [
+    { "role": "user", "content": "What's a neural network?" },
+    { "role": "assistant", "content": "A neural network is..." }
+  ]
+}</code></pre>
+
+<h4>Fields:</h4>
+<ul>
+  <li>
+    <code>id</code> – (optional) Existing chat ID. If omitted, a new chat is
+    created using the given fileId.
+  </li>
+  <li>
+    <code>fileId</code> – Required if starting a new chat. Refers to a
+    personalized file the student owns.
+  </li>
+  <li>
+    <code>userMessage</code> – The current question from the student.
+    <strong>Required</strong>.
+  </li>
+  <li>
+    <code>messages</code> – (optional) Chat history for better contextual
+    understanding.
+  </li>
+</ul>
+
+<hr />
+
+<h3>Behavior:</h3>
+<ul>
+  <li>Verifies student session</li>
+  <li>
+    If no <code>chatId</code>, attempts to create one using student's
+    personalized file
+  </li>
+  <li>
+    Embeds the user question and retrieves the top 3 relevant course content
+    chunks
+  </li>
+  <li>
+    Constructs a system prompt including course excerpts and student's
+    personalized learning profile
+  </li>
+  <li>Calls OpenAI’s GPT-4o to generate a tailored assistant response</li>
+  <li>Saves both the user message and AI response to the chat</li>
+</ul>
+
+<hr />
+
+<h3>Response:</h3>
+<pre><code>{
+  "assistant": "Backpropagation is a way to update the weights of a neural network...",
+  "chatId": "active-chat-id"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Assistant response returned</li>
+  <li>
+    400 Bad Request – Missing <code>userMessage</code> or <code>fileId</code> on
+    new chat
+  </li>
+  <li>403 Forbidden – Invalid chat access or file ownership</li>
+  <li>404 Not Found – Personalized file or student profile missing</li>
+  <li>500 Internal Server Error – Chat failed</li>
+</ul>
+
+<hr />
+
+<h2>/courses/&lt;course_id&gt;/citations</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Retrieves mock APA citations for files in the
+  course, based on metadata stored in the course index.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "citations": [
+    {
+      "source": "Lecture 1 Notes",
+      "citation": "Mock APA Citation for lecture1.pdf"
+    },
+    ...
+  ]
+}</code></pre>
+
+<ul>
+  <li>200 OK – Citations retrieved</li>
+  <li>404 Not Found – Index not built for course</li>
+</ul>
+
+<hr />
+
+<h2>/sessionLogin</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Exchanges a Firebase ID token for a secure
+  session cookie. Used to authenticate users.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "idToken": "firebase_id_token"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Session set"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Session cookie set successfully</li>
+  <li>400 Bad Request – Missing token</li>
+  <li>401 Unauthorized – Invalid or expired ID token</li>
+</ul>
+
+<hr />
+
+<h2>/sessionLogout</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Logs the user out by clearing the session
+  cookie.
+</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Logged out"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Session cleared</li>
+</ul>
+
+<hr />
+
+<h2>/admin/users</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<p>
+  <strong>Description:</strong> Retrieves all registered users and their roles.
+</p>
+<pre><code>[
+  {
+    "id": "user-id",
+    "email": "user@example.com",
+    "role": "student"
+  }
+]</code></pre>
+
+<h3>POST</h3>
+<p>
+  <strong>Description:</strong> Creates a new user with the given role and
+  profile.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "email": "newuser@example.com",
+  "password": "securepass",
+  "role_type": "instructor",
+  "name": "Jane Admin"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "new-user-id",
+  "email": "newuser@example.com",
+  "role": "instructor"
+}</code></pre>
+
+<ul>
+  <li>200 OK – User list returned</li>
+  <li>201 Created – User created</li>
+  <li>400 Bad Request – Missing required fields</li>
+</ul>
+
+<hr />
+
+<h2>/admin/users/&lt;user_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<p><strong>Description:</strong> View user details and role.</p>
+<pre><code>{
+  "id": "user-id",
+  "email": "user@example.com",
+  "role": "student"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Description:</strong> Update user email, password, or role.</p>
+<pre><code>{
+  "email": "updated@example.com",
+  "role_type": "instructor"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "id": "user-id",
+  "email": "updated@example.com"
+}</code></pre>
+
+<h3>DELETE</h3>
+<p><strong>Description:</strong> Permanently deletes the user account.</p>
+<pre><code>{
+  "message": "Deleted"
+}</code></pre>
+
+<ul>
+  <li>200 OK – User info updated or deleted</li>
+  <li>404 Not Found – User does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/admin/news</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p>
+  <strong>Description:</strong> Allows admins to view or post news articles to
+  the platform.
+</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<p><strong>Returns a list of news items:</strong></p>
+<pre><code>[
+  {
+    "id": "news-id",
+    "title": "Market Update",
+    "subject": "S&P 500 trends",
+    "link": "https://example.com/news"
+  }
+]</code></pre>
+
+<h3>POST</h3>
+<p><strong>Creates a new news item:</strong></p>
+<pre><code>{
+  "title": "Weekly Wrap",
+  "subject": "Financial News",
+  "link": "https://example.com/article"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{ "id": "new-news-id" }</code></pre>
+
+<ul>
+  <li>200 OK – News list retrieved</li>
+  <li>201 Created – News item created</li>
+  <li>400 Bad Request – Missing title, subject, or link</li>
+</ul>
+
+<hr />
+
+<h2>/admin/news/&lt;news_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p><strong>Description:</strong> View, edit, or delete a specific news item.</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<pre><code>{
+  "id": "news-id",
+  "title": "Market Update",
+  "subject": "S&P 500 trends",
+  "link": "https://example.com/news"
+}</code></pre>
+
+<h3>PATCH</h3>
+<p><strong>Updates one or more fields of the news item:</strong></p>
+<pre><code>{
+  "title": "Updated Title"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{ "id": "news-id" }</code></pre>
+
+<h3>DELETE</h3>
+<pre><code>{ "message": "Deleted" }</code></pre>
+
+<ul>
+  <li>200 OK – News item returned or updated</li>
+  <li>404 Not Found – Invalid news ID</li>
+</ul>
+
+<hr />
+
+<h2>/admin/market</h2>
+<p><strong>Methods:</strong> GET, POST</p>
+<p><strong>Description:</strong> View or upload S&P 500 market data entries.</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<pre><code>[
+  {
+    "id": "entry-id",
+    "snp500": 5043.21,
+    "date": "2025-05-14"
+  }
+]</code></pre>
+
+<h3>POST</h3>
+<pre><code>{
+  "snp500": 5075.89,
+  "date": "2025-05-13"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{ "id": "new-entry-id" }</code></pre>
+
+<ul>
+  <li>200 OK – Market data list retrieved</li>
+  <li>201 Created – Entry added</li>
+  <li>400 Bad Request – Missing snp500 or date</li>
+</ul>
+
+<hr />
+
+<h2>/admin/market/&lt;market_id&gt;</h2>
+<p><strong>Methods:</strong> GET, PATCH, DELETE</p>
+<p>
+  <strong>Description:</strong> View, update, or delete a specific market data
+  entry.
+</p>
+<p><strong>Authentication:</strong> Must be logged in as an admin</p>
+
+<h3>GET</h3>
+<pre><code>{
+  "id": "entry-id",
+  "snp500": 5043.21,
+  "date": "2025-05-14"
+}</code></pre>
+
+<h3>PATCH</h3>
+<pre><code>{
+  "snp500": 5060.00
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{ "id": "entry-id" }</code></pre>
+
+<h3>DELETE</h3>
+<pre><code>{ "message": "Deleted" }</code></pre>
+
+<ul>
+  <li>200 OK – Entry retrieved or updated</li>
+  <li>404 Not Found – Entry does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/generate-title</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Generates a short title based on the first 80
+  characters of a provided message.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "message": "This is a message that will be truncated to the first 80 characters..."
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "title": "This is a message that will be truncated to the first 80 characters..."
+}</code></pre>
+
+<ul>
+  <li>200 OK – Title generated</li>
+  <li>400 Bad Request – Message missing</li>
+</ul>
+
+<hr />
+
+<h2>/save-model-id</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Saves the preferred AI model for the current
+  student user.
+</p>
+
+<h4>Request Body:</h4>
+<pre><code>{
+  "model": "gpt-4o"
+}</code></pre>
+
+<h4>Response:</h4>
+<pre><code>{
+  "message": "Model ID gpt-4o saved successfully",
+  "model_preference": "gpt-4o"
+}</code></pre>
+
+<ul>
+  <li>200 OK – Model preference saved</li>
+  <li>400 Bad Request – Model not specified</li>
+</ul>
+
+<hr />
+
+<h2>/student/files/&lt;file_id&gt;/view-raw</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Increments the view count for a raw file if the
+  student is enrolled in the course.
+</p>
+
+<ul>
+  <li>204 No Content – Count incremented successfully</li>
+  <li>403 Forbidden – User not enrolled</li>
+  <li>404 Not Found – File does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/student/files/&lt;file_id&gt;/view-personalized</h2>
+<p><strong>Method:</strong> POST</p>
+<p>
+  <strong>Description:</strong> Increments the view count for a personalized
+  file if the student is enrolled in the course.
+</p>
+
+<ul>
+  <li>204 No Content – Count incremented successfully</li>
+  <li>403 Forbidden – User not enrolled</li>
+  <li>404 Not Found – File does not exist</li>
+</ul>
+
+<hr />
+
+<h2>/instructor/courses/&lt;course_id&gt;/faqs</h2>
+<p><strong>Method:</strong> GET</p>
+<p>
+  <strong>Description:</strong> Generates frequently asked questions (FAQs) for
+  a course based on student interactions and questions.
+</p>
+<p><strong>Authentication:</strong> Instructor-only</p>
+
+<h4>Response:</h4>
+<pre><code>{
+  "faqs": [
+    {
+      "question": "What is overfitting?",
+      "answer": "Overfitting occurs when a model performs well on training data but poorly on new data..."
+    }
+  ]
+}</code></pre>
+
+<ul>
+  <li>200 OK – FAQs returned</li>
+  <li>403 Forbidden – Instructor does not own the course</li>
+</ul>

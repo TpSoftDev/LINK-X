@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, ChevronRight } from "lucide-react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ReactMarkdown from "react-markdown";
 
 export default function AIChatbot({ fileId }: { fileId: string }) {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -56,7 +57,7 @@ export default function AIChatbot({ fileId }: { fileId: string }) {
 
       if (savedChatId) {
         setChatId(savedChatId);
-        fetch(`http://localhost:8080/messages/${savedChatId}`, {
+        fetch(`http://localhost:8080/student/chats/${savedChatId}/messages`, {
           method: "GET",
           credentials: "include",
         })
@@ -186,7 +187,7 @@ export default function AIChatbot({ fileId }: { fileId: string }) {
                         : "bg-gray-200 text-gray-800"
                     }`}
                   >
-                    {m.content}
+                    <ReactMarkdown>{m.content}</ReactMarkdown>
                   </div>
                 </div>
               ))}
@@ -228,83 +229,4 @@ export default function AIChatbot({ fileId }: { fileId: string }) {
       </div>
     </div>
   );
-  
-  // return (
-  //   <div className="flex flex-col h-full text-gray-900 bg-white border-l border-gray-200 shadow-lg">
-  //     <div
-  //       className={`flex flex-col h-full transition-all duration-300 ease-in-out ${
-  //         isMinimized ? "w-20" : "w-96"
-  //       }`}
-  //     >
-  //       <div className="relative bg-gray-50 py-2 px-4 font-semibold flex items-center border-t border-gray-200">
-  //         <button
-  //           onClick={() => setIsMinimized(!isMinimized)}
-  //           className="text-gray-500 hover:text-gray-700 transition-colors"
-  //         >
-  //           {isMinimized ? (
-  //             <ChevronRight size={18} />
-  //           ) : (
-  //             <ChevronRight size={18} className="rotate-180" />
-  //           )}
-  //         </button>
-  //         <span className="absolute left-1/2 -translate-x-1/2 text-sm text-gray-600">
-  //           {isMinimized ? "AI" : "AI Assistant"}
-  //         </span>
-  //       </div>
-
-  //       {!isMinimized && (
-  //         <>
-  //           <div className="flex-grow overflow-auto p-4 space-y-4 bg-white">
-  //             {messages.map((m, index) => (
-  //               <div
-  //                 key={index}
-  //                 className={`flex ${
-  //                   m.role === "user" ? "justify-end" : "justify-start"
-  //                 }`}
-  //               >
-  //                 <div
-  //                   className={`max-w-[75%] p-3 rounded-lg text-sm leading-relaxed ${
-  //                     m.role === "user"
-  //                       ? "bg-blue-600 text-white"
-  //                       : "bg-gray-200 text-gray-800"
-  //                   }`}
-  //                 >
-  //                   {m.content}
-  //                 </div>
-  //               </div>
-  //             ))}
-
-  //             {isLoading && (
-  //               <div className="flex justify-start">
-  //                 <div className="flex space-x-1 bg-gray-100 text-gray-700 p-3 rounded-lg text-sm leading-relaxed animate-pulse">
-  //                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
-  //                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
-  //                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
-  //                 </div>
-  //               </div>
-  //             )}
-
-  //             <div ref={messagesEndRef} />
-  //           </div>
-
-  //           <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 flex bg-white">
-  //             <input
-  //               className="flex-grow bg-gray-100 text-gray-900 rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-  //               value={input}
-  //               onChange={(e) => setInput(e.target.value)}
-  //               placeholder="Ask a question..."
-  //             />
-  //             <button
-  //               type="submit"
-  //               aria-label="Send message"
-  //               className="bg-blue-600 text-white p-2 rounded-r-lg hover:bg-blue-700 transition-colors duration-200"
-  //             >
-  //               <Send size={20} />
-  //             </button>
-  //           </form>
-  //         </>
-  //       )}
-  //     </div>
-  //   </div>
-  // );
 }

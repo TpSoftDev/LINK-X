@@ -134,7 +134,7 @@ def prompt_generate_personalized_file_content(working_dir, persona):
     1. Provide a **concise chapter title** (3–7 words).
     2. Include **2–4 comprehensive subsections**, each with:
         - A **short title** summarizing the subsection's focus.
-        - A **fullText** explanation that presents the relevant information in **at least two sentences**.
+        - A **fullText** explanation that presents the relevant information in **at least 10 sentences with subsections**.
 
     **INSTRUCTIONS**
     - Use language that is **clear, precise, and faithful** to the original material. Rephrase only to improve structure or flow.

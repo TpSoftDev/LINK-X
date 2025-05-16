@@ -55,6 +55,7 @@ export default function StudentDashboard() {
     code: string;
     term?: string;
     description?: string;
+    published?: boolean;
   };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -86,6 +87,17 @@ export default function StudentDashboard() {
     null
   );
   const router = useRouter();
+
+  const isMedia =
+  previewingFile?.title?.toLowerCase().endsWith(".mp3") ||
+  previewingFile?.title?.toLowerCase().endsWith(".mp4") ||
+  previewingFile?.title?.toLowerCase().endsWith(".wav") ||
+  previewingFile?.title?.toLowerCase().endsWith(".m4a") ||
+  previewingFile?.title?.toLowerCase().endsWith(".aac") ||
+  previewingFile?.title?.toLowerCase().endsWith(".ogg") ||
+  previewingFile?.title?.toLowerCase().endsWith(".flac") ||
+  previewingFile?.title?.toLowerCase().endsWith(".wma") ||
+  previewingFile?.title?.toLowerCase().endsWith(".aiff");
 
   useEffect(() => {
     const fetchEnrollments = async () => {
@@ -186,17 +198,19 @@ export default function StudentDashboard() {
   }, []);
 
   const filteredCourses = courses
-    .filter(
-      (course): course is Course =>
-        !!course &&
-        typeof course.title === "string" &&
-        typeof course.code === "string"
-    )
-    .filter(
-      (course) =>
-        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.code.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  .filter(
+    (course): course is Course =>
+      !!course &&
+      typeof course.title === "string" &&
+      typeof course.code === "string" &&
+      course.published === true
+  )
+  .filter(
+    (course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   const handleCourseClick = (course: any) => {
     setSelectedCourse(course);
@@ -418,9 +432,11 @@ export default function StudentDashboard() {
                           >
                             ← Back to Modules
                           </Button>
-                          <Button onClick={handlePersonalize}>
-                            Personalize
-                          </Button>
+                          {!isMedia && (
+                            <Button onClick={handlePersonalize}>
+                              Personalize
+                            </Button>
+                          )}
                         </div>
 
                         <h2 className="text-2xl font-bold text-gray-900">
@@ -542,17 +558,27 @@ export default function StudentDashboard() {
               </div>
               <TabsContent
                 value="all"
-                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch"
+                className="min-h-[300px] flex items-center justify-center"
               >
-                {filteredCourses.map((course: any) => (
-                  <div
-                    key={course.id}
-                    onClick={() => handleCourseClick(course)}
-                    className="cursor-pointer"
-                  >
-                    <CourseCard course={course} />
+                {filteredCourses.length === 0 ? (
+                  <div className="text-center text-muted-foreground text-lg">
+                    You are not enrolled in any courses yet.
+                    <br />
+                    Reach out to your instructor or check back later.
                   </div>
-                ))}
+                ) : (
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch w-full">
+                    {filteredCourses.map((course: any) => (
+                      <div
+                        key={course.id}
+                        onClick={() => handleCourseClick(course)}
+                        className="cursor-pointer"
+                      >
+                        <CourseCard course={course} />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           )}

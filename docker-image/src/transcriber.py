@@ -13,7 +13,11 @@ def transcribe_audio(file_storage):
             model="whisper-1",
             file=file_obj
         )
-        return response.text
+        print("🧠 Transcription result:",response)
+
+        return response.get("text") if hasattr(response, "get") else response.text
+
     except Exception as e:
         print(f"Whisper transcription failed: {e}")
         raise
+

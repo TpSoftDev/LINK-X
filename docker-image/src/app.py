@@ -620,12 +620,14 @@ def instructor_files(module_id):
             db.close()
             return jsonify({'error': 'Missing file'}), 400
         transcription = None
-        if fobj.mimetype.startswith('audio/'):
-            try:
-                transcription = transcribe_audio(fobj)
-                fobj.stream.seek(0)
-            except Exception as e:
-                app.logger.error(f"Transcription failed: {e}")
+        mimetype = fobj.mimetype or ""
+        print(f"📎 Uploaded file mimetype: {mimetype}")
+
+        if mimetype.startswith("audio/") or mimetype in ["application/octet-stream", "video/mp4"]:
+            print("🧠 Attempting transcription...")
+            transcription = transcribe_audio(fobj)
+            fobj.stream.seek(0)
+
         file_bytes = fobj.read()
         new_file = create_file(
             db,
@@ -650,7 +652,7 @@ def instructor_files(module_id):
                 txt.write(transcription)
         else:
             # Extract file extension
-            ext = os.path.splittext(fobj.filename)[1]
+            ext = os.path.splitext(fobj.filename)[1]
             input_filename = f"uploaded{ext}"
             with open(os.path.join(tmp_idx_dir, input_filename), "wb") as out:
                 out.write(file_bytes)
@@ -668,7 +670,7 @@ def instructor_files(module_id):
                 file_pkl = fpkl.read()
         except Exception as e:
             shutil.rmtree(tmp_root)
-            db.close
+            db.close()
             return jsonify({'error': f'Failed to read index files: {e}'}), 500
         
         # Store index in DB
@@ -689,6 +691,7 @@ def instructor_files(module_id):
         store_file_embeddings(db, str(new_file.id))
 
         # Cleanup
+        
         shutil.rmtree(tmp_root)
         db.close()
 
@@ -1321,7 +1324,7 @@ def ai_chat():
         # 2. Parse request
         data = request.get_json() or {}
         chat_id      = data.get('id')
-        file_id      = data.get('fileId')  # <- For first message
+        file_id      = data.get('fileId')
         user_message = data.get('userMessage') or data.get('message')
         history      = data.get('messages', [])
 
@@ -1331,6 +1334,7 @@ def ai_chat():
         db = Session()
         course_id = None
         f = get_file_by_id(db, file_id)
+        print(f"Saving to chat ID: {chat_id}")
         
       # 3. Get or create Chat
         if chat_id:
@@ -1367,8 +1371,10 @@ def ai_chat():
             return jsonify({'error': 'File or module not found'}), 404
 
         course_id = f.module.course_id
-        print(course_id)
-        # 4. Embed query and retrieve top 5 chunks
+        # 4. Save incoming user message
+        create_message(db, chat_id, role='user', content=user_message)
+
+        # 5. Embed query and retrieve top 5 chunks
         vector_list = openai_embed_text([user_message])[0].tolist()
         pgvector_str = f"[{','.join(map(str, vector_list))}]"
 
@@ -1382,7 +1388,7 @@ def ai_chat():
         rows = db.execute(sql, {"cid": course_id, "query_vec": pgvector_str}).fetchall()
         retrieved_chunks = [row[0] for row in rows if row[0]]
 
-        # 5. Build messages for OpenAI
+        # 6. Build messages for OpenAI
         messages = [
                 {
                 "role": "system",
@@ -1421,7 +1427,7 @@ def ai_chat():
 
         messages.append({"role": "user", "content": user_message})
 
-         # 5. Build persona prompt from StudentProfile
+         # 7. Build persona prompt from StudentProfile
         sp = get_student_profile(db, user_id)
         if not sp:
             db.close()
@@ -1467,7 +1473,7 @@ def ai_chat():
 
         print(messages)
 
-        # 6. Call OpenAI
+        # 8. Call OpenAI
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         resp = client.chat.completions.create(
             model="gpt-4o",
@@ -1478,12 +1484,12 @@ def ai_chat():
 
         assistant_reply = resp.choices[0].message.content.strip()
 
-        # 7. Save assistant reply (optional)
-        # create_message(db, chat_id, role="assistant", content=assistant_reply)
+        # 9. Save assistant reply (optional)
+        create_message(db, chat_id, role="assistant", content=assistant_reply)
 
         db.close()
 
-        # 8. Return result
+        # 10. Return result
         return jsonify({"assistant": assistant_reply, "chatId": chat_id}), 200
 
     except Exception as e:
