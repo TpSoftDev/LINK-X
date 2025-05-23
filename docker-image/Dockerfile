@@ -4,7 +4,7 @@ FROM python:3.10-slim
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED=True
 
-ENV PYTHONPATH="${PYTHONPATH}:/app/src"
+ENV PYTHONPATH="/app:/app/src"
 
 # Set the application home directory
 ENV APP_HOME=/app
@@ -47,4 +47,4 @@ RUN pip install faiss-cpu
 
 # Set the entry point to run migrations and then start the app
 ENTRYPOINT ["/run_migrations.sh"]
-CMD ["gunicorn", "--bind", ":$PORT", "--workers", "1", "--threads", "8", "--timeout", "0", "src.app:app"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]

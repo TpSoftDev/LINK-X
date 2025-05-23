@@ -81,47 +81,43 @@ const StudentSettings = () => {
   const [passwordError, setPasswordError] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
+  // Determine user role only once when component mounts
   useEffect(() => {
-    fetch(`http://localhost:8080/me`, {
-      method: "GET",
-      credentials: "include",
-    }).then(res => {
-      if (res.status === 200 || res.status === 404) {
-        setIsStudent(true);
-      } else {
-        setIsStudent(false);
-      }
-    }).catch(() => {
-      setIsStudent(false);
-    }).finally(() => {
-      setLoading(false);
-    });
-  }, [API]);
-  
+    const determineRole = async () => {
+      try {
+        const res = await fetch(`${API}/me`, {
+          method: "GET",
+          credentials: "include",
+        });
 
-  // Determine role
-  useEffect(() => {
-    fetch(`http://localhost:8080/me`, {
-      method: "GET",
-      credentials: "include",
-    }).then(res => {
-      if (res.status === 200 || res.status === 404) {
-        setIsStudent(true);
-        // load onboarding later
-        console.log("isStudent:", isStudent);
-      } else {
+        if (!res.ok) {
+          // If the user is not authenticated or the endpoint failed, default to professor
+          setIsStudent(false);
+          return;
+        }
+
+        const data = await res.json(); // expected shape: { id, email, role, ... }
+
+        if (data?.role === "student") {
+          setIsStudent(true);
+        } else {
+          setIsStudent(false);
+        }
+      } catch (err) {
+        console.error("Failed to determine role:", err);
         setIsStudent(false);
-        console.log("isStudent:", isStudent);
+      } finally {
+        setLoading(false);
       }
-    }).catch(() => {
-      setIsStudent(false);
-    });
+    };
+
+    determineRole();
   }, [API]);
 
   // Fetch Onboarding (students only)
   useEffect(() => {
     if (!isStudent) return;
-    fetch(`http://localhost:8080/student/profile`, {
+    fetch(`${API}/student/profile`, {
       method: "GET",
       credentials: "include",
     })
@@ -137,7 +133,7 @@ const StudentSettings = () => {
           topics: data.onboard_answers?.topics || "",
           interests: data.onboard_answers?.interests || "",
           schedule: data.onboard_answers?.schedule || "",
-          quizzes: data.want_quizzes,
+          quizzes: data.want_quizzes ?? false,
         });
         
       })
@@ -145,30 +141,17 @@ const StudentSettings = () => {
   }, [API, isStudent]);
   
 
-  // Fetch Account
-  useEffect(() => {
-    const path = isStudent ? "/student/profile" : "/professor/profile";
-    fetch(`http://localhost:8080${path}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async res => {
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setAccountData({ email: data.email, password: "" });
-      })
-      .catch(err => console.error("Failed to load account:", err));
-  }, [API, isStudent]);
+  // We already fetch /me below for email; No additional account endpoint needed.
 
   useEffect(() => {
-    fetch(`http://localhost:8080/me`, {
+    fetch(`${API}/me`, {
       method: "GET",
       credentials: "include",
     })
       .then(async res => {
         if (!res.ok) throw new Error();
         const data = await res.json();
-        setAccountData({ email: data.email, password: "" });
+        setAccountData({ email: data.email ?? "", password: "" });
       })
       .catch(err => console.error("Failed to load email:", err));
   }, []);
@@ -197,7 +180,7 @@ const StudentSettings = () => {
     };
   
     try {
-      const res = await fetch(`http://localhost:8080/student/profile`, {
+      const res = await fetch(`${API}/student/profile`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -220,7 +203,7 @@ const StudentSettings = () => {
   
   
     try {
-      const res = await fetch("http://localhost:8080/me", {
+      const res = await fetch(`${API}/me`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -339,7 +322,7 @@ const StudentSettings = () => {
                     id="onboardingName"
                     type="text"
                     name="name"
-                    defaultValue={formData.name}
+                    value={formData.name || ""}
                     onChange={e => handleChange(e.target.value, "name")}
                   />
                   <Label htmlFor="job">What do you do?</Label>
@@ -348,7 +331,7 @@ const StudentSettings = () => {
                     type="text"
                     name="job"
                     placeholder="e.g., Student, Engineer"
-                    defaultValue={formData.job}
+                    value={formData.job || ""}
                     onChange={e => handleChange(e.target.value, "job")}
                   />
 
@@ -358,7 +341,7 @@ const StudentSettings = () => {
                     type="text"
                     name="traits"
                     placeholder="e.g., witty, encouraging"
-                    defaultValue={formData.traits}
+                    value={formData.traits || ""}
                     onChange={e => handleChange(e.target.value, "traits")}
                   />
 
@@ -398,7 +381,7 @@ const StudentSettings = () => {
                     type="text"
                     name="topics"
                     placeholder="e.g., Finance, Biology"
-                    defaultValue={formData.topics}
+                    value={formData.topics || ""}
                     onChange={e => handleChange(e.target.value, "topics")}
                   />
 
@@ -408,7 +391,7 @@ const StudentSettings = () => {
                     type="text"
                     name="interests"
                     placeholder="e.g., Basketball, Music"
-                    defaultValue={formData.interests}
+                    value={formData.interests || ""}
                     onChange={e => handleChange(e.target.value, "interests")}
                   />
 
